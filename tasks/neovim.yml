@@ -21,7 +21,7 @@
   tags:
     - install
     - neovim
-- name: Neovim Plugin Development 1
+- name: Neovim Plugin Development 1 luarocks
   become: true
   apt: name=luarocks
   tags:
