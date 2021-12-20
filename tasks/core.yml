@@ -1,0 +1,16 @@
+- name: Install System Packages
+  become: true
+  apt:
+    name: ["build-essential", "cmake", "curl", "clangd", "htop", "lua5.1", "nvidia-settings", "python3-pip", "unzip"]
+  tags:
+    - install
+    - neovim
+    - core
+- name: Install Clang
+  become: true
+  apt:
+    name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12"]
+  tags:
+    - install
+    - neovim
+    - core
