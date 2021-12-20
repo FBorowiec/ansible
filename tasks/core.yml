@@ -2,9 +2,10 @@
   become: true
   apt:
     name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl",\
-      "clangd", "g++", "gcc", "gettext", "git", "global", "htop", "libtool", "libtool-bin", "lua5.1", "nload",\
-      "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow",\
-      "unzip", "wget", "xclip"]
+      "clangd", "g++", "gcc", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev",\
+      "libxcb-xfixes0-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings",\
+      "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget",\
+      "xclip"]
   tags:
     - install
     - neovim
