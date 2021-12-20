@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+docker rmi -f new-computer 2> /dev/null
+docker build . -f test.Dockerfile -t new-computer

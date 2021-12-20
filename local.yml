@@ -1,0 +1,18 @@
+- hosts: localhost
+  vars:
+    source_key: "./.ssh/id_rsa"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    personal: "{{ lookup('env', 'HOME') }}/personal"
+  become: true
+  pre_tasks:
+    - name: Update cache
+      apt:
+        update_cache: true
+      tags:
+      - ssh
+  tasks:
+  - include: tasks/ssh.yml
+  - include: tasks/zsh.yml
+  - include: tasks/node.yml
+  - include: tasks/bazel.yml
+
