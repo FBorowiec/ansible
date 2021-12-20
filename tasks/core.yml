@@ -1,20 +1,22 @@
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+  tags:
+    - install
+    - core
 - name: Install System Packages
   become: true
   apt:
-    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl",\
-      "clangd", "g++", "gcc", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev",\
-      "libxcb-xfixes0-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings",\
-      "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget",\
-      "xclip"]
+    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxcb-xfixes0-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget", "xclip"]
   tags:
     - install
-    - neovim
     - core
-- name: Install Clang
+- name: Install Clang, GCC
   become: true
   apt:
-    name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12"]
+    name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "gcc", "g++"]
   tags:
     - install
-    - neovim
     - core

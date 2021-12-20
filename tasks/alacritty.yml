@@ -4,14 +4,14 @@
     state: present
   become: yes
   tags:
-  - dotfiles
   - install
   - terminal
+  - alacritty
 - name: Install alacritty
   apt:
     name: alacritty
   become: yes
   tags:
-  - dotfiles
   - install
   - terminal
+  - alacritty
