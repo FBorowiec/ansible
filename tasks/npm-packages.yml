@@ -33,3 +33,17 @@
   tags:
     - install
     - node
+- name: Install bash lsp
+  npm:
+    name: bash-language-server
+    global: yes
+  tags:
+    - install
+    - node
+- name: Install bash lua formatter
+  npm:
+    name: lua-fmt
+    global: yes
+  tags:
+    - install
+    - node

@@ -17,6 +17,7 @@
   - include: tasks/ssh.yml
   - include: tasks/core.yml
   - include: tasks/zsh.yml
+  - include: tasks/alacritty.yml
   - include: tasks/node.yml
   - include: tasks/npm-packages.yml
   - include: tasks/neovim.yml
