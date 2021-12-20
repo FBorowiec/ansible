@@ -1,7 +1,10 @@
 - name: Install System Packages
   become: true
   apt:
-    name: ["build-essential", "cmake", "curl", "clangd", "htop", "lua5.1", "nvidia-settings", "python3-pip", "unzip"]
+    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl",\
+      "clangd", "g++", "gcc", "gettext", "git", "global", "htop", "libtool", "libtool-bin", "lua5.1", "nload",\
+      "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow",\
+      "unzip", "wget", "xclip"]
   tags:
     - install
     - neovim
