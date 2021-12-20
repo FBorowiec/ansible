@@ -1,0 +1,3 @@
+pip3 install 'python-lsp-server[all]'
+pip3 install lookatme
+pip3 install lookatme.contrib.qrcode lookatme.contrib.image-ueberzug lookatme.contrib.render

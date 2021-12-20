@@ -20,3 +20,28 @@
   tags:
     - install
     - core
+- name: Install Ranger with deps
+  become: true
+  apt:
+    name: ["ranger", "caca-utils", "highlight", "atool", "w3m", "poppler-utils", "mediainfo", "lynx", "ffmpegthumbnailer"]
+  tags:
+    - install
+    - core
+    - ranger
+- name: Install Neovim deps
+  become: true
+  apt:
+    name: ["lua-nvim", "python3-neovim", "python3-venv", "fzf", "ripgrep", "ueberzug"]
+  tags:
+    - install
+    - core
+    - neovim
+- name: Install tmux deps
+  become: true
+  apt:
+    name: ["tmux",  "fonts-powerline"]
+  tags:
+    - install
+    - core
+    - tmux
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm

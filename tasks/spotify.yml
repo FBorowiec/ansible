@@ -1,31 +1,34 @@
-- name: Add Spotify repo key
+---
+- name: Connect to spotify keyserver
   apt_key:
     keyserver: hkp://keyserver.ubuntu.com:80
-    id: 4773BD5E130D1D45
     state: present
-  become: yes
-  register: repo_key_added
+    id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
   tags:
     - install
     - spotify
-- name: Add sources to spotify.list
-  lineinfile:
-    dest: /etc/apt/sources.list.d/spotify.list
-    line: "deb http://repository.spotify.com stable non-free"
-    create: yes
-  become: yes
-  register: sources_added
-  when: repo_key_added|succeeded and ansible_distribution == 'Ubuntu'
+- name: Set ppa spotify
+  apt_repository:
+    repo: deb http://repository.spotify.com stable non-free
+    state: present
+    update_cache: yes
   tags:
     - install
     - spotify
-- name: Install spotify-client
+- name: Install spotify
+  become: true
+  become_user: root
   apt:
     name: spotify-client
+    state: present
+  tags:
+    - install
+    - spotify
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
     update_cache: yes
-    force: yes
-  become: yes
-  when: sources_added|succeeded
   tags:
     - install
     - spotify
