@@ -4,9 +4,10 @@
     global: true
   tags:
   - bazel
+  - install
 - name: Install bazel compilation database
   vars:
     version: 0.4.5
   shell: 'curl -L "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz" | tar -xz && ln -f -s "/usr/bin/local/bazel-compilation-database-{{ version }}/generate.sh" bazel-compdb'
   tags:
-  - bazel
+  - install

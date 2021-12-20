@@ -5,8 +5,10 @@
     state: present
   become: yes
   register: repo_key_added
-
-- name: Add sources to docker.list
+  tags:
+    - install
+    - spotify
+- name: Add sources to spotify.list
   lineinfile:
     dest: /etc/apt/sources.list.d/spotify.list
     line: "deb http://repository.spotify.com stable non-free"
@@ -14,7 +16,9 @@
   become: yes
   register: sources_added
   when: repo_key_added|succeeded and ansible_distribution == 'Ubuntu'
-
+  tags:
+    - install
+    - spotify
 - name: Install spotify-client
   apt:
     name: spotify-client
@@ -22,3 +26,6 @@
     force: yes
   become: yes
   when: sources_added|succeeded
+  tags:
+    - install
+    - spotify
