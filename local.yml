@@ -18,6 +18,7 @@
   - include: tasks/core.yml
   - include: tasks/zsh.yml
   - include: tasks/alacritty.yml
+  - include: tasks/tmux.yml
   - include: tasks/node.yml
   - include: tasks/npm-packages.yml
   - include: tasks/pip-packages.yml
