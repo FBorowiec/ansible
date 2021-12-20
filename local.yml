@@ -4,14 +4,20 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   become: true
   pre_tasks:
-    - name: Update cache
+    - name: Update Apt
+      become: true
       apt:
+        force_apt_get: true
         update_cache: true
+        state: present
       tags:
-      - ssh
+      - install
+      - core
   tasks:
   - include: tasks/ssh.yml
   - include: tasks/zsh.yml
   - include: tasks/node.yml
   - include: tasks/bazel.yml
+  - include: tasks/brave.yml
+  - include: tasks/spotify.yml
 
