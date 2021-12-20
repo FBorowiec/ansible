@@ -15,8 +15,11 @@
       - core
   tasks:
   - include: tasks/ssh.yml
+  - include: tasks/core.yml
   - include: tasks/zsh.yml
   - include: tasks/node.yml
+  - include: tasks/npm-packages.yml
+  - include: tasks/neovim.yml
   - include: tasks/bazel.yml
   - include: tasks/brave.yml
   - include: tasks/spotify.yml

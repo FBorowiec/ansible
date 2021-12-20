@@ -5,11 +5,3 @@
   tags:
   - install
   - node
-- name: Install yarn
-  apt_key:
-    id: 1646B01B86E50310
-    url: https://dl.yarnpkg.com/debian/pubkey.gpg
-    state: present
-  tags:
-    - install
-    - node
