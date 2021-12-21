@@ -1,3 +1,8 @@
-pip3 install 'python-lsp-server[all]'
-pip3 install lookatme
-pip3 install lookatme.contrib.qrcode lookatme.contrib.image-ueberzug lookatme.contrib.render
+- name: Install python lsp server
+  pip:
+    name: 'python-lsp-server[all]'
+    executable: pip3
+- name: Install lookatme with extensions
+  pip:
+    name: ["lookatme", "lookatme.contrib.qrcode", "lookatme.contrib.image-ueberzug", "lookatme.contrib.render"]
+
