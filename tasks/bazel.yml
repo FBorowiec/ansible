@@ -1,3 +1,4 @@
+---
 - name: Install Bazel
   npm:
     name: "@bazel/bazelisk"
