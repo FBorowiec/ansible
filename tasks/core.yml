@@ -8,7 +8,7 @@
 - name: Install System Packages
   become: true
   apt:
-    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxcb-xfixes0-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget", "xclip"]
+    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libx11-dev", "libxcb-xfixes0-dev", "libxcomposite-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget", "xclip"]
   tags:
   - core
 - name: Install Clang, GCC
