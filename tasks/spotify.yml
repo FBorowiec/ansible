@@ -1,24 +1,12 @@
 ---
-- name: Connect to spotify keyserver
-  apt_key:
-    keyserver: hkp://keyserver.ubuntu.com:80
-    state: present
-    id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
-  tags:
-  - spotify
-- name: Set ppa spotify
-  apt_repository:
-    repo: deb http://repository.spotify.com stable non-free
-    state: present
-    update_cache: yes
-  tags:
-  - spotify
-- name: Install spotify
+- name: Download spotify apt keys
+  shell: curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | apt-key add -
   become: true
-  become_user: root
-  apt:
-    name: spotify-client
-    state: present
+  tags:
+  - spotify
+- name: Add spotify to sources list
+  shell: echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
+  become: true
   tags:
   - spotify
 - name: Update and upgrade apt packages
@@ -26,5 +14,11 @@
   apt:
     upgrade: yes
     update_cache: yes
+  tags:
+  - spotify
+- name: Install Spotify
+  become: true
+  apt:
+    name: ["spotify-client"]
   tags:
   - spotify

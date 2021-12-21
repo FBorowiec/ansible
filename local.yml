@@ -24,12 +24,12 @@
   - include: tasks/npm-packages.yml
   - include: tasks/pip-packages.yml
   - include: tasks/neovim.yml
-  # - include: tasks/docker.yml
-  # - include: tasks/kubectl.yml
-  # - include: tasks/helm.yml
+  - include: tasks/docker.yml
+  - include: tasks/kubectl.yml
+  - include: tasks/helm.yml
   - include: tasks/bazel.yml
-  # - include: tasks/dwm.yml
+  - include: tasks/dwm.yml
   - include: tasks/dotfiles.yml
   - include: tasks/brave.yml
-  # - include: tasks/spotify.yml
+  - include: tasks/spotify.yml
 
