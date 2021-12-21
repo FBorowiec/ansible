@@ -11,7 +11,6 @@
   tags:
     - install
     - docker
-
 - name: Add Dockers offical GPG key
   become: true
   ansible.builtin.apt_key:
@@ -20,7 +19,6 @@
   tags:
     - install
     - docker
-
 - name: Setup Docker stable repository
   become: true
   ansible.builtin.template:
@@ -31,14 +29,12 @@
   tags:
     - install
     - docker
-
 - name: Update Cache
   become: true
   apt:
     update_cache: true
   tags:
     - docker
-
 - name: Install the latest version of docker engine
   become: true
   apt:
@@ -50,7 +46,6 @@
   tags:
     - install
     - docker
-
 - name: Add USER to docker group
   become: true
   shell: usermod -aG docker {{ ansible_env.USER }}
