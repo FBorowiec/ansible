@@ -1,3 +1,4 @@
+---
 - name: Install Stow
   become: true
   apt: name=stow

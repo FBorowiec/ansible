@@ -1,3 +1,4 @@
+---
 - name: dwm - Download
   get_url:
     url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz

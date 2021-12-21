@@ -1,3 +1,4 @@
+---
 - name: Install python lsp server
   pip:
     name: 'python-lsp-server[all]'

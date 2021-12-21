@@ -1,3 +1,4 @@
+---
 - name: required libraries for brave
   become: true
   apt:
