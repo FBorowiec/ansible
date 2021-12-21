@@ -1,0 +1,33 @@
+---
+- name: Check if Kubectl is installed.
+  ansible.builtin.command: which kubectl
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: kubectl_command_results
+  tags:
+  - kubernetes
+- name: Add an apt signing key for Kubernetes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags:
+  - kubernetes
+- name: Adding apt repository for Kubernetes
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
+  tags:
+  - kubernetes
+- name: Install Kubernetes binaries
+  apt:
+    name: "kubectl"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+      - kubectl
+  when: kubectl_command_results.rc == 1
+  tags:
+  - kubernetes
