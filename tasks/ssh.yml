@@ -19,10 +19,3 @@
     mode: 0644
   tags:
   - ssh
-- name: Set authorized key
-  ansible.posix.authorized_key:
-    user: "{{ ansible_env.USER }}"
-    state: present
-    key:  "{{ lookup('file', './.ssh/id_rsa.pub') }}"
-  tags:
-    - ssh

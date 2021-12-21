@@ -11,27 +11,27 @@
   tags:
   - fonts
 - name: Install font - Droid Sans Mono for Powerline Nerd Font Complete
-  shell: 'curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf'
+  shell: 'curl -fLo "~/.share/local/fonts/Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf'
   tags:
   - fonts
 - name: Install font - Hack Regular Nerd Font Complete
-  shell: 'curl -fLo "Hack Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf'
+  shell: 'curl -fLo "~/.share/local/fonts/Hack Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf'
   tags:
   - fonts
 - name: Install font - MesloLGS NF Regular
-  shell: 'curl -flo "MesloLGS NF Regular.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf'
+  shell: 'curl -flo "~/.share/local/fonts/MesloLGS NF Regular.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf'
   tags:
   - fonts
 - name: Install font - MesloLGS NF Bold
-  shell: 'curl -flo "MesloLGS NF Bold.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
+  shell: 'curl -flo "~/.share/local/fonts/MesloLGS NF Bold.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
   tags:
   - fonts
 - name: Install font - MesloLGS NF Italic
-  shell: 'curl -flo "MesloLGS NF Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf'
+  shell: 'curl -flo "~/.share/local/fonts/MesloLGS NF Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf'
   tags:
   - fonts
 - name: Install font - MesloLGS NF Bold Italic
-  shell: 'curl -flo "MesloLGS NF Bold Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf'
+  shell: 'curl -flo "~/.share/local/fonts/MesloLGS NF Bold Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf'
   tags:
   - fonts
 - name: X/fonts - Refresh font cache
