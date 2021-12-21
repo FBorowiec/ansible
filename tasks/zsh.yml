@@ -18,3 +18,5 @@
   - zsh
 - name: update zsrhc
   shell: sed -i 's/(git/(git zsh-autosuggestions/' ~/.zshrc
+  tags:
+  - zsh

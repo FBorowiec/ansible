@@ -5,16 +5,14 @@
     state: present
     id: BBEBDCB318AD50EC6865090613B00F1FD2C19886
   tags:
-    - install
-    - spotify
+  - spotify
 - name: Set ppa spotify
   apt_repository:
     repo: deb http://repository.spotify.com stable non-free
     state: present
     update_cache: yes
   tags:
-    - install
-    - spotify
+  - spotify
 - name: Install spotify
   become: true
   become_user: root
@@ -22,13 +20,11 @@
     name: spotify-client
     state: present
   tags:
-    - install
-    - spotify
+  - spotify
 - name: Update and upgrade apt packages
   become: true
   apt:
     upgrade: yes
     update_cache: yes
   tags:
-    - install
-    - spotify
+  - spotify

@@ -3,13 +3,11 @@
   apt:
     name: ["tmux",  "fonts-powerline"]
   tags:
-    - install
-    - tmux
+   - tmux
 - name: Clone tpm plugins
   ansible.builtin.git:
     repo: 'https://github.com/tmux-plugins/tpm.git'
     dest: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm"
   tags:
-    - install
-    - tmux
+   - tmux
 

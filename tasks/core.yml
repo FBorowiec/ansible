@@ -4,35 +4,30 @@
     upgrade: yes
     update_cache: yes
   tags:
-    - install
-    - core
+  - core
 - name: Install System Packages
   become: true
   apt:
     name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxcb-xfixes0-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "wget", "xclip"]
   tags:
-    - install
-    - core
+  - core
 - name: Install Clang, GCC
   become: true
   apt:
     name: ["clang", "clang-11", "clang-12", "clangd", "clangd-10", "clangd-11", "clangd-12", "gcc", "g++"]
   tags:
-    - install
-    - core
+  - core
 - name: Install Ranger with deps
   become: true
   apt:
-    name: ["ranger", "caca-utils", "highlight", "atool", "w3m", "poppler-utils", "mediainfo", "lynx", "ffmpegthumbnailer"]
+    name: ["ranger", "caca-utils", "highlight", "atool", "w3m", "mediainfo", "lynx", "ffmpegthumbnailer"]
   tags:
-    - install
-    - core
-    - ranger
+  - core
+  - ranger
 - name: Install Neovim deps
   become: true
   apt:
-    name: ["lua-nvim", "python3-neovim", "python3-venv", "fzf", "ripgrep", "ueberzug"]
+    name: ["python3-neovim", "python3-venv", "fzf", "ripgrep"]
   tags:
-    - install
-    - core
-    - neovim
+  - core
+  - neovim
