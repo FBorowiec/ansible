@@ -2,7 +2,13 @@
   pip:
     name: 'python-lsp-server[all]'
     executable: pip3
+  tags:
+  - python
 - name: Install lookatme with extensions
   pip:
     name: ["lookatme", "lookatme.contrib.qrcode", "lookatme.contrib.image-ueberzug", "lookatme.contrib.render"]
-
+  tags:
+  - python
+- name: Install other deps
+  pip:
+    name: ["poppler-utils"]

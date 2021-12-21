@@ -3,15 +3,13 @@
     path: "{{ ansible_env.HOME }}/neovim"
     state: absent
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Clone neovim
   ansible.builtin.git:
     repo: 'https://github.com/neovim/neovim.git'
     dest: "{{ ansible_env.HOME }}/neovim"
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Install build requirements for neovim
   become: true
   apt:
@@ -31,42 +29,36 @@
     state: latest
     update_cache: true
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Build neovim
   shell: "cd {{ ansible_env.HOME }}/neovim && make -j 4"
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Install neovim
   become: true
   shell: "cd {{ ansible_env.HOME }}/neovim && make install"
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Neovim Plugin Development 1
   become: true
   apt: name=luarocks
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Neovim Plugin Development 2 luacheck
   become: true
   shell: luarocks install luacheck
   tags:
-    - nvim
-    - install
+  - nvim
 - name: Make sure Vim-Plug's installation path exists
   file:
     path: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload"
     state: directory
   tags:
-    - nvim
-    - install
+  - nvim
 - name: install Vim-Plug
   get_url:
     url:  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
   tags:
-    - nvim
-    - install
+  - nvim
+

@@ -4,7 +4,6 @@
     state: present
   become: yes
   tags:
-  - install
   - terminal
   - alacritty
 - name: Install alacritty
@@ -12,7 +11,6 @@
     name: alacritty
   become: yes
   tags:
-  - install
   - terminal
   - alacritty
 
