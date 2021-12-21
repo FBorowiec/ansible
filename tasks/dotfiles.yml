@@ -5,13 +5,10 @@
   tags:
   - stow
   - dotfiles
-- name: Clone the .dotfiles repo
+- name: Clone the dotfiles repo
   ansible.builtin.git:
-    repo: "git@github.com:FBorowiec/dotfiles.git"
+    repo: 'https://github.com/FBorowiec/dotfiles.git'
     dest: "{{ ansible_env.HOME }}/dotfiles"
-    update: yes
-    accept_hostkey: yes
-    version: main
   tags:
   - stow
   - dotfiles

@@ -29,7 +29,7 @@
   # - include: tasks/helm.yml
   - include: tasks/bazel.yml
   # - include: tasks/dwm.yml
-  # - include: tasks/dotfiles.yml
+  - include: tasks/dotfiles.yml
   - include: tasks/brave.yml
   # - include: tasks/spotify.yml
 
