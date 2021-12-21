@@ -1,0 +1,70 @@
+- name: dwm - Download
+  get_url:
+    url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz
+    dest: "{{ ansible_env.HOME }}"
+  tags:
+    - X
+    - dwm
+
+- name: dwm - Extract
+  ansible.builtin.unarchive:
+    src: "{{ ansible_env.HOME }}/dwm-6.2.tar.gz"
+    dest: "{{ ansible_env.HOME }}"
+  tags:
+    - X
+    - dwm
+
+- name: dwm - config.h
+  copy:
+    src: config.h
+    dest: "{{ ansible_env.HOME }}/dwm-6.2"
+  tags:
+    - X
+    - dwm
+
+- name: dwm - Patch dwm for no border on one maximized window
+  shell: patch "{{ ansible_env.HOME }}/dwm-6.2/dwm.c" noborder.diff
+  tags:
+    - X
+    - dwm
+
+- name: dwm - Install dwm dependencies
+  become: true
+  apt:
+    pkg:
+      - libx11-dev
+      - libxft-dev
+      - libxinerama-dev
+  tags:
+    - X
+    - dwm
+
+- name: dwm - Build
+  shell: "cd {{ ansible_env.HOME }}/dwm-6.2 && make"
+  tags:
+    - X
+    - dwm
+
+- name: dwm - Install
+  become: true
+  shell: "cd {{ ansible_env.HOME }}/dwm-6.2 && make install"
+  tags:
+    - X
+    - dwm
+
+- name: dwm - dwm.desktop
+  become: true
+  copy:
+    src: dwm.desktop
+    dest: /usr/share/xsessions
+  tags:
+    - X
+    - dwm
+
+- name: dmw - Cleanup
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/dwm-6.2.tar.gz"
+    state: absent
+  tags:
+    - X
+    - dwm

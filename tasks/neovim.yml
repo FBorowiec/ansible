@@ -1,41 +1,72 @@
 - name: Remove neovim
-  shell: rm -rf ~/neovim
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/neovim"
+    state: absent
   tags:
+    - nvim
     - install
-    - neovim
-- name: Clone Neovim
+- name: Clone neovim
   ansible.builtin.git:
     repo: 'https://github.com/neovim/neovim.git'
-    dest: "{{ lookup('env', 'HOME') }}/neovim"
+    dest: "{{ ansible_env.HOME }}/neovim"
   tags:
+    - nvim
     - install
-    - neovim
+- name: Install build requirements for neovim
+  become: true
+  apt:
+    pkg:
+      - ninja-build
+      - gettext
+      - libtool
+      - libtool-bin
+      - autoconf
+      - automake
+      - cmake
+      - g++
+      - pkg-config
+      - unzip
+      - curl
+      - doxygen
+    state: latest
+    update_cache: true
+  tags:
+    - nvim
+    - install
 - name: Build neovim
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make -j 20"
+  shell: "cd {{ ansible_env.HOME }}/neovim && make -j 4"
   tags:
+    - nvim
     - install
-    - neovim
 - name: Install neovim
   become: true
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
+  shell: "cd {{ ansible_env.HOME }}/neovim && make install"
   tags:
+    - nvim
     - install
-    - neovim
-- name: Neovim Plugin Development 1 luarocks
+- name: Neovim Plugin Development 1
   become: true
   apt: name=luarocks
   tags:
+    - nvim
     - install
-    - neovim
 - name: Neovim Plugin Development 2 luacheck
   become: true
   shell: luarocks install luacheck
   tags:
+    - nvim
     - install
-    - neovim
-- name: Install Vim-Plug
-  shell: curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+- name: Make sure Vim-Plug's installation path exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload"
+    state: directory
   tags:
+    - nvim
     - install
-    - dotfiles
-    - neovim
+- name: install Vim-Plug
+  get_url:
+    url:  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+  tags:
+    - nvim
+    - install

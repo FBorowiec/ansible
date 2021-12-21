@@ -1,0 +1,155 @@
+- name: X/fonts - Create fonts directory
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/fonts/"
+    state: directory
+  tags:
+    - fonts
+    - install
+- name: X/fonts - Install monaco font
+  copy:
+    src: files/monaco.ttf
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+  tags:
+    - fonts
+    - install
+- name: X/fonts - Get jetbrains
+  get_url:
+    url: https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip
+    dest: "{{ ansible_env.HOME }}/Downloads"
+  tags:
+    - fonts
+    - install
+- name: X/fonts - Get/Extract jetbrains
+  ansible.builtin.unarchive:
+    src: https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip
+    dest: "{{ ansible_env.HOME }}/Downloads"
+    remote_src: yes
+  tags:
+    - fonts
+    - install
+- name: X/fonts - Install jetbrains
+  copy:
+    src: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+  with_fileglob:
+    - "{{ ansible_env.HOME }}/Downloads/fonts/ttf/*"
+  tags:
+    - fonts
+    - install
+- name: Install font - Droid Sans Mono for Powerline Nerd Font Complete
+  shell: 'curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf'
+  tags:
+    - fonts
+    - install
+- name: Install font - Hack Regular Nerd Font Complete
+  shell: 'curl -fLo "Hack Regular Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - MesloLGS NF Regular
+  shell: 'curl -flo "MesloLGS NF Regular.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - MesloLGS NF Bold
+  shell: 'curl -flo "MesloLGS NF Bold.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - MesloLGS NF Italic
+  shell: 'curl -flo "MesloLGS NF Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - MesloLGS NF Bold Italic
+  shell: 'curl -flo "MesloLGS NF Bold Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Black
+  shell: 'curl -fLo "SourceCodePro-Black.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Black.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-BlackItalic
+  shell: 'curl -fLo "SourceCodePro-BlackItalic.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-BlackItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Bold
+  shell: 'curl -fLo "SourceCodePro-Bold.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Bold.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-BoldItalic
+  shell: 'curl -fLo "SourceCodePro-BoldItalic.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-BoldItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-ExtraLight
+  shell: 'curl -fLo "SourceCodePro-ExtraLight.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-ExtraLight.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-ExtraLightItalic
+  shell: 'curl -fLo "SourceCodePro-ExtraLightItalic.ttf " https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-ExtraLightItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Italic
+  shell: 'curl -fLo "SourceCodePro-Italic.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Italic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Light
+  shell: 'curl -fLo "SourceCodePro-Light.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Light.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-LightItalic
+  shell: 'curl -fLo "SourceCodePro-LightItalic.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-LightItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Medium
+  shell: 'curl -fLo "SourceCodePro-Medium.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Medium.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-MediumItalic
+  shell: 'curl -fLo "SourceCodePro-MediumItalic.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-MediumItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-Regular
+  shell: 'curl -fLo "SourceCodePro-Regular.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-Regular.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-SemiBold
+  shell: 'curl -fLo "SourceCodePro-SemiBold.ttf" https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-SemiBold.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - SourceCodePro-SemiBoldItalic
+  shell: 'curl -fLo "SourceCodePro-SemiBoldItalic.ttf " https://github.com/google/fonts/tree/main/ofl/sourcecodepro/SourceCodePro-SemiBoldItalic.ttf'
+  tags:
+    - fonts
+    - install
+- name: Install font - nerfdont
+  shell: 'curl -sS https://webinstall.dev/nerdfont | bash'
+  tags:
+    - fonts
+    - install
+- name: X/fonts - Refresh font cache
+  shell: fc-cache
+  tags:
+    - fonts
+    - install
+- name: Install fonts-powerline
+  apt:
+    name: fonts-powerline
+  become: yes
+  tags:
+    - fonts
+    - install
