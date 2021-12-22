@@ -13,21 +13,17 @@
   - cpp
 - name: Extract cpptools
   shell: "unzip {{ ansible_env.HOME }}/cpptools-linux.vsix -d  {{ ansible_env.HOME }}/.cpptools/cpptools-linux"
-  become: true
   tags:
   - cpp
 - name: Make cpptools an executable
   shell: "chmod +x {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
-  become: true
   tags:
   - cpp
 - name: Create copy of json config
   shell: 'cp {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json'
-  become: true
   tags:
   - cpp
 - name: Install lldb-vscode debugger adapter
   shell: 'curl https://github.com/lanza/lldb-vscode/raw/master/bin/darwin/bin/lldb-vscode >> /usr/local/bin/lldb-vscode && chmod +x /usr/local/bin/lldb-vscode && ln -s /usr/local/bin/lldb-vscode /usr/bin/lldb-vscode'
-  become: true
   tags:
   - cpp

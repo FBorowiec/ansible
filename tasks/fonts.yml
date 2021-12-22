@@ -48,7 +48,7 @@
   tags:
   - fonts
 - name: X/fonts - Refresh font cache
-  shell: fc-cache
+  shell: fc-cache -fv
   tags:
   - fonts
 - name: Install fonts-powerline

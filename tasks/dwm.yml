@@ -1,4 +1,11 @@
 ---
+- name: Install dwm deps
+  become: true
+  apt:
+    update_cache: yes
+    name: ["suckless-tools", "stterm"]
+  tags:
+  - dwm
 - name: dwm - Download
   get_url:
     url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz
