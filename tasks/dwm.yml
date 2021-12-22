@@ -9,23 +9,23 @@
 - name: dwm - Download
   get_url:
     url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz
-    dest: "{{ ansible_env.HOME }}"
+    dest: "{{ lookup('env', 'HOME') }}"
   tags:
     - dwm
 - name: dwm - Extract
   ansible.builtin.unarchive:
-    src: "{{ ansible_env.HOME }}/dwm-6.2.tar.gz"
-    dest: "{{ ansible_env.HOME }}"
+    src: "{{ lookup('env', 'HOME') }}/dwm-6.2.tar.gz"
+    dest: "{{ lookup('env', 'HOME') }}"
   tags:
     - dwm
 - name: dwm - config.h
   copy:
     src: config.h
-    dest: "{{ ansible_env.HOME }}/dwm-6.2"
+    dest: "{{ lookup('env', 'HOME') }}/dwm-6.2"
   tags:
     - dwm
 - name: dwm - Patch dwm for no border on one maximized window
-  shell: patch "{{ ansible_env.HOME }}/dwm-6.2/dwm.c" files/noborder.diff
+  shell: patch "{{ lookup('env', 'HOME') }}/dwm-6.2/dwm.c" files/noborder.diff
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
@@ -38,12 +38,12 @@
   tags:
     - dwm
 - name: dwm - Build
-  shell: "cd {{ ansible_env.HOME }}/dwm-6.2 && make"
+  shell: "cd {{ lookup('env', 'HOME') }}/dwm-6.2 && make"
   tags:
     - dwm
 - name: dwm - Install
   become: true
-  shell: "cd {{ ansible_env.HOME }}/dwm-6.2 && make install"
+  shell: "cd {{ lookup('env', 'HOME') }}/dwm-6.2 && make install"
   tags:
     - dwm
 - name: dwm - dwm.desktop
@@ -55,7 +55,7 @@
     - dwm
 - name: dmw - Cleanup
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/dwm-6.2.tar.gz"
+    path: "{{ lookup('env', 'HOME') }}/dwm-6.2.tar.gz"
     state: absent
   tags:
     - dwm
