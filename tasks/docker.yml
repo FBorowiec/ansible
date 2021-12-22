@@ -22,13 +22,6 @@
   when: docker_command_result.rc == 1
   tags:
   - docker
-- name: Ensure Docker is started.
-  ansible.builtin.service:
-    name: docker
-    state: started
-    enabled: true
-  tags:
-  - docker
 - name: Ensure dependencies are installed (Debian).
   ansible.builtin.apt:
     name:
@@ -59,13 +52,6 @@
     name: docker-compose
     state: present
     executable: pip3
-  tags:
-  - docker
-- name: Ensure "{{ ansible_user }}"" user is added to the docker group.
-  ansible.builtin.user:
-    name: "{{ ansible_user }}"
-    groups: docker
-    append: true
   tags:
   - docker
 # reset_connection doesn't support conditionals.
