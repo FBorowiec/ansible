@@ -2,25 +2,25 @@
 - name: Download vscode-cpptools
   get_url:
     url: https://github.com/microsoft/vscode-cpptools/releases/download/1.7.1/cpptools-linux.vsix
-    dest: "{{ ansible_env.HOME }}"
+    dest: "{{ lookup('env', 'HOME') }}"
   tags:
   - cpp
 - name: Create cpptools directory
   file:
-    path: "{{ ansible_env.HOME }}/.cpptools"
+    path: "{{ lookup('env', 'HOME') }}/.cpptools"
     state: directory
   tags:
   - cpp
 - name: Extract cpptools
-  shell: "unzip {{ ansible_env.HOME }}/cpptools-linux.vsix -d  {{ ansible_env.HOME }}/.cpptools/cpptools-linux"
+  shell: "unzip {{ lookup('env', 'HOME') }}/cpptools-linux.vsix -d  {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux"
   tags:
   - cpp
 - name: Make cpptools an executable
-  shell: "chmod +x {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
+  shell: "chmod +x {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
   tags:
   - cpp
 - name: Create copy of json config
-  shell: 'cp {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json {{ ansible_env.HOME }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json'
+  shell: "cp {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
   tags:
   - cpp
 - name: Install lldb-vscode debugger adapter
