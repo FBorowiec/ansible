@@ -6,4 +6,4 @@ sudo apt-get update -y
 sudo apt-get install -y curl git software-properties-common ansible
 
 # Install my ansible
-sudo ansible-playbook --ask-vault-pass local.yml
+ansible-playbook --ask-become-pass --ask-vault-pass local.yml
