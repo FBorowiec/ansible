@@ -6,6 +6,7 @@
   - stow
   - dotfiles
 - name: Clone the dotfiles repo
+  become_user: "{{ lookup('env', 'USER' }}"
   ansible.builtin.git:
     repo: 'https://github.com/FBorowiec/dotfiles.git'
     dest: "/home/{{ lookup('env', 'USER') }}/dotfiles"
@@ -13,6 +14,7 @@
   - stow
   - dotfiles
 - name: Stow dotfiles (run ~/dotfiles/install)
+  become_user: "{{ lookup('env', 'USER' }}"
   shell: cd /home/{{ lookup('env', 'USER') }}/dotfiles && ./install
   tags:
   - stow
