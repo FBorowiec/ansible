@@ -10,7 +10,7 @@
   tags:
   - zsh
 - name: Install ohmyzsh
-  shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+  shell: "cd /home/{{ lookup('env', 'USER') }} && curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
   tags:
   - zsh
 - name: Install the zsh plugin

@@ -13,7 +13,7 @@
   - stow
   - dotfiles
 - name: Stow dotfiles (run ~/dotfiles/install)
-  shell: cd $HOME/dotfiles && ./install
+  shell: cd /home/{{ lookup('env', 'USER') }}/dotfiles && ./install
   tags:
   - stow
   - dotfiles
