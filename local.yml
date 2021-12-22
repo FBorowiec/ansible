@@ -1,18 +1,22 @@
 - hosts: localhost
+  tags: always
+  become: true
   vars:
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
-  become: true
   pre_tasks:
-    - name: Update Apt
-      become: true
-      apt:
-        force_apt_get: true
-        update_cache: true
-        state: present
-      tags:
-      - install
-      - core
+    - name: Pre-run | update package cache (arch)
+      tags: always
+      pacman: update_cache=yes
+      changed_when: False
+      when: ansible_distribution == "Archlinux"
+
+    - name: Pre-run | update package cache (debian)
+      tags: always
+      apt: update_cache=yes
+      changed_when: False
+      when: ansible_distribution == ["Debian", "Ubuntu"]
+
   tasks:
   - include: tasks/ssh.yml
   - include: tasks/core.yml
