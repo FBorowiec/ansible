@@ -8,7 +8,7 @@
 - name: Install bazel compilation database
   vars:
     version: 0.4.5
-  shell: 'curl -L "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz" | tar -xz && ln -f -s "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh" bazel-compdb'
+  shell: 'cd /usr/local/bin && curl -L "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz" | tar -xz && ln -f -s "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh" bazel-compdb'
   become: true
   tags:
   - bazel

@@ -8,6 +8,6 @@
 - name: Clone tpm plugins
   ansible.builtin.git:
     repo: 'https://github.com/tmux-plugins/tpm.git'
-    dest: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm"
+    dest: "/home/{{ lookup('env', 'USER') }}/.tmux/plugins/tpm"
   tags:
    - tmux

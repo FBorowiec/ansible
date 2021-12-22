@@ -1,9 +1,10 @@
+---
 - hosts: localhost
-  tags: always
   become: true
+  tags: always
   vars:
     source_key: "./.ssh/id_rsa"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    dest_key: "/home/{{ lookup('env', 'USER') }}/.ssh/id_rsa"
   pre_tasks:
     - name: Pre-run | update package cache (arch)
       tags: always
