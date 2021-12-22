@@ -10,26 +10,31 @@
   tags:
   - zsh
 - name: Install ohmyzsh
+  become_user: "{{ lookup('env', 'USER' }}"
   shell: "cd /home/{{ lookup('env', 'USER') }} && curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
   tags:
   - zsh
 - name: Install the zsh plugin
+  become_user: "{{ lookup('env', 'USER' }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: "/home/{{ lookup('env', 'USER') }}/.oh-my-zsh/plugins/zsh-autosuggestions"
   tags:
   - zsh
 - name: update zsrhc
+  become_user: "{{ lookup('env', 'USER' }}"
   shell: sed -i 's/(git/(git zsh-autosuggestions/' ~/.zshrc
   tags:
   - zsh
 - name: Install powelevel10k
+  become_user: "{{ lookup('env', 'USER' }}"
   get_url:
     url: https://github.com/romkatv/powerlevel10k.git
     dest: "/home/{{ lookup('env', 'USER') }}/.oh-my-zsh/custom/themes/powerlevel10k"
   tags:
   - zsh
 - name: Install autosuggestions
+  become_user: "{{ lookup('env', 'USER' }}"
   get_url:
     url: https://github.com/zsh-users/zsh-autosuggestions
     dest: "/home/{{ lookup('env', 'USER') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
