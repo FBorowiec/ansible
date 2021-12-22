@@ -3,20 +3,20 @@
   apt_repository:
     repo: 'ppa:mmstick76/alacritty'
     state: present
-  become: yes
+  become: true
   tags:
   - terminal
   - alacritty
 - name: Install alacritty
   apt:
     name: alacritty
-  become: yes
+  become: true
   tags:
   - terminal
   - alacritty
 - name: Make Alacritty default terminal
   shell: update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 60
-  become: yes
+  become: true
   tags:
   - terminal
   - alacritty
