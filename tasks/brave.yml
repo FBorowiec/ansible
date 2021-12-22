@@ -6,6 +6,7 @@
   tags:
   - brave
 - name: Brave Browser archive-keyring.gpg download
+  become: true
   get_url:
     url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
     dest: /usr/share/keyrings/brave-browser-archive-keyring.gpg

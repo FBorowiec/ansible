@@ -1,26 +1,27 @@
 ---
 - name: Download vscode-cpptools
+  become_user: "{{ lookup('env', 'USR') }}"
   get_url:
     url: https://github.com/microsoft/vscode-cpptools/releases/download/1.7.1/cpptools-linux.vsix
-    dest: "{{ lookup('env', 'HOME') }}"
+    dest: "{{ lookup('env', 'USER') }}"
   tags:
   - cpp
 - name: Create cpptools directory
   file:
-    path: "{{ lookup('env', 'HOME') }}/.cpptools"
+    path: "/home/{{ lookup('env', 'USER') }}/.cpptools"
     state: directory
   tags:
   - cpp
 - name: Extract cpptools
-  shell: "unzip {{ lookup('env', 'HOME') }}/cpptools-linux.vsix -d  {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux"
+  shell: "unzip /home/{{ lookup('env', 'USER') }}/cpptools-linux.vsix -d  /home/{{ lookup('env', 'USER') }}/.cpptools/cpptools-linux"
   tags:
   - cpp
 - name: Make cpptools an executable
-  shell: "chmod +x {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
+  shell: "chmod +x /home/{{ lookup('env', 'USER') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
   tags:
   - cpp
 - name: Create copy of json config
-  shell: "cp {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json {{ lookup('env', 'HOME') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
+  shell: "cp /home/{{ lookup('env', 'USER') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json /home/{{ lookup('env', 'USER') }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
   tags:
   - cpp
 - name: Install lldb-vscode debugger adapter

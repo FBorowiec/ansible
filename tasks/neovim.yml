@@ -2,11 +2,11 @@
 - name: Clone Neovim
   ansible.builtin.git:
     repo: "https://github.com/neovim/neovim.git"
-    dest: "{{ lookup('env', 'HOME') }}/neovim"
+    dest: "/home/{{ lookup('env', 'USER') }}/neovim"
   tags:
     - neovim
 - name: Checkout stable branch
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && git checkout release-0.6"
+  shell: "cd /home/{{ lookup('env', 'USER') }}/neovim && git checkout release-0.6"
   tags:
     - neovim
 - name: Install build requirements for neovim
@@ -39,11 +39,11 @@
   tags:
     - neovim
 - name: Build neovim
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make"
+  shell: "cd /home/{{ lookup('env', 'USER') }}/neovim && make"
   tags:
     - neovim
 - name: Install neovim
-  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
+  shell: "cd /home/{{ lookup('env', 'USER') }}/neovim && make install"
   become: true
   tags:
     - neovim
