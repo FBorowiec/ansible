@@ -6,9 +6,10 @@
   tags:
    - tmux
 - name: Clone tpm plugins
-  become_user: "{{ lookup('env', 'USER' }}"
+  become: yes
+  become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: 'https://github.com/tmux-plugins/tpm.git'
-    dest: "/home/{{ lookup('env', 'USER') }}/.tmux/plugins/tpm"
+    dest: "{{ main_user_dir }}/.tmux/plugins/tpm"
   tags:
    - tmux

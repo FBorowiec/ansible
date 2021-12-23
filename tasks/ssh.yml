@@ -1,6 +1,7 @@
 ---
 - name: Ensure .ssh directory exists.
-  become_user: "{{ lookup('env', 'USER' }}"
+  become: yes
+  become_user: "{{ main_user }}"
   file:
     dest: "{{ dest_key | dirname }}"
     mode: 0700
@@ -8,7 +9,8 @@
   tags:
   - ssh
 - name: Install ssh key
-  become_user: "{{ lookup('env', 'USER' }}"
+  become: yes
+  become_user: "{{ main_user }}"
   copy:
     src: "{{ source_key }}"
     dest: "{{ dest_key }}"
@@ -16,7 +18,8 @@
   tags:
   - ssh
 - name: Install ssh key public
-  become_user: "{{ lookup('env', 'USER' }}"
+  become: yes
+  become_user: "{{ main_user }}"
   copy:
     src: "{{ source_key }}.pub"
     dest: "{{ dest_key }}.pub"
