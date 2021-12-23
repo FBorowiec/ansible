@@ -7,25 +7,33 @@
   tags:
   - dwm
 - name: dwm - Download
+  become: yes
+  become_user: "{{ main_user }}"
   get_url:
     url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz
-    dest: "/home/{{ lookup('env', 'USER') }}"
+    dest: "{{ main_user_dir }}"
   tags:
     - dwm
 - name: dwm - Extract
+  become: yes
+  become_user: "{{ main_user }}"
   ansible.builtin.unarchive:
-    src: "/home/{{ lookup('env', 'USER') }}/dwm-6.2.tar.gz"
-    dest: "/home/{{ lookup('env', 'USER') }}"
+    src: "{{ main_user_dir }}/dwm-6.2.tar.gz"
+    dest: "{{ main_user_dir }}"
   tags:
     - dwm
 - name: dwm - config.h
+  become: yes
+  become_user: "{{ main_user }}"
   copy:
     src: config.h
-    dest: "/home/{{ lookup('env', 'USER') }}/dwm-6.2"
+    dest: "{{ main_user_dir }}/dwm-6.2"
   tags:
     - dwm
 - name: dwm - Patch dwm for no border on one maximized window
-  shell: patch "/home/{{ lookup('env', 'USER') }}/dwm-6.2/dwm.c" files/noborder.diff
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/noborder.diff
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
@@ -38,12 +46,14 @@
   tags:
     - dwm
 - name: dwm - Build
-  shell: "cd /home/{{ lookup('env', 'USER') }}/dwm-6.2 && make"
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/dwm-6.2 && make"
   tags:
     - dwm
 - name: dwm - Install
   become: true
-  shell: "cd /home/{{ lookup('env', 'USER') }}/dwm-6.2 && make install"
+  shell: "cd {{ main_user_dir }}/dwm-6.2 && make install"
   tags:
     - dwm
 - name: dwm - dwm.desktop
@@ -54,8 +64,10 @@
   tags:
     - dwm
 - name: dmw - Cleanup
+  become: yes
+  become_user: "{{ main_user }}"
   ansible.builtin.file:
-    path: "/home/{{ lookup('env', 'USER') }}/dwm-6.2.tar.gz"
+    path: "{{ main_user_dir }}/dwm-6.2.tar.gz"
     state: absent
   tags:
     - dwm
