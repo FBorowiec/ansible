@@ -33,6 +33,11 @@
   shell: "cp {{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json {{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
   tags:
   - cpp
+- name: Cleanup
+  become: true
+  shell: "rm -rf {{ main_user_dir }}/cpptools-linux.vsix"
+  tags:
+  - cpp
 - name: Install lldb-vscode debugger adapter
   shell: 'cd /usr/local/bin && curl https://github.com/lanza/lldb-vscode/raw/master/bin/darwin/bin/lldb-vscode >> /usr/local/bin/lldb-vscode && chmod +x /usr/local/bin/lldb-vscode && ln -s /usr/local/bin/lldb-vscode /usr/bin/lldb-vscode'
   tags:
