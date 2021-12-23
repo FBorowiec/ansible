@@ -6,7 +6,7 @@
   - zsh
 - name: Change shell
   become: true
-  shell: chsh -s `which zsh`
+  shell: chsh -s /usr/bin/zsh
   tags:
   - zsh
 - name: Install ohmyzsh
