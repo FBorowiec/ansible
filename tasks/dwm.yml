@@ -3,9 +3,28 @@
   become: true
   apt:
     update_cache: yes
-    name: ["suckless-tools", "stterm"]
+    name: ["meson", "suckless-tools", "stterm"]
   tags:
   - dwm
+- name: Clone pamixer
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: 'https://github.com/cdemoulins/pamixer.git'
+    dest: "{{ main_user_dir }}/pamixer"
+  tags:
+   - dwm
+- name: Build pamixer
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/pamixer && meson setup build"
+  tags:
+    - dwm
+- name: Install pamixer
+  shell: "cd {{ main_user_dir }}/pamixer && meson install -C build"
+  become: true
+  tags:
+    - dwm
 - name: dwm - Download
   become: yes
   become_user: "{{ main_user }}"
@@ -30,10 +49,10 @@
     dest: "{{ main_user_dir }}/dwm-6.2"
   tags:
     - dwm
-- name: dwm - Patch dwm for no border on one maximized window
+- name: dwm - Patch dwm
   become: yes
   become_user: "{{ main_user }}"
-  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/noborder.diff
+  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/*.diff
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
