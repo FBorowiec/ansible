@@ -42,6 +42,10 @@
   shell: luarocks install luacheck
   tags:
     - neovim
+- name: Neovim Plugin Development 3 luaformatter
+  shell: luarocks install --server=https://luarocks.org/dev luaformatter
+  tag:
+    - neovim
 - name: Build neovim
   become: yes
   become_user: "{{ main_user }}"
