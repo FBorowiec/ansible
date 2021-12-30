@@ -1,9 +1,26 @@
 #!/usr/bin/env bash
 
-## Install ansible
-sudo apt-add-repository -y ppa:ansible/ansible
-sudo apt-get update -y
-sudo apt-get install -y curl git software-properties-common ansible
+set -e
 
-# Install my ansible
-ansible-pull -U https://github.com/FBorowiec/ansible.git --ask-become-pass --ask-vault-pass
+set -eif ! [ -x "$(command -v ansible)" ]; then
+    # Installs ansible
+    sudo apt-add-repository -y ppa:ansible/ansible
+    sudo apt-get update -y
+    sudo apt-get install -y curl git software-properties-common ansible
+fi
+
+# Project root directory
+ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Host file location
+HOSTS="$ROOTDIR/hosts"
+# Main playbook
+PLAYBOOK="$ROOTDIR/local.yml"
+
+# Runs Ansible playbook using user.
+ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
+
+if command -v terminal-notifier 1>/dev/null 2>&1; then
+    terminal-notifier -title "Ansible: Bootstrap complete" -message "Successfully set up dev environment."
+fi
+
+exit 0

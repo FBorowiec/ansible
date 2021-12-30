@@ -39,3 +39,4 @@
   - include: tasks/brave.yml
   - include: tasks/spotify.yml
   - include: tasks/dwm.yml
+  - include: tasks/dmenu.yml
