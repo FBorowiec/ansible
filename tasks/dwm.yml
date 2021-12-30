@@ -52,7 +52,7 @@
 - name: dwm - Patch dwm
   become: yes
   become_user: "{{ main_user }}"
-  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/patches/*.diff
+  shell: "patch {{ main_user_dir }}/dwm-6.2/dwm.c files/dwm/patches/*.diff"
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
