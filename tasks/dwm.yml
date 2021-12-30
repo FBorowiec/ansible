@@ -3,7 +3,7 @@
   become: true
   apt:
     update_cache: yes
-    name: ["meson", "suckless-tools", "stterm"]
+    name: ["meson", "suckless-tools", "stterm", "libpulse-dev"]
   tags:
   - dwm
 - name: Clone pamixer
