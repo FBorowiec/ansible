@@ -34,6 +34,31 @@
   tags:
   - dwm
   - dmenu
+- name: Create patch directory
+  become: yes
+  become_user: "{{ main_user }}"
+  file:
+    path: "{{ main_user_dir }}/dmenu-5.0/patch/"
+    state: directory
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - patches
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cp -r files/dmenu/patches/ {{ main_user_dir }}/dmenu-5.0/patch"
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - patches.h
+  become: yes
+  become_user: "{{ main_user }}"
+  copy:
+    src: files/dmenu/patches.def.h
+    dest: "{{ main_user_dir }}/dmenu-5.0"
+  tags:
+  - dwm
+  - dmenu
 - name: dmenu - Build
   become: yes
   become_user: "{{ main_user }}"
