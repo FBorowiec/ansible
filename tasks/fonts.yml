@@ -75,3 +75,9 @@
     name: fonts-powerline
   tags:
   - fonts
+- name: Install Jetbrains
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
+  tags:
+  - fonts

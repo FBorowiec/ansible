@@ -1,0 +1,75 @@
+---
+- name: Install dmenu deps
+  become: true
+  apt:
+    update_cache: yes
+    name: ["meson", "suckless-tools", "stterm"]
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - Download
+  become: yes
+  become_user: "{{ main_user }}"
+  get_url:
+    url: https://dl.suckless.org/tools/dmenu-5.0.tar.gz
+    dest: "{{ main_user_dir }}"
+  tags:
+  - dwm
+  - dmenu
+- name: dwm - Extract
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.unarchive:
+    src: "{{ main_user_dir }}/dmenu-5.0.tar.gz"
+    dest: "{{ main_user_dir }}"
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - config.h
+  become: yes
+  become_user: "{{ main_user }}"
+  copy:
+    src: config.h
+    dest: "{{ main_user_dir }}/dwm-6.2"
+  tags:
+  - dwm
+  - dmenu
+- name: dwm - Patch dwm
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/*.diff
+  tags:
+  - dwm
+  - dmenu
+- name: dwm - Install dwm dependencies
+  become: true
+  apt:
+    pkg:
+      - libx11-dev
+      - libxft-dev
+      - libxinerama-dev
+  tags:
+  - dwm
+  - dmenu
+- name: dwm - Build
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/dmenu-5.0 && make"
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - Install
+  become: true
+  shell: "cd {{ main_user_dir }}/dmenu-5.0 && make install"
+  tags:
+  - dwm
+  - dmenu
+- name: dmenu - Cleanup
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.file:
+    path: "{{ main_user_dir }}/dmenu-5.0.tar.gz"
+    state: absent
+  tags:
+  - dwm
+  - dmenu

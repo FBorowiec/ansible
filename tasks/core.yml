@@ -32,3 +32,9 @@
   tags:
   - core
   - neovim
+- name: Pdf reader
+  become: true
+  apt:
+    name: ["zathura"]
+  tags:
+  - core

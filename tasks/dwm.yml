@@ -45,14 +45,14 @@
   become: yes
   become_user: "{{ main_user }}"
   copy:
-    src: config.h
+    src: files/dwm/config/config.def.h
     dest: "{{ main_user_dir }}/dwm-6.2"
   tags:
     - dwm
 - name: dwm - Patch dwm
   become: yes
   become_user: "{{ main_user }}"
-  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/*.diff
+  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/patches/*.diff
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
