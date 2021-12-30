@@ -16,7 +16,7 @@
   tags:
   - dwm
   - dmenu
-- name: dwm - Extract
+- name: dmenu - Extract
   become: yes
   become_user: "{{ main_user }}"
   ansible.builtin.unarchive:
@@ -29,29 +29,12 @@
   become: yes
   become_user: "{{ main_user }}"
   copy:
-    src: config.h
-    dest: "{{ main_user_dir }}/dwm-6.2"
+    src: files/dmenu/config/config.def.h
+    dest: "{{ main_user_dir }}/dmenu-5.0"
   tags:
   - dwm
   - dmenu
-- name: dwm - Patch dwm
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: patch "{{ main_user_dir }}/dwm-6.2/dwm.c" files/dwm/*.diff
-  tags:
-  - dwm
-  - dmenu
-- name: dwm - Install dwm dependencies
-  become: true
-  apt:
-    pkg:
-      - libx11-dev
-      - libxft-dev
-      - libxinerama-dev
-  tags:
-  - dwm
-  - dmenu
-- name: dwm - Build
+- name: dmenu - Build
   become: yes
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/dmenu-5.0 && make"
