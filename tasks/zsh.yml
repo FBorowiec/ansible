@@ -9,6 +9,10 @@
   shell: chsh -s /usr/bin/zsh
   tags:
   - zsh
+- name: Remove existing configuration
+  shell: "rm -rf {{ main_user_dir }}/.oh-my-zsh"
+  tags:
+  - zsh
 - name: Install ohmyzsh
   become: yes
   become_user: "{{ main_user }}"
@@ -29,11 +33,5 @@
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-  tags:
-  - zsh
-- name: update zsrhc
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: sed -i 's/(git/(git zsh-autosuggestions/' {{ main_user_dir }}/.zshrc
   tags:
   - zsh
