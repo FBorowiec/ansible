@@ -46,7 +46,7 @@
 - name: dmenu - patches
   become: yes
   become_user: "{{ main_user }}"
-  shell: "cp -r files/dmenu/patches/ {{ main_user_dir }}/dmenu-5.0/patch"
+  shell: "cp -r files/dmenu/patches/* {{ main_user_dir }}/dmenu-5.0/patch"
   tags:
   - dwm
   - dmenu
