@@ -1,9 +1,8 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=dwm
-Comment=dynamic window manager
+Comment=Dynamic window manager
 Exec=/usr/local/bin/dwm
 TryExec=dwm
-Type=Application
-X-LightDM-DesktopName=dwm
-DesktopNames=dwm
+Type=XSession
 Keywords=tiling;wm;windowmanager;window;manager;
