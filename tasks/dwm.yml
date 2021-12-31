@@ -58,9 +58,8 @@
     cd {{ main_user_dir }}/dwm-6.2
     for patch in $PWD/files/dwm/patches/*.diff
     do
-      patch dwm.c < "$patch"
+      patch {{ main_user_dir }}/dwm-6.2/dwm.c < $patch
     done
-  # shell: "patch {{ main_user_dir }}/dwm-6.2/dwm.c < files/dwm/patches/*.diff"
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
