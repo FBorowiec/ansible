@@ -60,12 +60,12 @@
   become: yes
   become_user: "{{ main_user }}"
   shell: |
-    PWD=echo `pwd` \
     set -e \
+    PWD=echo `pwd` \
     cd {{ main_user_dir }}/dwm-6.2
     for patch in $PWD/files/dwm/patches/*.diff
     do
-      patch {{ main_user_dir }}/dwm-6.2/dwm.c < $patch
+      patch -p1 < $patch
     done
   tags:
     - dwm
