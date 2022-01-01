@@ -22,3 +22,56 @@
   shell: gsettings set org.gnome.desktop.interface gtk-theme "Nordic" && gsettings set org.gnome.desktop.wm.preferences theme "Nordic"
   tags:
   - gtk
+- name: Create icons directory
+  become: yes
+  become_user: "{{ main_user }}"
+  file:
+    path: "{{ main_user_dir }}/.icons"
+    state: directory
+  tags:
+  - gtk
+- name: Add papirus icons
+  apt_repository:
+    repo: 'ppa:papirus/papirus'
+    state: present
+  become: true
+  tags:
+  - gtk
+- name: Install papirus-icon-theme
+  apt:
+    name: papirus-icon-theme
+  become: true
+  tags:
+  - gtk
+- name: Clone Papirus nord
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/Adapta-Projects/Papirus-Nord.git"
+    dest: "{{ main_user_dir }}/.icons/Papirus-Nord"
+  tags:
+  - gtk
+- name: Install icons
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/.icons/Papirus-Nord && bash install"
+  tags:
+  - gtk
+- name: Set icons
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: gsettings set org.gnome.desktop.interface icon-theme "Papirus-Nord "
+  tags:
+  - gtk
+- name: Download Nordzy cursors
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'cd {{ main_user_dir }}/.icons && curl -L "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.1.0/Nordzy-cursors.tar.gz" | tar -xz'
+  tags:
+  - gtk
+- name: Set Nordzy cursors
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: gsettings set org.gnome.desktop.interface cursor-theme "Nordzy-cursors"
+  tags:
+  - gtk
