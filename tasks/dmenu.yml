@@ -7,77 +7,33 @@
   tags:
   - dwm
   - dmenu
-- name: dmenu - Download
+- name: dwm - Clone
   become: yes
   become_user: "{{ main_user }}"
-  get_url:
-    url: https://dl.suckless.org/tools/dmenu-5.0.tar.gz
+  ansible.builtin.git:
+    repo: "https://github.com/bakkeby/dmenu-flexipatch.git"
     dest: "{{ main_user_dir }}"
   tags:
-  - dwm
-  - dmenu
-- name: dmenu - Extract
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.unarchive:
-    src: "{{ main_user_dir }}/dmenu-5.0.tar.gz"
-    dest: "{{ main_user_dir }}"
-  tags:
-  - dwm
-  - dmenu
-- name: dmenu - config.h
+    - dwm
+- name: dwm - config.h
   become: yes
   become_user: "{{ main_user }}"
   copy:
-    src: files/dmenu/config/config.def.h
-    dest: "{{ main_user_dir }}/dmenu-5.0"
+    src: files/dmenu/config.def.h
+    dest: "{{ main_user_dir }}/dmenu-flexipatch"
   tags:
-  - dwm
-  - dmenu
-- name: Create patch directory
-  become: yes
-  become_user: "{{ main_user }}"
-  file:
-    path: "{{ main_user_dir }}/dmenu-5.0/patch/"
-    state: directory
-  tags:
-  - dwm
-  - dmenu
-- name: dmenu - patches
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: "cp -r files/dmenu/patches/* {{ main_user_dir }}/dmenu-5.0/patch"
-  tags:
-  - dwm
-  - dmenu
+    - dwm
 - name: dmenu - patches.h
   become: yes
   become_user: "{{ main_user }}"
   copy:
     src: files/dmenu/patches.def.h
-    dest: "{{ main_user_dir }}/dmenu-5.0"
+    dest: "{{ main_user_dir }}/dmenu-flexipatch"
   tags:
-  - dwm
-  - dmenu
-- name: dmenu - Build
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/dmenu-5.0 && make"
-  tags:
-  - dwm
-  - dmenu
+    - dwm
 - name: dmenu - Install
   become: true
-  shell: "cd {{ main_user_dir }}/dmenu-5.0 && make install"
-  tags:
-  - dwm
-  - dmenu
-- name: dmenu - Cleanup
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path: "{{ main_user_dir }}/dmenu-5.0.tar.gz"
-    state: absent
+  shell: "cd {{ main_user_dir }}/dmenu-flexipatch && make install"
   tags:
   - dwm
   - dmenu
