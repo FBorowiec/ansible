@@ -3,6 +3,7 @@
 /* The alpha patch adds transparency for the dmenu window.
  * You need to uncomment the corresponding line in config.mk to use the
  * -lXrender library when including this patch.
+ * https://github.com/bakkeby/patches/blob/master/dmenu/dmenu-alpha-5.0_20210725_523aa08.diff
  */
 #define ALPHA_PATCH 0
 
@@ -31,12 +32,27 @@
  */
 #define COLOR_EMOJI_PATCH 0
 
+/* Minor patch to enable the use of Ctrl+v (XA_PRIMARY) and Ctrl+Shift+v
+ * (CLIPBOARD) to paste. By default dmenu only supports Ctrl+y and Ctrl+Shift+y
+ * to paste.
+ */
+#define CTRL_V_TO_PASTE_PATCH 0
+
 /* This patch adds a flag (-dy) which makes dmenu run the command given to it
  * whenever input is changed with the current input as the last argument and
  * update the option list according to the output of that command.
  * https://tools.suckless.org/dmenu/patches/dynamicoptions/
  */
 #define DYNAMIC_OPTIONS_PATCH 0
+
+/* This patch will allow for emojis on the left side with a colored background
+ * when selected. To test this try running: $ echo -e ":b here\n:p there\n:r
+ * and here" | ./dmenu -p "Search..." -W 400 -l 20 -i -h -1 NB: the original
+ * patch came embedded with the the xyw patch, the morecolors patch and the line
+ * height patch and as such is intended to be combined with these.
+ * https://tools.suckless.org/dmenu/patches/emoji-highlight/
+ */
+#define EMOJI_HIGHLIGHT_PATCH 0
 
 /* This patch make it so that fuzzy matches gets highlighted and is therefore
  * meant to be used together with the fuzzymatch patch.
@@ -56,6 +72,12 @@
  * https://tools.suckless.org/dmenu/patches/grid/
  */
 #define GRID_PATCH 1
+
+/* This patch adds the ability to move left and right through a grid.
+ * This patch depends on the grid patch.
+ * https://tools.suckless.org/dmenu/patches/gridnav/
+ */
+#define GRIDNAV_PATCH 0
 
 /* This patch highlights the individual characters of matched text for each
  * dmenu list entry. The fuzzy highlight patch takes precedence over this patch.
@@ -78,8 +100,8 @@
  */
 #define INITIALTEXT_PATCH 0
 
-/* This patch adds a flag which will cause dmenu to select an item immediately
- * if there is only one matching option left.
+/* This patch adds a flag which will cause dmenu to selet an item immediately if
+ * there is only one matching option left.
  * https://tools.suckless.org/dmenu/patches/instant/
  */
 #define INSTANT_PATCH 0
@@ -103,8 +125,8 @@
  */
 #define LINE_HEIGHT_PATCH 1
 
-/* This patch adds a -wm flag which sets overide_redirect to false; thus letting
- * your window manager manage the dmenu window.
+/* This patch adds a -wm flag which sets override_redirect to false; thus
+ * letting your window manager manage the dmenu window.
  *
  * This may be helpful in contexts where you don't want to exclusively bind
  * dmenu or want to treat dmenu more as a "window" rather than as an overlay.
@@ -136,9 +158,22 @@
 #define MULTI_SELECTION_PATCH 0
 
 /* This patch provides dmenu the ability for history navigation similar to that
- * of bash. https://tools.suckless.org/dmenu/patches/navhistory/
+ * of bash.
+ *
+ * If you take this patch then it is recommended that you also uncomment the
+ * line in the dmenu_run script which replaces the exec command.
+ *
+ * https://tools.suckless.org/dmenu/patches/navhistory/
  */
 #define NAVHISTORY_PATCH 0
+
+/* Adds the -S option to disable sorting menu items after matching. Useful, for
+ * example, when menu items are sorted by their frequency of use (using an
+ * external cache) and the most frequently selected items should always appear
+ * first regardless of how they were exact, prefix, or substring matches.
+ * https://tools.suckless.org/dmenu/patches/no-sort/
+ */
+#define NO_SORT_PATCH 0
 
 /* This is a patch to have dmenu read stdin in a non blocking way, making it
  * wait for input both from stdin and from X. This means that you can continue
@@ -198,6 +233,14 @@
  */
 #define PIPEOUT_PATCH 0
 
+/* Lifted from the listfullwidth patch this simple change just avoids colors for
+ * the prompt (with the -p option or in config.h) by making it use the same
+ * style as the rest of the input field. The rest of the listfullwidth patch is
+ * covered by the vertfull patch.
+ * https://tools.suckless.org/dmenu/patches/listfullwidth/
+ */
+#define PLAIN_PROMPT_PATCH 0
+
 /* This patch changes the behaviour of matched items and the Tab key to allow
  * tab completion. https://tools.suckless.org/dmenu/patches/prefix-completion/
  */
@@ -207,6 +250,14 @@
  * should be pre-selected. https://tools.suckless.org/dmenu/patches/preselect/
  */
 #define PRESELECT_PATCH 0
+
+/* This patch allows dmenu to print out the 0-based index of matched text
+ * instead of the matched text itself. This can be useful in cases where you
+ * would like to select entries from one array of text but index into another,
+ * or when you are selecting from an ordered list of non-unique items.
+ * https://tools.suckless.org/dmenu/patches/printindex/
+ */
+#define PRINTINDEX_PATCH 0
 
 /* This patch adds a flag (-t) which makes Return key to ignore selection and
  * print the input text to stdout. The flag basically swaps the functions of
@@ -225,6 +276,14 @@
  */
 #define REJECTNOMATCH_PATCH 0
 
+/* This patch adds a '-1' option which disables Shift-Return and Ctrl-Return.
+ * This guarantees that dmenu will only output one item, and that item was read
+ * from stdin. The original patch used '-r'. This was changed to '-1' to avoid
+ * conflict with the incremental patch.
+ * https://tools.suckless.org/dmenu/patches/restrict-return/
+ */
+#define RESTRICT_RETURN_PATCH 0
+
 /* This patch adds support for text scrolling and no longer appends '...' for
  * long input as it can handle long text.
  * https://tools.suckless.org/dmenu/patches/scroll/
@@ -237,6 +296,17 @@
  * https://tools.suckless.org/dmenu/patches/symbols/
  */
 #define SYMBOLS_PATCH 0
+
+/* With this patch dmenu will split input lines at first tab character and only
+ * display first part, but it will perform matching on and output full lines as
+ * usual.
+ *
+ * This can be useful if you want to separate data and representation, for
+ * example, a music player wrapper can display only a track title to user, but
+ * still supply full filename to the underlying script.
+ * https://tools.suckless.org/dmenu/patches/tsv/
+ */
+#define TSV_PATCH 0
 
 /* This patch prevents dmenu from indenting items at the same level as the
  * prompt length. https://tools.suckless.org/dmenu/patches/vertfull/
@@ -255,6 +325,9 @@
  *    dmenu.foreground    : normal foreground color
  *    dmenu.selbackground : selected background color
  *    dmenu.selforeground : selected foreground color
+ *
+ * See patch/xresources.c for more color settings.
+ *
  * https://tools.suckless.org/dmenu/patches/xresources/
  */
 #define XRESOURCES_PATCH 0
@@ -263,4 +336,4 @@
  * The center patch takes precedence over the XYW patch if enabled.
  * https://tools.suckless.org/dmenu/patches/xyw/
  */
-#define XYW_PATCH 1r
+#define XYW_PATCH 1

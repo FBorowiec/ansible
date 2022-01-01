@@ -37,23 +37,19 @@
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/bakkeby/dwm-flexipatch.git"
-    dest: "{{ main_user_dir }}"
+    dest: "{{ main_user_dir }}/dwm"
   tags:
     - dwm
-- name: dwm - config.h
-  become: yes
-  become_user: "{{ main_user }}"
-  copy:
-    src: files/dwm/config.def.h
-    dest: "{{ main_user_dir }}/dwm-flexipatch"
-  tags:
-    - dwm
+# - name: dwm - config.h
+#   copy:
+#     src: files/dwm/config.def.h
+#     dest: "{{ main_user_dir }}/dwm"
+#   tags:
+#     - dwm
 - name: dwm - patches.h
-  become: yes
-  become_user: "{{ main_user }}"
   copy:
     src: files/dwm/patches.def.h
-    dest: "{{ main_user_dir }}/dwm-flexipatch"
+    dest: "{{ main_user_dir }}/dwm"
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
@@ -68,12 +64,12 @@
 - name: dwm - Build
   become: yes
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/dwm-flexipatch && make"
+  shell: "cd {{ main_user_dir }}/dwm && make"
   tags:
     - dwm
 - name: dwm - Install
   become: true
-  shell: "cd {{ main_user_dir }}/dwm-flexipatch && make install"
+  shell: "cd {{ main_user_dir }}/dwm && make install"
   tags:
     - dwm
 - name: dwm - dwm.desktop
