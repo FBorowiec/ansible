@@ -32,7 +32,7 @@
   become: true
   tags:
     - dwm
-- name: dwm - Download
+- name: dwm - Clone
   become: yes
   become_user: "{{ main_user }}"
   ansible.builtin.git:
