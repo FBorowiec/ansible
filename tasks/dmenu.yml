@@ -12,28 +12,27 @@
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/bakkeby/dmenu-flexipatch.git"
-    dest: "{{ main_user_dir }}"
+    dest: "{{ main_user_dir }}/dmenu"
   tags:
-    - dwm
-- name: dwm - config.h
-  become: yes
-  become_user: "{{ main_user }}"
-  copy:
-    src: files/dmenu/config.def.h
-    dest: "{{ main_user_dir }}/dmenu-flexipatch"
-  tags:
-    - dwm
+  - dwm
+  - dmenu
+# - name: dwm - config.h
+#   copy:
+#     src: files/dmenu/config.def.h
+#     dest: "{{ main_user_dir }}/dmenu"
+#   tags:
+#   - dwm
+#   - dmenu
 - name: dmenu - patches.h
-  become: yes
-  become_user: "{{ main_user }}"
   copy:
     src: files/dmenu/patches.def.h
-    dest: "{{ main_user_dir }}/dmenu-flexipatch"
+    dest: "{{ main_user_dir }}/dmenu"
   tags:
-    - dwm
+  - dwm
+  - dmenu
 - name: dmenu - Install
   become: true
-  shell: "cd {{ main_user_dir }}/dmenu-flexipatch && make install"
+  shell: "cd {{ main_user_dir }}/dmenu && make install"
   tags:
   - dwm
   - dmenu
