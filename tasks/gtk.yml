@@ -1,0 +1,24 @@
+
+---
+- name: Create themes directory
+  become: yes
+  become_user: "{{ main_user }}"
+  file:
+    path: "{{ main_user_dir }}/.themes"
+    state: directory
+  tags:
+  - gtk
+- name: Clone Nordic theme
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/EliverLara/Nordic.git"
+    dest: "{{ main_user_dir }}/.themes/Nordic"
+  tags:
+  - gtk
+- name: Set Nordic theme
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: gsettings set org.gnome.desktop.interface gtk-theme "Nordic" && gsettings set org.gnome.desktop.wm.preferences theme "Nordic"
+  tags:
+  - gtk
