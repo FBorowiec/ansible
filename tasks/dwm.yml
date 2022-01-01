@@ -35,16 +35,8 @@
 - name: dwm - Download
   become: yes
   become_user: "{{ main_user }}"
-  get_url:
-    url: https://dl.suckless.org/dwm/dwm-6.2.tar.gz
-    dest: "{{ main_user_dir }}"
-  tags:
-    - dwm
-- name: dwm - Extract
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.unarchive:
-    src: "{{ main_user_dir }}/dwm-6.2.tar.gz"
+  ansible.builtin.git:
+    repo: "https://github.com/bakkeby/dwm-flexipatch.git"
     dest: "{{ main_user_dir }}"
   tags:
     - dwm
@@ -52,21 +44,16 @@
   become: yes
   become_user: "{{ main_user }}"
   copy:
-    src: files/dwm/config/config.def.h
-    dest: "{{ main_user_dir }}/dwm-6.2"
+    src: files/dwm/config.def.h
+    dest: "{{ main_user_dir }}/dwm-flexipatch"
   tags:
     - dwm
-- name: dwm - Patch dwm
+- name: dwm - patches.h
   become: yes
   become_user: "{{ main_user }}"
-  shell: |
-    set -e \
-    PWD=echo `pwd` \
-    cd {{ main_user_dir }}/dwm-6.2
-    for patch in $PWD/files/dwm/patches/*.diff
-    do
-      patch -p1 < $patch
-    done
+  copy:
+    src: files/dwm/patches.def.h
+    dest: "{{ main_user_dir }}/dwm-flexipatch"
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
@@ -81,12 +68,12 @@
 - name: dwm - Build
   become: yes
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/dwm-6.2 && make"
+  shell: "cd {{ main_user_dir }}/dwm-flexipatch && make"
   tags:
     - dwm
 - name: dwm - Install
   become: true
-  shell: "cd {{ main_user_dir }}/dwm-6.2 && make install"
+  shell: "cd {{ main_user_dir }}/dwm-flexipatch && make install"
   tags:
     - dwm
 - name: dwm - dwm.desktop
@@ -94,13 +81,5 @@
   copy:
     src: dwm.desktop
     dest: /usr/share/xsessions
-  tags:
-    - dwm
-- name: dmw - Cleanup
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path: "{{ main_user_dir }}/dwm-6.2.tar.gz"
-    state: absent
   tags:
     - dwm

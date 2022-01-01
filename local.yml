@@ -20,23 +20,23 @@
       when: ansible_distribution == ["Debian", "Ubuntu"]
 
   tasks:
-  - include: tasks/ssh.yml
-  - include: tasks/core.yml
-  - include: tasks/alacritty.yml
-  - include: tasks/fonts.yml
-  - include: tasks/tmux.yml
-  - include: tasks/node.yml
-  - include: tasks/npm-packages.yml
-  - include: tasks/pip-packages.yml
-  - include: tasks/neovim.yml
-  - include: tasks/zsh.yml
-  - include: tasks/dotfiles.yml
-  - include: tasks/docker.yml
-  - include: tasks/kubectl.yml
-  - include: tasks/helm.yml
-  - include: tasks/bazel.yml
-  - include: tasks/cpp.yml
-  - include: tasks/brave.yml
-  - include: tasks/spotify.yml
+  # - include: tasks/ssh.yml
+  # - include: tasks/core.yml
+  # - include: tasks/alacritty.yml
+  # - include: tasks/fonts.yml
+  # - include: tasks/tmux.yml
+  # - include: tasks/node.yml
+  # - include: tasks/npm-packages.yml
+  # - include: tasks/pip-packages.yml
+  # - include: tasks/neovim.yml
+  # - include: tasks/zsh.yml
+  # - include: tasks/dotfiles.yml
+  # - include: tasks/docker.yml
+  # - include: tasks/kubectl.yml
+  # - include: tasks/helm.yml
+  # - include: tasks/bazel.yml
+  # - include: tasks/cpp.yml
+  # - include: tasks/brave.yml
+  # - include: tasks/spotify.yml
   - include: tasks/dwm.yml
   - include: tasks/dmenu.yml
