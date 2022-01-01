@@ -28,13 +28,13 @@
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
   - gtk
-- name: Write new user theme
+- name: Enable user extensions
   become: yes
   become_user: "{{ main_user }}"
-  shell: dconf write /org/gnome/shell/extensions/user-theme/name "'Nordic'"
+  shell: 'gnome-extensions enable user-themes@gnome-shell-extensions.gcampax.github.com'
   tags:
   - gtk
-- name: Set user nordic theme - REQUIRES USER THEMES INSTALLED
+- name: Set user nordic theme
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
@@ -55,10 +55,10 @@
   tags:
   - gtk
 - name: Add papirus icons
+  become: true
   apt_repository:
     repo: 'ppa:papirus/papirus'
     state: present
-  become: true
   tags:
   - gtk
 - name: Install papirus-icon-theme
@@ -153,5 +153,17 @@
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock autohide true'
+  tags:
+  - gtk
+- name: Other gsettings - 10
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-trash false'
+  tags:
+  - gtk
+- name: Other gsettings - 11
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-home false'
   tags:
   - gtk
