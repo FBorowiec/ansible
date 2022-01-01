@@ -1,5 +1,11 @@
 
 ---
+- name: Install deps
+  become: true
+  apt:
+    name: gnome-shell-extensions
+  tags:
+    - gtk
 - name: Create themes directory
   become: yes
   become_user: "{{ main_user }}"
@@ -17,14 +23,26 @@
   tags:
   - gtk
 - name: Set gtk theme
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
   - gtk
-# - name: Set user nordic theme - REQUIRES USER THEMES INSTALLED
-#   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
-#   tags:
-#   - gtk
+- name: Write new user theme
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: dconf write /org/gnome/shell/extensions/user-theme/name "'Nordic'"
+  tags:
+  - gtk
+- name: Set user nordic theme - REQUIRES USER THEMES INSTALLED
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
+  tags:
+  - gtk
 - name: Set wm theme
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences theme "Nordic"'
   tags:
   - gtk
@@ -56,6 +74,8 @@
   tags:
   - gtk
 - name: Set icons
+  become: yes
+  become_user: "{{ main_user }}"
   shell: gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
   tags:
   - gtk
@@ -77,30 +97,44 @@
   tags:
   - gtk
 - name: Other gsettings - 1
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false'
   tags:
   - gtk
 - name: Other gsettings - 2
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM'
   tags:
   - gtk
 - name: Other gsettings - 3
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED'
   tags:
   - gtk
 - name: Other gsettings - 4
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48'
   tags:
   - gtk
 - name: Other gsettings - 5
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.0'
   tags:
   - gtk
 - name: Other gsettings - 6
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false'
   tags:
   - gtk
 - name: Other gsettings - 7
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences button-layout close,minimize,maximize:'
   tags:
   - gtk
@@ -110,6 +144,14 @@
   tags:
   - gtk
 - name: Other gsettings - 8
+  become: yes
+  become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.background picture-uri "file:///usr/share/backgrounds/star_wars_last_supper.jpg"'
+  tags:
+  - gtk
+- name: Other gsettings - 9
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock autohide true'
   tags:
   - gtk
