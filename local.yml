@@ -6,6 +6,9 @@
     main_user_dir: "/home/{{ lookup('env', 'USER') }}"
     source_key: "./.ssh/id_rsa"
     dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_rsa"
+    discord:
+      version: 0.0.16
+      libfixed: false
   pre_tasks:
     - name: Pre-run | update package cache (arch)
       tags: always
@@ -38,6 +41,7 @@
   - include: tasks/cpp.yml
   - include: tasks/brave.yml
   - include: tasks/spotify.yml
+  - include: tasks/discord.yml
   - include: tasks/gtk.yml
   - include: tasks/dwm.yml
   - include: tasks/dmenu.yml
