@@ -10,9 +10,28 @@
   become: true
   apt:
     update_cache: yes
-    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "picom", "xsettingsd"]
+    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd"]
   tags:
   - dwm
+- name: Clone picom
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: 'https://github.com/yshui/picom.git'
+    dest: "{{ main_user_dir }}/picom"
+  tags:
+   - dwm
+- name: Build picom
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/picom && meson --buildtype=release . build && ninja -C build"
+  tags:
+    - dwm
+- name: Install picom
+  shell: "cd {{ main_user_dir }}/picom && ninja -C build install"
+  become: true
+  tags:
+    - dwm
 - name: Clone pamixer
   become: yes
   become_user: "{{ main_user }}"
