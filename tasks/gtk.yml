@@ -28,7 +28,7 @@
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
   - gtk
-- name: Enable user extensions
+- name: Install user extensions
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gnome-extensions enable user-themes@gnome-shell-extensions.gcampax.github.com'
@@ -38,6 +38,12 @@
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
+  tags:
+  - gtk
+- name: Enable user extensions
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gnome-extensions enable user-themes@gnome-shell-extensions.gcampax.github.com'
   tags:
   - gtk
 - name: Set wm theme

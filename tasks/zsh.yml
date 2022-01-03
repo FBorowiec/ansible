@@ -35,3 +35,9 @@
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
   tags:
   - zsh
+- name: Launch zsh from bash
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "sed -i '/zsh && exit/d' {{ main_user_dir }}/.bashrc && echo 'zsh && exit' >> {{ main_user_dir }}/.bashrc"
+  tags:
+  - zsh
