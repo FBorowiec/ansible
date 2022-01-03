@@ -2,6 +2,9 @@
 - name: Clone Neovim
   become: yes
   become_user: "{{ main_user }}"
+  retries: 3
+  delay: 10
+  ignore_errors: yes
   ansible.builtin.git:
     repo: "https://github.com/neovim/neovim.git"
     dest: "{{ main_user_dir }}/neovim"
@@ -40,6 +43,9 @@
     - neovim
 - name: Neovim Plugin Development 2 luacheck
   shell: luarocks install luacheck
+  retries: 3
+  delay: 10
+  ignore_errors: yes
   tags:
     - neovim
 # - name: Neovim Plugin Development 3 luaformatter
