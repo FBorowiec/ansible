@@ -6,6 +6,7 @@
     name: ["gnome-shell-extensions", "curl", "unzip"]
   tags:
     - gtk
+  register: gnome-setup
 - name: Create themes directory
   become: yes
   become_user: "{{ main_user }}"
@@ -194,10 +195,5 @@
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-home false'
-  tags:
-  - gtk
-- name: Restart gdm
-  become: true
-  shell: systemctl restart gdm
   tags:
   - gtk

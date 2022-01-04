@@ -45,3 +45,4 @@
   - include: tasks/gtk.yml
   - include: tasks/dwm.yml
   - include: tasks/dmenu.yml
+  - include: tasks/restart.yml
