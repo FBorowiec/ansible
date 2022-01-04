@@ -6,7 +6,6 @@
     name: ["gnome-shell-extensions", "curl", "unzip"]
   tags:
     - gtk
-  register: gnome-setup
 - name: Create themes directory
   become: yes
   become_user: "{{ main_user }}"
