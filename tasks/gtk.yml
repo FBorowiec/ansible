@@ -3,7 +3,7 @@
 - name: Install deps
   become: true
   apt:
-    name: gnome-shell-extensions
+    name: ["gnome-shell-extensions", "curl", "unzip"]
   tags:
     - gtk
 - name: Create themes directory
@@ -28,10 +28,24 @@
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
   - gtk
-- name: Install user extensions
+- name: Create extensions directory
   become: yes
   become_user: "{{ main_user }}"
-  shell: 'gnome-extensions enable user-themes@gnome-shell-extensions.gcampax.github.com'
+  file:
+    path: "{{ main_user_dir }}/.local/share/gnome-shell/extensions/"
+    state: directory
+  tags:
+  - gtk
+- name: Copy extensions
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'cp files/gnome-shell-extensions.zip {{ main_user_dir }}/.local/share/gnome-shell/extensions/'
+  tags:
+  - gtk
+- name: Extract extensions
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'cd {{ main_user_dir }}/.local/share/gnome-shell/extensions/ && unzip gnome-shell-extensions.zip && rm gnome-shell-extensions.zip'
   tags:
   - gtk
 - name: Set user nordic theme
@@ -43,7 +57,10 @@
 - name: Enable user extensions
   become: yes
   become_user: "{{ main_user }}"
-  shell: 'gnome-extensions enable user-themes@gnome-shell-extensions.gcampax.github.com'
+  shell: |
+    gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com &&
+    gnome-extensions enable dynamic-panel-transparency@rockon999.github.io &&
+    gnome-extensions enable transparent-window-moving@noobsai.github.com
   tags:
   - gtk
 - name: Set wm theme
@@ -177,5 +194,10 @@
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-home false'
+  tags:
+  - gtk
+- name: Restart gdm
+  become: true
+  shell: systemctl restart gdm
   tags:
   - gtk
