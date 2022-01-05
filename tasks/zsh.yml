@@ -4,11 +4,6 @@
   apt: name=zsh
   tags:
   - zsh
-- name: Change shell
-  become: true
-  shell: chsh -s /usr/bin/zsh
-  tags:
-  - zsh
 - name: Remove existing configuration
   shell: "rm -rf {{ main_user_dir }}/.oh-my-zsh"
   tags:
@@ -33,6 +28,11 @@
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+  tags:
+  - zsh
+- name: Change shell
+  become: true
+  shell: chsh -s /usr/bin/zsh
   tags:
   - zsh
 - name: Launch zsh from bash
