@@ -94,7 +94,7 @@
 - name: Install Fantasque sans
   become: yes
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir/.local/share/fonts/ && curl -L 'https://github.com/belluzj/fantasque-sans/releases/download/v1.8.0/FantasqueSansMono-Normal.tar.gz' | tar -xz"
+  shell: 'cd {{ main_user_dir/.local/share/fonts && curl -L "https://github.com/belluzj/fantasque-sans/releases/download/v1.8.0/FantasqueSansMono-Normal.tar.gz" | tar -xz'
   tags:
   - fonts
 - name: X/fonts - Refresh font cache
