@@ -1,11 +1,4 @@
 ---
-- name: Add universe
-  become: true
-  apt_repository:
-    repo: 'ppa:universe'
-    state: present
-  tags:
-  - fonts
 - name: Update and upgrade apt packages
   become: true
   apt:
