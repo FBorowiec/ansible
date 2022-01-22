@@ -10,7 +10,7 @@
   become: true
   apt:
     update_cache: yes
-    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd"]
+    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd", "alsa-utils", "cmus", "brightnessctl", "xbacklight", "playerctl", "libplayerctl-dev", "calcurse", "wpasupplicat", "connman", "connman-dev"]
   tags:
   - dwm
 - name: Clone picom
@@ -51,26 +51,20 @@
   become: true
   tags:
     - dwm
-- name: dwm - Clone
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.git:
-    repo: "https://github.com/bakkeby/dwm-flexipatch.git"
-    dest: "{{ main_user_dir }}/dwm"
+- name: Install Rofi with deps
+  become: True
+  apt:
+    update_cache: yes
+    name: ["rofi", "mpc", "xclip", "xdotool"]
   tags:
-    - dwm
-# - name: dwm - config.h
-#   copy:
-#     src: files/dwm/config.def.h
-#     dest: "{{ main_user_dir }}/dwm"
-#   tags:
-#     - dwm
-- name: dwm - patches.h
-  copy:
-    src: files/dwm/patches.def.h
-    dest: "{{ main_user_dir }}/dwm"
+  - dwm
+- name: Install Dunst
+  become: True
+  apt:
+    update_cache: yes
+    name: ["dunst"]
   tags:
-    - dwm
+  - dwm
 - name: dwm - Install dwm dependencies
   become: true
   apt:
@@ -78,6 +72,14 @@
       - libx11-dev
       - libxft-dev
       - libxinerama-dev
+  tags:
+    - dwm
+- name: dwm - Clone
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/fborowiec/dwm.git"
+    dest: "{{ main_user_dir }}/dwm"
   tags:
     - dwm
 - name: dwm - Build

@@ -22,3 +22,34 @@
     name: ["spotify-client"]
   tags:
   - spotify
+- name: Add write permission to Spotify files
+  become: true
+  shell: chmod a+wr /usr/share/spotify && chmod a+wr /usr/share/spotify/Apps -R
+  tags:
+  - spotify
+- name: Install Spicetify
+  shell: curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
+  tags:
+  - spotify
+- name: Create initial config file
+  command:
+    cmd: spicetify
+    creates: "{{ main_user_dir }}/.config/spicetify/config.ini"
+  tags:
+  - spotify
+- name: Check current theme
+  command: spicetify config current_theme
+  check_mode: false
+  register: current_theme
+  tags:
+  - spotify
+- name: Set theme
+  command: spicetify config current_theme Nord
+  when: '"Nord" not in current_theme.stdout'
+  tags:
+  - spotify
+- name: Apply theme
+  command: spicetify backup apply
+  when: '"Nord" not in current_theme.stdout'
+  tags:
+  - spotify
