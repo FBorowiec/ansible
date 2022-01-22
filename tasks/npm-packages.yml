@@ -41,3 +41,9 @@
     global: yes
   tags:
   - node
+- name: Install emojione
+  npm:
+    name: emojione
+    global: yes
+  tags:
+  - node
