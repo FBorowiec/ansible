@@ -23,7 +23,12 @@ static const int vertpadbar = 2;  /* vertical padding for statusbar */
 static int tagindicatortype = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype = INDICATOR_NONE;
 static int floatindicatortype = INDICATOR_TOP_LEFT_SQUARE;
-static const char *fonts[] = {"fontawesome:size=10", "JoyPixels:pixelsize=10",
+static const char *fonts[] = {"JetBrainsMono Nerd Font",
+                              "FiraCode Nerd Font",
+                              "MesloLGS NF",
+                              "Hack:size=10",
+                              "fontawesome:size=10",
+                              "JoyPixels:pixelsize=10",
                               "monospace:size=10"};
 static const char dmenufont[] = "fontawesome:size=10";
 
@@ -141,7 +146,7 @@ static Sp scratchpads[] = {
  * patches.
  */
 static char *tagicons[][NUMTAGS] = {
-    [DEFAULT_TAGS] = {"", "", "", "4", "5", "6", "7", "", ""},
+    [DEFAULT_TAGS] = {"", "", "", "4", "5", "6", "7", "8", ""},
     [ALTERNATIVE_TAGS] = {"A", "B", "C", "D", "E", "F", "G", "H", "I"},
     [ALT_TAGS_DECORATION] = {"<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>",
                              "<8>", "<9>"},
