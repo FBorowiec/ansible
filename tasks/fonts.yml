@@ -63,21 +63,43 @@
     dest: "{{ main_user_dir }}/.local/share/fonts/MesloLGS_NF_Bold_Italic.ttf"
   tags:
   - fonts
-- name: X/fonts - Refresh font cache
+- name: Install font - Hermit medium mono
   become: yes
   become_user: "{{ main_user }}"
-  shell: fc-cache -fv
+  get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Medium/complete/Hurmit%20Medium%20Nerd%20Font%20Complete%20Mono.otf
+    dest: "{{ main_user_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete_Mono.otf"
   tags:
   - fonts
-- name: Install fonts-powerline
+- name: Install font - Hermit medium
+  become: yes
+  become_user: "{{ main_user }}"
+  get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Medium/complete/Hurmit%20Medium%20Nerd%20Font%20Complete.otf
+    dest: "{{ main_user_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete.otf"
+  tags:
+  - fonts
+- name: Install additional fonts
   become: true
   apt:
-    name: fonts-powerline
+    name: ["fonts-powerline", "fonts-font-awesome", "fonts-firacode"]
   tags:
   - fonts
 - name: Install Jetbrains
   become: yes
   become_user: "{{ main_user }}"
   shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
+  tags:
+  - fonts
+- name: Install Fantasque sans
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir/.local/share/fonts/ && curl -L 'https://github.com/belluzj/fantasque-sans/releases/download/v1.8.0/FantasqueSansMono-Normal.tar.gz' | tar -xz"
+  tags:
+  - fonts
+- name: X/fonts - Refresh font cache
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: fc-cache -fv
   tags:
   - fonts
