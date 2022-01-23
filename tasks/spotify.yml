@@ -28,28 +28,28 @@
   tags:
   - spotify
 - name: Install Spicetify
+  become: yes
+  become_user: "{{ main_user }}"
   shell: curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
   tags:
   - spotify
-- name: Create initial config file
-  command:
-    cmd: spicetify
-    creates: "{{ main_user_dir }}/.config/spicetify/config.ini"
-  tags:
-  - spotify
-- name: Check current theme
-  command: spicetify config current_theme
+- name: Enable Dribbblish extensions
+  become: yes
+  become_user: "{{ main_user }}"
+  command: cd {{ HOME_USER_DIR }}/.config/spicetify/Themes/Dribbblish && spicetify config extensions dribbblish.js
   check_mode: false
   register: current_theme
   tags:
   - spotify
 - name: Set theme
-  command: spicetify config current_theme Nord
-  when: '"Nord" not in current_theme.stdout'
+  become: yes
+  become_user: "{{ main_user }}"
+  command: spicetify config current_theme Dribbblish color_scheme nord-dark && spicetify config inject_css 1 replace_colors 1 overwrite_assets 1
   tags:
   - spotify
 - name: Apply theme
-  command: spicetify backup apply
-  when: '"Nord" not in current_theme.stdout'
+  become: yes
+  become_user: "{{ main_user }}"
+  command: spicetify backup apply && spicetify apply
   tags:
   - spotify
