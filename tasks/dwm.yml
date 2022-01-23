@@ -96,7 +96,7 @@
 - name: dwm - dwm.desktop
   become: true
   copy:
-    src: dwm.desktop
+    src: files/dwm.desktop
     dest: /usr/share/xsessions
   tags:
     - dwm
