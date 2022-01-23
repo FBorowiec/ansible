@@ -49,17 +49,29 @@
   when: discord_check_deb.rc == 1
   tags:
   - discord
-- name: Clone better discord
+- name: Launch Discord in background to create config files
   become: yes
   become_user: "{{ main_user }}"
-  ansible.builtin.git:
-    repo: "https://github.com/BetterDiscord/BetterDiscord.git"
-    dest: "{{ main_user_dir }}/.BetterDiscord"
+  shell: discord &
   tags:
   - discord
-- name: Build and install better discord
+- name: Download Better discord
   become: yes
   become_user: "{{ main_user }}"
-  command: "{{ main_user_dir}}/.BetterDiscord && npm install && npm run build && npm run inject"
+  get_url:
+    url: https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage
+    dest: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+  tags:
+  - discord
+- name: Make Better discord an executable
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "chmod +x {{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+  tags:
+  - discord
+- name: Launch Better discord installer
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: "cd {{ main_user_dir }}/Downloads && ./BetterDiscord-Linux.AppImage &"
   tags:
   - discord

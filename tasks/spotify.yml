@@ -22,6 +22,12 @@
     name: ["spotify-client"]
   tags:
   - spotify
+- name: Launch spotify to create default config
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: spotify &
+  tags:
+  - spotify
 - name: Add write permission to Spotify files
   become: true
   shell: chmod a+wr /usr/share/spotify && chmod a+wr /usr/share/spotify/Apps -R
@@ -45,14 +51,6 @@
   become_user: "{{ main_user }}"
   command: "{{ main_user_dir }}/spicetify-cli/spicetify backup apply enable-devtool"
   check_mode: false
-  tags:
-  - spotify
-- name: Create spotify directory
-  become: yes
-  become_user: "{{ main_user }}"
-  file:
-    path: "{{ main_user_dir }}/.config/spotify"
-    state: directory
   tags:
   - spotify
 - name: Copy spotify preferences
