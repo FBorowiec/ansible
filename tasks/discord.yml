@@ -49,3 +49,17 @@
   when: discord_check_deb.rc == 1
   tags:
   - discord
+- name: Clone better discord
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: "https://github.com/BetterDiscord/BetterDiscord.git"
+    dest: "{{ main_user_dir }}/.BetterDiscord"
+  tags:
+  - discord
+- name: Build and install better discord
+  become: yes
+  become_user: "{{ main_user }}"
+  command: "{{ main_user_dir}}/.BetterDiscord && npm install && npm run build && npm run inject"
+  tags:
+  - discord
