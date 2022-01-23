@@ -58,9 +58,7 @@
 - name: Download Better discord
   become: yes
   become_user: "{{ main_user }}"
-  get_url:
-    url: https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage
-    dest: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+  shell: "cd {{ main_user_dir }}/Downloads && wget https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage"
   tags:
   - discord
 - name: Make Better discord an executable
