@@ -10,7 +10,7 @@
   become: true
   apt:
     update_cache: yes
-    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd", "alsa-utils", "cmus", "brightnessctl", "xbacklight", "playerctl", "libplayerctl-dev", "calcurse", "wpasupplicat", "connman", "connman-dev"]
+    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd", "alsa-utils", "cmus", "brightnessctl", "xbacklight", "playerctl", "libplayerctl-dev", "calcurse", "connman", "connman-dev"]
   tags:
   - dwm
 - name: Clone picom
