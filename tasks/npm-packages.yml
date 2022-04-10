@@ -41,6 +41,12 @@
     global: yes
   tags:
   - node
+- name: Install PG format
+  npm:
+    name: pg-format
+    global: yes
+  tags:
+  - node
 - name: Install emojione
   npm:
     name: emojione
