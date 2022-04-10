@@ -13,4 +13,4 @@
   tags:
   - bazel
 - name: Install buildifier
-  shell: 'cd /usr/local/bin && curl https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-linux-amd64 >> /usr/local/bin/buildifier && chmod +x /usr/local/bin/buildifier && ln -s /usr/local/bin/buildifier /usr/bin/buildifier'
+  shell: 'cd /usr/local/bin && curl -k https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-linux-amd64 >> /usr/local/bin/buildifier && chmod +x /usr/local/bin/buildifier && ln -s /usr/local/bin/buildifier /usr/bin/buildifier'
