@@ -33,6 +33,7 @@
   - include: tasks/pip-packages.yml
   - include: tasks/neovim.yml
   - include: tasks/zsh.yml
+  - include: tasks/barrier.yml
   - include: tasks/dotfiles.yml
   - include: tasks/docker.yml
   - include: tasks/kubectl.yml
