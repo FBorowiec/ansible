@@ -46,5 +46,6 @@
   - include_tasks: tasks/spotify.yml
   - include_tasks: tasks/discord.yml
   - include_tasks: tasks/gtk.yml
+  - include_tasks: tasks/grub.yml
   # - include_tasks: tasks/dwm.yml
   # - include_tasks: tasks/restart.yml
