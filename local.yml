@@ -4,10 +4,12 @@
   vars:
     main_user: "{{ lookup('env', 'USER') }}"
     main_user_dir: "/home/{{ lookup('env', 'USER') }}"
-    source_key: "./.ssh/id_rsa"
-    dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_rsa"
+    rsa_source_key: "./.ssh/id_rsa"
+    rsa_dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_rsa"
+    source_key: "./.ssh/id_ed25519"
+    dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_ed25519"
     discord:
-      version: 0.0.16
+      version: 0.0.17
       libfixed: false
   pre_tasks:
     - name: Pre-run | update package cache (arch)
@@ -23,26 +25,26 @@
       when: ansible_distribution == ["Debian", "Ubuntu"]
 
   tasks:
-  - include: tasks/ssh.yml
-  - include: tasks/core.yml
-  - include: tasks/alacritty.yml
-  - include: tasks/fonts.yml
-  - include: tasks/tmux.yml
-  - include: tasks/node.yml
-  - include: tasks/npm-packages.yml
-  - include: tasks/pip-packages.yml
-  - include: tasks/neovim.yml
-  - include: tasks/zsh.yml
-  - include: tasks/barrier.yml
-  - include: tasks/dotfiles.yml
-  - include: tasks/docker.yml
-  - include: tasks/kubectl.yml
-  - include: tasks/helm.yml
-  - include: tasks/bazel.yml
-  - include: tasks/cpp.yml
-  - include: tasks/brave.yml
-  - include: tasks/spotify.yml
-  - include: tasks/discord.yml
-  - include: tasks/gtk.yml
-  - include: tasks/dwm.yml
-  - include: tasks/restart.yml
+  - include_tasks: tasks/ssh.yml
+  - include_tasks: tasks/core.yml
+  - include_tasks: tasks/alacritty.yml
+  - include_tasks: tasks/fonts.yml
+  - include_tasks: tasks/tmux.yml
+  - include_tasks: tasks/node.yml
+  - include_tasks: tasks/npm-packages.yml
+  - include_tasks: tasks/pip-packages.yml
+  - include_tasks: tasks/neovim.yml
+  - include_tasks: tasks/zsh.yml
+  - include_tasks: tasks/barrier.yml
+  - include_tasks: tasks/dotfiles.yml
+  - include_tasks: tasks/docker.yml
+  - include_tasks: tasks/kubectl.yml
+  - include_tasks: tasks/helm.yml
+  - include_tasks: tasks/bazel.yml
+  - include_tasks: tasks/cpp.yml
+  - include_tasks: tasks/brave.yml
+  - include_tasks: tasks/spotify.yml
+  - include_tasks: tasks/discord.yml
+  - include_tasks: tasks/gtk.yml
+  # - include_tasks: tasks/dwm.yml
+  - include_tasks: tasks/restart.yml
