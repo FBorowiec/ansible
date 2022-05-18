@@ -8,6 +8,24 @@
     state: directory
   tags:
   - ssh
+- name: Install rsa ssh key
+  become: yes
+  become_user: "{{ main_user }}"
+  copy:
+    src: "{{ rsa_source_key }}"
+    dest: "{{ rsa_dest_key }}"
+    mode: 0600
+  tags:
+  - ssh
+- name: Install rsa ssh key public
+  become: yes
+  become_user: "{{ main_user }}"
+  copy:
+    src: "{{ rsa_source_key }}.pub"
+    dest: "{{ rsa_dest_key }}.pub"
+    mode: 0644
+  tags:
+  - ssh
 - name: Install ssh key
   become: yes
   become_user: "{{ main_user }}"
