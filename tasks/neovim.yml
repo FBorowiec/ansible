@@ -13,7 +13,7 @@
 - name: Checkout stable branch
   become: yes
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/neovim && git checkout release-0.6"
+  shell: "cd {{ main_user_dir }}/neovim && git checkout release-0.7"
   tags:
     - neovim
 - name: Install build requirements for neovim
