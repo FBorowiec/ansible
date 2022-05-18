@@ -47,4 +47,4 @@
   - include_tasks: tasks/discord.yml
   - include_tasks: tasks/gtk.yml
   # - include_tasks: tasks/dwm.yml
-  - include_tasks: tasks/restart.yml
+  # - include_tasks: tasks/restart.yml

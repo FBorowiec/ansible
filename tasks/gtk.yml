@@ -3,7 +3,7 @@
 - name: Install deps
   become: true
   apt:
-    name: ["gnome-shell-extensions", "curl", "unzip"]
+    name: ["chrome-gnome-shell", "gnome-shell-extensions", "curl", "unzip"]
   tags:
     - gtk
 - name: Create themes directory
@@ -28,39 +28,39 @@
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
   - gtk
-- name: Create extensions directory
-  become: yes
-  become_user: "{{ main_user }}"
-  file:
-    path: "{{ main_user_dir }}/.local/share/gnome-shell/extensions/"
-    state: directory
-  tags:
-  - gtk
-- name: Copy extensions
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: 'cp files/gnome-shell-extensions.zip {{ main_user_dir }}/.local/share/gnome-shell/extensions/'
-  tags:
-  - gtk
-- name: Extract extensions
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: 'cd {{ main_user_dir }}/.local/share/gnome-shell/extensions/ && unzip gnome-shell-extensions.zip && rm gnome-shell-extensions.zip'
-  tags:
-  - gtk
+# - name: Create extensions directory
+#   become: yes
+#   become_user: "{{ main_user }}"
+#   file:
+#     path: "{{ main_user_dir }}/.local/share/gnome-shell/extensions/"
+#     state: directory
+#   tags:
+#   - gtk
+# - name: Copy extensions
+#   become: yes
+#   become_user: "{{ main_user }}"
+#   shell: 'cp files/gnome-shell-extensions.zip {{ main_user_dir }}/.local/share/gnome-shell/extensions/'
+#   tags:
+#   - gtk
+# - name: Extract extensions
+#   become: yes
+#   become_user: "{{ main_user }}"
+#   shell: 'cd {{ main_user_dir }}/.local/share/gnome-shell/extensions/ && unzip gnome-shell-extensions.zip && rm gnome-shell-extensions.zip'
+#   tags:
+#   - gtk
+# - name: Enable user extensions
+#   become: yes
+#   become_user: "{{ main_user }}"
+#   shell: |
+#     gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com &&
+#     gnome-extensions enable dynamic-panel-transparency@rockon999.github.io &&
+#     gnome-extensions enable transparent-window-moving@noobsai.github.com
+#   tags:
+#   - gtk
 - name: Set user nordic theme
   become: yes
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
-  tags:
-  - gtk
-- name: Enable user extensions
-  become: yes
-  become_user: "{{ main_user }}"
-  shell: |
-    gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com &&
-    gnome-extensions enable dynamic-panel-transparency@rockon999.github.io &&
-    gnome-extensions enable transparent-window-moving@noobsai.github.com
   tags:
   - gtk
 - name: Set wm theme
@@ -187,12 +187,12 @@
 - name: Other gsettings - 11
   become: yes
   become_user: "{{ main_user }}"
-  shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-trash false'
+  shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false'
   tags:
   - gtk
 - name: Other gsettings - 12
   become: yes
   become_user: "{{ main_user }}"
-  shell: 'gsettings set org.gnome.shell.extensions.desktop-icons show-home false'
+  shell: 'gsettings set org.gnome.shell.extensions.ding show-home false'
   tags:
   - gtk
