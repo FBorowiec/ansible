@@ -18,6 +18,12 @@
     name: ["clang", "clang-11", "clang-12", "clangd", "gcc", "g++", "libboost-all-dev"]
   tags:
   - core
+- name: Java Development Kit
+  become: true
+  apt:
+    name: ["default-jdk"]
+  tags:
+  - core
 - name: Install Ranger with deps
   become: true
   apt:
