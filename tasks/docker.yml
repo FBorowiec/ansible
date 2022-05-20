@@ -35,6 +35,16 @@
   when: ansible_facts.os_family == "Debian"
   tags:
   - docker
+- name: Add docker to sudoers
+  become: true
+  shell: 'groupadd docker'
+  tags:
+  - docker
+- name: Add user to docker group
+  become: true
+  shell: 'usermod -aG docker {{ main_user }}'
+  tags:
+  - docker
 - name: Ensure dependencies are installed (Archlinux).
   community.general.pacman:
     name:
