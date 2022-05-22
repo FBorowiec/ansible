@@ -196,3 +196,9 @@
   shell: 'gsettings set org.gnome.shell.extensions.ding show-home false'
   tags:
   - gtk
+- name: Show seconds in clock
+  become: yes
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.desktop.interface clock-show-seconds true'
+  tags:
+  - gtk
