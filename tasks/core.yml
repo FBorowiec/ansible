@@ -44,3 +44,10 @@
     name: ["zathura"]
   tags:
   - core
+- name: Install zsh deps
+  become: true
+  apt:
+    name: ["jq", "bc"]
+  tags:
+  - core
+  - zsh
