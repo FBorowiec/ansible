@@ -22,20 +22,20 @@
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
   tags:
   - zsh
+- name: Install autocomplete
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: https://github.com/marlonrichert/zsh-autocomplete
+    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
+  tags:
+  - zsh
 - name: Install autosuggestions
   become: yes
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-  tags:
-  - zsh
-- name: Install ansiweather
-  become: yes
-  become_user: "{{ main_user }}"
-  ansible.builtin.git:
-    repo: https://github.com/fcambus/ansiweather
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/ansiweather"
   tags:
   - zsh
 - name: Install k
@@ -54,12 +54,20 @@
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
   tags:
   - zsh
-- name: Install syntax highlight
+- name: Install fzf tab
   become: yes
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Aloxaf/fzf-tab
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
+  tags:
+  - zsh
+- name: Install zsh vi mode
+  become: yes
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: https://github.com/jeffreytse/zsh-vi-mode
+    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
   tags:
   - zsh
 - name: Change shell
