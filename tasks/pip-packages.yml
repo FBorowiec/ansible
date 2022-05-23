@@ -12,4 +12,4 @@
   - python
 - name: Install other deps
   pip:
-    name: ["pynvim", "poppler-utils"]
+    name: ["pynvim", "poppler-utils", "thefuck"]
