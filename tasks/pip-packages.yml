@@ -12,4 +12,11 @@
   - python
 - name: Install other deps
   pip:
-    name: ["pynvim", "poppler-utils", "thefuck"]
+    name: ["poppler-utils", "thefuck"]
+  tags:
+  - python
+- name: Neovim deps
+  pip:
+    name: ["pynvim", "mypy", "pylint", "isort" "black"]
+  tags:
+  - python
