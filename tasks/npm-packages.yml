@@ -53,6 +53,12 @@
     global: yes
   tags:
   - node
+- name: Install markdownlint
+  npm:
+    name: markdownlint
+    global: yes
+  tags:
+  - node
 - name: Install PG format
   npm:
     name: pg-format
