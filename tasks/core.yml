@@ -12,6 +12,12 @@
     name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "gimp", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxft-dev", "libx11-dev", "libxcb-xfixes0-dev", "libxcomposite-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "libxinerama-dev", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "vlc", "wget", "xclip", "xournal"]
   tags:
   - core
+- name: Yaml linters
+  become: true
+  apt:
+    name: ["yamllint", "ansible-lint"]
+  tags:
+  - core
 - name: Install Clang, GCC, Boost
   become: true
   apt:
@@ -51,3 +57,8 @@
   tags:
   - core
   - zsh
+- name: Symbolic link from python3 to python
+  become: true
+  shell: "ln -s /usr/bin/python3 /usr/bin/python"
+  tags:
+  - core
