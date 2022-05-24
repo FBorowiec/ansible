@@ -35,9 +35,21 @@
     global: yes
   tags:
   - node
-- name: Install bash lua formatter
+- name: Install lua formatter
   npm:
     name: lua-fmt
+    global: yes
+  tags:
+  - node
+- name: Install jsonlint
+  npm:
+    name: jsonlint
+    global: yes
+  tags:
+  - node
+- name: Install fixjson
+  npm:
+    name: fixjson
     global: yes
   tags:
   - node
