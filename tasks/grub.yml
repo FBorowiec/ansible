@@ -5,17 +5,17 @@
     state: present
   become: true
   tags:
-  - grub
+    - grub
 - name: Update and upgrade apt packages
   become: true
   apt:
-    upgrade: yes
-    update_cache: yes
+    upgrade: true
+    update_cache: true
   tags:
-  - grub
+    - grub
 - name: Install grub customizer
   become: true
   apt:
     name: ["grub-customizer"]
   tags:
-  - grub
+    - grub

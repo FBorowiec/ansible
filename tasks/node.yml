@@ -4,4 +4,4 @@
   apt:
     name: ['nodejs', 'npm']
   tags:
-  - node
+    - node

@@ -12,22 +12,22 @@
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     state: present
   tags:
-  - kubernetes
+    - kubernetes
 - name: Adding apt repository for Kubernetes
   apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
     filename: kubernetes.list
   tags:
-  - kubernetes
+    - kubernetes
 - name: Install Kubernetes binaries
   apt:
     name: "kubectl"
     state: present
-    update_cache: yes
+    update_cache: true
   vars:
     packages:
       - kubectl
   when: kubectl_command_results.rc == 1
   tags:
-  - kubernetes
+    - kubernetes

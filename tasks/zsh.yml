@@ -3,81 +3,81 @@
   become: true
   apt: name=zsh
   tags:
-  - zsh
+    - zsh
 - name: Remove existing configuration
   shell: "rm -rf {{ main_user_dir }}/.oh-my-zsh"
   tags:
-  - zsh
+    - zsh
 - name: Install ohmyzsh
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }} && curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh"
   tags:
-  - zsh
+    - zsh
 - name: Install powelevel10k
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
   tags:
-  - zsh
+    - zsh
 - name: Install autocomplete
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/marlonrichert/zsh-autocomplete
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
   tags:
-  - zsh
+    - zsh
 - name: Install autosuggestions
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
   tags:
-  - zsh
+    - zsh
 - name: Install k
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/supercrabtree/k
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/k"
   tags:
-  - zsh
+    - zsh
 - name: Install syntax highlight
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
   tags:
-  - zsh
+    - zsh
 - name: Install fzf tab
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Aloxaf/fzf-tab
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
   tags:
-  - zsh
+    - zsh
 - name: Install zsh vi mode
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/jeffreytse/zsh-vi-mode
     dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
   tags:
-  - zsh
+    - zsh
 - name: Change shell
   become: true
   shell: chsh -s /usr/bin/zsh
   tags:
-  - zsh
+    - zsh
 - name: Launch zsh from bash
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "sed -i '/zsh && exit/d' {{ main_user_dir }}/.bashrc && echo 'zsh && exit' >> {{ main_user_dir }}/.bashrc"
   tags:
-  - zsh
+    - zsh

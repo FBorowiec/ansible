@@ -1,4 +1,3 @@
-
 ---
 - name: Install deps
   become: true
@@ -7,198 +6,198 @@
   tags:
     - gtk
 - name: Create themes directory
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   file:
     path: "{{ main_user_dir }}/.themes"
     state: directory
   tags:
-  - gtk
+    - gtk
 - name: Clone Nordic theme
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/EliverLara/Nordic.git"
     dest: "{{ main_user_dir }}/.themes/Nordic"
   tags:
-  - gtk
+    - gtk
 - name: Set gtk theme
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
-  - gtk
+    - gtk
 # - name: Create extensions directory
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   file:
 #     path: "{{ main_user_dir }}/.local/share/gnome-shell/extensions/"
 #     state: directory
 #   tags:
-#   - gtk
+#     - gtk
 # - name: Copy extensions
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   shell: 'cp files/gnome-shell-extensions.zip {{ main_user_dir }}/.local/share/gnome-shell/extensions/'
 #   tags:
-#   - gtk
+#     - gtk
 # - name: Extract extensions
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   shell: 'cd {{ main_user_dir }}/.local/share/gnome-shell/extensions/ && unzip gnome-shell-extensions.zip && rm gnome-shell-extensions.zip'
 #   tags:
-#   - gtk
+#     - gtk
 # - name: Enable user extensions
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   shell: |
 #     gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com &&
 #     gnome-extensions enable dynamic-panel-transparency@rockon999.github.io &&
 #     gnome-extensions enable transparent-window-moving@noobsai.github.com
 #   tags:
-#   - gtk
+#     - gtk
 - name: Set user nordic theme
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
   tags:
-  - gtk
+    - gtk
 - name: Set wm theme
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences theme "Nordic"'
   tags:
-  - gtk
+    - gtk
 - name: Create icons directory
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   file:
     path: "{{ main_user_dir }}/.icons"
     state: directory
   tags:
-  - gtk
+    - gtk
 - name: Add papirus icons
   become: true
   apt_repository:
     repo: 'ppa:papirus/papirus'
     state: present
   tags:
-  - gtk
+    - gtk
 - name: Install papirus-icon-theme
   apt:
     name: papirus-icon-theme
   become: true
   tags:
-  - gtk
+    - gtk
 - name: Install papirus-folders
   apt:
     name: papirus-folders
   become: true
   tags:
-  - gtk
+    - gtk
 - name: Set icons
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
   tags:
-  - gtk
+    - gtk
 - name: Set nordic icons theme
   become: true
   shell: papirus-folders -C nordic --theme Papirus-Dark && papirus-folders -C nordic --theme Papirus
   tags:
-  - gtk
+    - gtk
 - name: Download Nordzy cursors
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'cd {{ main_user_dir }}/.icons && curl -L "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.1.0/Nordzy-cursors.tar.gz" | tar -xz'
   tags:
-  - gtk
+    - gtk
 - name: Set Nordzy cursors
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: gsettings set org.gnome.desktop.interface cursor-theme "Nordzy-cursors"
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 1
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 2
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 3
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 4
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 5
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.0'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 6
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 7
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences button-layout close,minimize,maximize:'
   tags:
-  - gtk
+    - gtk
 - name: Download wallpaper
   become: true
   shell: cp files/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 8
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.background picture-uri "file:///usr/share/backgrounds/star_wars_last_supper.jpg"'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 9
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 10
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock autohide true'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 11
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false'
   tags:
-  - gtk
+    - gtk
 - name: Other gsettings - 12
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.ding show-home false'
   tags:
-  - gtk
+    - gtk
 - name: Show seconds in clock
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.interface clock-show-seconds true'
   tags:
-  - gtk
+    - gtk

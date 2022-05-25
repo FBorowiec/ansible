@@ -6,18 +6,18 @@
   - stow
   - dotfiles
 - name: Clone the dotfiles repo
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: 'https://github.com/FBorowiec/dotfiles.git'
     dest: "{{ main_user_dir }}/dotfiles"
   tags:
-  - stow
-  - dotfiles
+    - stow
+    - dotfiles
 - name: Stow dotfiles (run ~/dotfiles/install)
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: cd {{ main_user_dir }}/dotfiles && ./install
   tags:
-  - stow
-  - dotfiles
+    - stow
+    - dotfiles

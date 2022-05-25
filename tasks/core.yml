@@ -2,63 +2,63 @@
 - name: Update and upgrade apt packages
   become: true
   apt:
-    upgrade: yes
-    update_cache: yes
+    upgrade: true
+    update_cache: true
   tags:
-  - core
+    - core
 - name: Install System Packages
   become: true
   apt:
     name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "gimp", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxft-dev", "libx11-dev", "libxcb-xfixes0-dev", "libxcomposite-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "libxinerama-dev", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "vlc", "wget", "xclip", "xournal"]
   tags:
-  - core
+    - core
 - name: Yaml linters
   become: true
   apt:
     name: ["yamllint", "ansible-lint"]
   tags:
-  - core
+    - core
 - name: Install Clang, GCC, Boost
   become: true
   apt:
     name: ["clang", "clang-11", "clang-12", "clangd", "gcc", "g++", "libboost-all-dev"]
   tags:
-  - core
+    - core
 - name: Java Development Kit
   become: true
   apt:
     name: ["default-jdk"]
   tags:
-  - core
+    - core
 - name: Install Ranger with deps
   become: true
   apt:
     name: ["ranger", "caca-utils", "highlight", "atool", "w3m", "mediainfo", "lynx", "ffmpegthumbnailer"]
   tags:
-  - core
-  - ranger
+    - core
+    - ranger
 - name: Install Neovim deps
   become: true
   apt:
     name: ["python3-neovim", "python3-venv", "fzf", "ripgrep"]
   tags:
-  - core
-  - neovim
+    - core
+    - neovim
 - name: Pdf reader
   become: true
   apt:
     name: ["zathura"]
   tags:
-  - core
+    - core
 - name: Install zsh deps
   become: true
   apt:
     name: ["jq", "bc"]
   tags:
-  - core
-  - zsh
+    - core
+    - zsh
 - name: Symbolic link from python3 to python
   become: true
   shell: "ln -s /usr/bin/python3 /usr/bin/python"
   tags:
-  - core
+    - core

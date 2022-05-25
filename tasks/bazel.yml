@@ -4,16 +4,16 @@
     name: "@bazel/bazelisk"
     global: true
   tags:
-  - bazel
+    - bazel
 - name: Install bazel compilation database
   vars:
     version: 0.4.5
   shell: 'cd /usr/local/bin && curl -L "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz" | tar -xz && ln -f -s "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh" bazel-compdb'
   become: true
   tags:
-  - bazel
+    - bazel
 - name: Install buildifier
   become: true
   shell: 'cd /usr/local/bin && curl -fLo buildifier https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-linux-amd64 && chmod +x /usr/local/bin/buildifier && ln -s /usr/local/bin/buildifier /usr/bin/buildifier'
   tags:
-  - bazel
+    - bazel

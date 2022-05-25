@@ -1,28 +1,28 @@
 ---
 - name: Install picom deps
-  become: True
+  become: true
   apt:
-    update_cache: yes
+    update_cache: true
     name: ["libxext-dev", "libxcb1-dev", "libxcb-damage0-dev", "libxcb-xfixes0-dev", "libxcb-shape0-dev", "libxcb-render-util0-dev", "libxcb-render0-dev", "libxcb-randr0-dev", "libxcb-composite0-dev", "libxcb-image0-dev", "libxcb-present-dev", "libxcb-xinerama0-dev", "libxcb-glx0-dev", "libpixman-1-dev", "libdbus-1-dev", "libconfig-dev", "libgl1-mesa-dev", "libpcre2-dev", "libpcre3-dev", "libevdev-dev", "uthash-dev", "libev-dev", "libx11-xcb-dev", "meson", "x11-xserver-utils"]
   tags:
-  - dwm
+    - dwm
 - name: Install dwm deps
   become: true
   apt:
-    update_cache: yes
+    update_cache: true
     name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd", "alsa-utils", "cmus", "brightnessctl", "xbacklight", "playerctl", "libplayerctl-dev", "calcurse", "connman", "connman-dev"]
   tags:
-  - dwm
+    - dwm
 - name: Clone picom
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: 'https://github.com/yshui/picom.git'
     dest: "{{ main_user_dir }}/picom"
   tags:
-   - dwm
+    - dwm
 - name: Build picom
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/picom && meson --buildtype=release . build && ninja -C build"
   tags:
@@ -33,15 +33,15 @@
   tags:
     - dwm
 - name: Clone pamixer
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: 'https://github.com/cdemoulins/pamixer.git'
     dest: "{{ main_user_dir }}/pamixer"
   tags:
-   - dwm
+    - dwm
 - name: Build pamixer
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/pamixer && meson setup build"
   tags:
@@ -52,19 +52,19 @@
   tags:
     - dwm
 - name: Install Rofi with deps
-  become: True
+  become: true
   apt:
-    update_cache: yes
+    update_cache: true
     name: ["rofi", "mpc", "xclip", "xdotool"]
   tags:
-  - dwm
+    - dwm
 - name: Install Dunst
-  become: True
+  become: true
   apt:
-    update_cache: yes
+    update_cache: true
     name: ["dunst"]
   tags:
-  - dwm
+    - dwm
 - name: dwm - Install dwm dependencies
   become: true
   apt:
@@ -75,7 +75,7 @@
   tags:
     - dwm
 - name: dwm - Clone
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/fborowiec/dwm.git"
@@ -83,7 +83,7 @@
   tags:
     - dwm
 - name: dwm - Build
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/dwm && make"
   tags:
@@ -93,7 +93,7 @@
   shell: "cd {{ main_user_dir }}/dwm && make install"
   tags:
     - dwm
-- name: dwm - dwm.desktop
+- name: dwm   - dwm.desktop
   become: true
   copy:
     src: files/dwm.desktop

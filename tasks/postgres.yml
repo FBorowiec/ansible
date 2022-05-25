@@ -1,19 +1,19 @@
+---
 - name: Update and upgrade apt packages
   become: true
   apt:
-    upgrade: yes
-    update_cache: yes
+    upgrade: true
+    update_cache: true
   tags:
-  - postgres
+    - postgres
 - name: Install postgres
   become: true
   apt:
     name: ["postgres", "postgresql-contrib"]
   tags:
-  - postgres
+    - postgres
 - name: Start postgres service
   become: true
   shell: 'systemctl start postgresql.service'
   tags:
-  - postgres
-
+    - postgres

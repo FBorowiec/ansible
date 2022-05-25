@@ -5,18 +5,18 @@
     state: present
   become: true
   tags:
-  - terminal
-  - alacritty
+    - terminal
+    - alacritty
 - name: Install alacritty
   apt:
     name: alacritty
   become: true
   tags:
-  - terminal
-  - alacritty
+    - terminal
+    - alacritty
 - name: Make Alacritty default terminal
   shell: update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 60
   become: true
   tags:
-  - terminal
-  - alacritty
+    - terminal
+    - alacritty

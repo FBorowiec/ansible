@@ -2,14 +2,14 @@
 - name: Install tmux deps
   become: true
   apt:
-    name: ["tmux",  "fonts-powerline"]
+    name: ["tmux", "fonts-powerline"]
   tags:
-   - tmux
+    - tmux
 - name: Clone tpm plugins
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: 'https://github.com/tmux-plugins/tpm.git'
     dest: "{{ main_user_dir }}/.tmux/plugins/tpm"
   tags:
-   - tmux
+    - tmux
