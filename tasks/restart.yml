@@ -1,3 +1,4 @@
+---
 - name: Restart gdm
   become: true
   shell: systemctl restart gdm

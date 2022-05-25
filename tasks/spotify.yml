@@ -3,86 +3,86 @@
   shell: curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | apt-key add -
   become: true
   tags:
-  - spotify
+    - spotify
 - name: Add spotify to sources list
   shell: echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
   become: true
   tags:
-  - spotify
+    - spotify
 - name: Update and upgrade apt packages
   become: true
   apt:
-    upgrade: yes
-    update_cache: yes
+    upgrade: true
+    update_cache: true
   tags:
-  - spotify
+    - spotify
 - name: Install Spotify
   become: true
   apt:
     name: ["spotify-client"]
   tags:
-  - spotify
+    - spotify
 - name: Launch spotify to create default config
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: spotify &
   tags:
-  - spotify
+    - spotify
 - name: Add write permission to Spotify files
   become: true
   shell: chmod a+wr /usr/share/spotify && chmod a+wr /usr/share/spotify/Apps -R
   tags:
-  - spotify
+    - spotify
 - name: Install Spicetify
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
   tags:
-  - spotify
+    - spotify
 # - name: Run spicetify once to generate config file
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify"
 #   check_mode: false
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Enable spicetify devtool
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify backup apply enable-devtool"
 #   check_mode: false
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Copy spotify preferences
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   copy:
 #     src: files/spotify/prefs
 #     dest: "{{ main_user_dir}}/.config/spotify/prefs"
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Enable Dribbblish extensions
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify config extensions {{ main_user_dir }}/.config/spicetify/Themes/Dribbblish/dribbblish.js"
 #   check_mode: false
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Set theme
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify config current_theme Dribbblish color_scheme nord-dark"
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Inject settings
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify config inject_css 1 replace_colors 1 overwrite_assets 1"
 #   tags:
-#   - spotify
+#     - spotify
 # - name: Apply spicetify
-#   become: yes
+#   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/spicetify-cli/spicetify apply"
 #   tags:
-#   - spotify
+#     - spotify

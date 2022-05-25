@@ -4,19 +4,19 @@
     name: 'python-lsp-server[all]'
     executable: pip3
   tags:
-  - python
+    - python
 - name: Install lookatme with extensions
   pip:
     name: ["lookatme", "lookatme.contrib.qrcode", "lookatme.contrib.image-ueberzug", "lookatme.contrib.render"]
   tags:
-  - python
+    - python
 - name: Install other deps
   pip:
     name: ["poppler-utils", "thefuck"]
   tags:
-  - python
+    - python
 - name: Neovim deps
   pip:
-    name: ["pynvim", "mypy", "pylint", "isort" "black"]
+    name: ["pynvim", "pylint", "pycodestyle", "pydocstyle", "jedi", "mypy", "pylsp-mypy", "black", "python-lsp-black", "flake8", "pyls-flake8", "isort", "pyls-isort", "rope", "pylsp-rope"]
   tags:
-  - python
+    - python

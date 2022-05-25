@@ -2,72 +2,72 @@
 - name: Install Yarn
   npm:
     name: yarn
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install eslint
   npm:
     name: eslint
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install Typescript server
   npm:
     name: typescript-language-server
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install Typescript
   npm:
     name: typescript
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install TS-Node
   npm:
     name: ts-node
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install bash lsp
   npm:
     name: bash-language-server
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install lua formatter
   npm:
     name: lua-fmt
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install jsonlint
   npm:
     name: jsonlint
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install fixjson
   npm:
     name: fixjson
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install markdownlint
   npm:
     name: markdownlint
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install PG format
   npm:
     name: pg-format
-    global: yes
+    global: true
   tags:
-  - node
+    - node
 - name: Install emojione
   npm:
     name: emojione
-    global: yes
+    global: true
   tags:
-  - node
+    - node

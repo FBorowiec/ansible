@@ -5,14 +5,14 @@
   failed_when: discord_check_deb.rc > 1
   changed_when: discord_check_deb.rc == 1
   tags:
-  - discord
+    - discord
 - name: "Download discord"
   get_url:
     url: "https://dl.discordapp.net/apps/linux/{{ discord.version }}/discord-{{ discord.version }}.deb"
     dest: "/tmp/discord.deb"
   when: discord_check_deb.rc == 1
   tags:
-  - discord
+    - discord
 - name: "Fix que package for Debian 11"
   when: not discord.libfixed and discord_check_deb.rc == 1
   block:
@@ -42,34 +42,34 @@
         cmd: "dpkg -b unpack discord.deb"
         chdir: "/tmp"
   tags:
-  - discord
+    - discord
 - name: "Install Discord"
   apt:
     deb: "/tmp/discord.deb"
   when: discord_check_deb.rc == 1
   tags:
-  - discord
+    - discord
 - name: Launch Discord in background to create config files
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: discord &
   tags:
-  - discord
+    - discord
 - name: Download Better discord
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/Downloads && wget https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage"
   tags:
-  - discord
+    - discord
 - name: Make Better discord an executable
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "chmod +x {{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
   tags:
-  - discord
+    - discord
 - name: Launch Better discord installer
-  become: yes
+  become: true
   become_user: "{{ main_user }}"
   shell: "cd {{ main_user_dir }}/Downloads && ./BetterDiscord-Linux.AppImage &"
   tags:
-  - discord
+    - discord
