@@ -9,7 +9,42 @@
 - name: Install System Packages
   become: true
   apt:
-    name: ["autoconf", "automake", "apt-transport-https", "build-essential", "clang-format", "cmake", "curl", "gettext", "gimp", "git", "global", "htop", "libfreetype6-dev", "libfontconfig1-dev", "libxft-dev", "libx11-dev", "libxcb-xfixes0-dev", "libxcomposite-dev", "libxkbcommon-dev", "libtool", "libtool-bin", "libxinerama-dev", "lua5.1", "nload", "nvidia-settings", "pkg-config", "python3-pip", "simplescreenrecorder", "software-properties-common", "stow", "unzip", "vlc", "wget", "xclip", "xournal"]
+    pkg:
+      - autoconf
+      - automake
+      - apt-transport-https
+      - build-essential
+      - clang-format
+      - cmake
+      - curl
+      - gettext
+      - gimp
+      - git
+      - global
+      - htop
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libxft-dev
+      - libx11-dev
+      - libxcb-xfixes0-dev
+      - libxcomposite-dev
+      - libxkbcommon-dev
+      - libtool
+      - libtool-bin
+      - libxinerama-dev
+      - lua5.1
+      - nload
+      - nvidia-settings
+      - pkg-config
+      - python3-pip
+      - simplescreenrecorder
+      - software-properties-common
+      - stow
+      - unzip
+      - vlc
+      - wget
+      - xclip
+      - xournal
   tags:
     - core
 - name: Yaml linters
@@ -21,7 +56,14 @@
 - name: Install Clang, GCC, Boost
   become: true
   apt:
-    name: ["clang", "clang-11", "clang-12", "clangd", "gcc", "g++", "libboost-all-dev"]
+    pkg:
+      - clang
+      - clang-11
+      - clang-12
+      - clangd
+      - gcc
+      - g++
+      - libboost-all-dev
   tags:
     - core
 - name: Java Development Kit
@@ -33,7 +75,15 @@
 - name: Install Ranger with deps
   become: true
   apt:
-    name: ["ranger", "caca-utils", "highlight", "atool", "w3m", "mediainfo", "lynx", "ffmpegthumbnailer"]
+    pkg:
+      - ranger
+      - caca-utils
+      - highlight
+      - atool
+      - w3m
+      - mediainfo
+      - lynx
+      - ffmpegthumbnailer
   tags:
     - core
     - ranger
