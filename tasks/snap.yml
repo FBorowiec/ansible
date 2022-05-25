@@ -1,0 +1,6 @@
+---
+- name: Install mdl
+  shell: snap install mdl
+  become: true
+  tags:
+    - snap
