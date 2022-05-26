@@ -4,16 +4,10 @@
   become_user: "{{ main_user }}"
   retries: 3
   delay: 10
-  ignore_errors: true
   ansible.builtin.git:
     repo: "https://github.com/neovim/neovim.git"
     dest: "{{ main_user_dir }}/neovim"
-  tags:
-    - neovim
-- name: Checkout stable branch
-  become: true
-  become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/neovim && git checkout nightly"
+    version: nightly
   tags:
     - neovim
 - name: Install build requirements for neovim
@@ -32,7 +26,6 @@
       - unzip
       - curl
       - doxygen
-    state: latest
     update_cache: true
   tags:
     - nvim
@@ -40,32 +33,39 @@
   apt: name=luarocks
   become: true
   tags:
-    - neovim
 - name: Neovim Plugin Development 2 luacheck
-  shell: luarocks install luacheck
+  ansible.builtin.command: luarocks install luacheck
+  register: luacheck_install
+  changed_when: luacheck_install.rc != 0
+  failed_when: luacheck_install.rc != 0
   retries: 3
   delay: 10
   ignore_errors: true
   tags:
     - neovim
-# - name: Neovim Plugin Development 3 luaformatter
-#   shell: luarocks install --server=https://luarocks.org/dev luaformatter
-#   tag:
-#     - neovim
 - name: Build neovim
   become: true
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo"
+  ansible.builtin.command: "cd {{ main_user_dir }}/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo"
+  register: build_neovim
+  changed_when: build_neovim.rc != 0
+  failed_when: build_neovim.rc != 0
   tags:
     - neovim
 - name: Install neovim
-  shell: "cd {{ main_user_dir }}/neovim && make install"
   become: true
+  shell: "cd {{ main_user_dir }}/neovim && make install"
+  register: install_neovim
+  changed_when: install_neovim.rc != 0
+  failed_when: install_neovim.rc != 0
   tags:
     - neovim
 - name: Install Vim-Plug
   become: true
   become_user: "{{ main_user }}"
-  shell: "curl -fLo {{ main_user_dir }}/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  get_url:
+    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    dest: "{{ main_user_dir }}/.local/share/nvim/site/autoload/plug.vim"
   tags:
+    - neovim
     - neovim
