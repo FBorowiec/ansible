@@ -6,14 +6,51 @@
   tags:
     - bazel
 - name: Install bazel compilation database
+  become: true
   vars:
     version: 0.4.5
-  shell: 'cd /usr/local/bin && curl -L "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz" | tar -xz && ln -f -s "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh" bazel-compdb'
+  ansible.builtin.unarchive:
+    src:
+      "https://github.com/grailbio/bazel-compilation-database/archive/{{ version }}.tar.gz"
+    dest: "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh"
+    remote_src: true
+  tags:
+    - bazel
+- name: Symbolic link from python3 to python
   become: true
+  vars:
+    version: 0.4.5
+  file:
+    src: "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh"
+    dest: "/usr/local/bin/bazel-compdb"
+    state: link
   tags:
     - bazel
 - name: Install buildifier
   become: true
-  shell: 'cd /usr/local/bin && curl -fLo buildifier https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-linux-amd64 && chmod +x /usr/local/bin/buildifier && ln -s /usr/local/bin/buildifier /usr/bin/buildifier'
+  get_url:
+    url: "https://github.com/bazelbuild/buildtools/releases/download/5.0.1/buildifier-linux-amd64"
+    dest: "/usr/local/bin/buildifier-linux-amd64"
+    remote_src: true
+  tags:
+    - bazel
+- name: Make buildifier executable
+  become: true
+  vars:
+    version: 0.4.5
+  file:
+    src: "/usr/local/bin/buildifier-linux-amd64"
+    dest: "/usr/local/bin/buildifier-linux-amd64"
+    mode: a+x
+  tags:
+    - bazel
+- name: Symbolic link for buildifier
+  become: true
+  vars:
+    version: 0.4.5
+  file:
+    src: "/usr/local/bin/buildifier-linux-amd64"
+    dest: "/usr/local/bin/buildifier"
+    state: link
   tags:
     - bazel
