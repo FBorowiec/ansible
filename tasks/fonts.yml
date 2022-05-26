@@ -5,6 +5,7 @@
   file:
     path: "{{ main_user_dir }}/.local/share/fonts/"
     state: directory
+    mode: 0755
   tags:
     - fonts
 - name: X/fonts - Install monaco font
@@ -13,13 +14,14 @@
   copy:
     src: files/monaco.ttf
     dest: "{{ main_user_dir }}/.local/share/fonts"
+    mode: 0644
   tags:
     - fonts
 - name: Install font - Droid Sans Mono for Powerline Nerd Font Complete
   become: true
   become_user: "{{ main_user }}"
   get_url:
-    url:  https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+    url: https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
     dest: "{{ main_user_dir }}/.local/share/fonts/Droid_Sans_Mono_for_Powerline_Nerd_Font_Complete.otf"
   tags:
     - fonts
@@ -88,12 +90,18 @@
 - name: Install Jetbrains
   become: true
   become_user: "{{ main_user }}"
-  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"
+  ansible.builtin.command: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"'
+  register: install_jetbrains
+  changed_when: install_jetbrains.rc != 0
+  failed_when: install_jetbrains.rc != 0
   tags:
     - fonts
 - name: X/fonts - Refresh font cache
   become: true
   become_user: "{{ main_user }}"
-  shell: fc-cache -fv
+  ansible.builtin.command: fc-cache -fv
+  register: refreshed_font_cache
+  changed_when: refreshed_font_cache.rc != 0
+  failed_when: refreshed_font_cache.rc != 0
   tags:
     - fonts
