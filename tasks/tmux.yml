@@ -11,5 +11,6 @@
   ansible.builtin.git:
     repo: 'https://github.com/tmux-plugins/tpm.git'
     dest: "{{ main_user_dir }}/.tmux/plugins/tpm"
+    version: master
   tags:
     - tmux
