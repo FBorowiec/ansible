@@ -17,7 +17,6 @@
     repo: https://github.com/robbyrussell/oh-my-zsh
     dest: "{{ main_user_dir }}/.oh-my-zsh"
     version: master
-    mode: 0755
   tags:
     - zsh
 - name: Install powelevel10k

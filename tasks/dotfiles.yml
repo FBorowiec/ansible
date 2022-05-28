@@ -18,7 +18,7 @@
 - name: Stow dotfiles
   become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "./{{ main_user_dir }}/dotfiles/install"
+  ansible.builtin.command: ".{{ main_user_dir }}/dotfiles/install"
   register: dotfiles_install
   changed_when: dotfiles_install.rc != 0
   failed_when: dotfiles_install.rc != 0

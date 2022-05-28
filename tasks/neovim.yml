@@ -60,12 +60,3 @@
   failed_when: install_neovim.rc != 0
   tags:
     - neovim
-- name: Install Vim-Plug
-  become: true
-  become_user: "{{ main_user }}"
-  get_url:
-    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-    dest: "{{ main_user_dir }}/.local/share/nvim/site/autoload/plug.vim"
-  tags:
-    - neovim
-    - neovim
