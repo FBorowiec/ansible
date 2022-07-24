@@ -38,6 +38,7 @@
       - nvidia-settings
       - pandoc
       - pkg-config
+      - psensor
       - python3-pip
       - simplescreenrecorder
       - software-properties-common
