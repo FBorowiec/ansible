@@ -71,3 +71,9 @@
     global: true
   tags:
     - node
+- name: Install live-server
+  npm:
+    name: live-server
+    global: true
+  tags:
+    - node

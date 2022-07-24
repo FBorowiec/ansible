@@ -7,7 +7,7 @@
   ansible.builtin.git:
     repo: "https://github.com/neovim/neovim.git"
     dest: "{{ main_user_dir }}/neovim"
-    version: nightly
+    version: master
   tags:
     - neovim
 - name: Install build requirements for neovim

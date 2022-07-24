@@ -12,7 +12,7 @@
   become: true
   become_user: "{{ main_user }}"
   file:
-    path: "{{ main_user_dir }}/.cpptools"
+    path: "{{ main_user_dir }}/.cpptools/cpptools-linux"
     state: directory
     mode: 0755
   tags:
@@ -27,11 +27,11 @@
     - cpp
 - name: Make cpptools an executable
   become: true
-  become_user: "{{ main_user }}"
   file:
     src: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
-    dest: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
+    dest: "/usr/local/bin/OpenDebugAD7"
     mode: a+x
+    state: link
   tags:
     - cpp
 - name: Create copy of json config
@@ -40,6 +40,8 @@
   file:
     src: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json"
     dest: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
+    state: hard
+    mode: 0644
   tags:
     - cpp
 - name: Cleanup

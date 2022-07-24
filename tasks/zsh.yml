@@ -89,3 +89,28 @@
   changed_when: false
   tags:
     - zsh
+- name: Check whether .bashrc has a reference to zsh
+  lineinfile:
+    name: "{{ main_user_dir}}/.bashrc"
+    regexp: "zsh.*"
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: bashrc
+  tags:
+    - zsh
+- name: Launch zsh from bash (replace line)
+  when: bashrc.found
+  replace:
+    dest: "{{ main_user_dir}}/.bashrc"
+    regexp: "zsh.*"
+    replace: "zshre && exitre"
+  tags:
+    - zsh
+- name: Launch zsh from bash (add missing line)
+  when: not bashrc.found
+  lineinfile:
+    path: "{{ main_user_dir}}/.bashrc"
+    line: "zsh && exit"
+  tags:
+    - zsh
