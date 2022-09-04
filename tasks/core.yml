@@ -96,7 +96,7 @@
 - name: Install Neovim deps
   become: true
   apt:
-    name: ["python3-neovim", "python3-venv", "fzf", "ripgrep"]
+    name: ["python3-neovim", "python3-venv", "fzf", "ripgrep", "fd-find"]
   tags:
     - core
     - neovim
