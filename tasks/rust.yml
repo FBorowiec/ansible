@@ -21,9 +21,3 @@
   shell: /tmp/sh.rustup.rs -y
   tags:
     - rust
-
-- name: install stylua
-  shell: cargo install stylua
-  tags:
-    - rust
-    - lua
