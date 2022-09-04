@@ -43,7 +43,9 @@
     - include_tasks: tasks/bazel.yml
     - include_tasks: tasks/cpp.yml
     - include_tasks: tasks/rust.yml
+    - include_tasks: tasks/cargo.yml
     - include_tasks: tasks/snap.yml
+    - include_tasks: tasks/misc.yml
     - include_tasks: tasks/brave.yml
     - include_tasks: tasks/spotify.yml
     - include_tasks: tasks/discord.yml

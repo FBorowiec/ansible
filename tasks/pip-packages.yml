@@ -39,4 +39,17 @@
     executable: pip3
   tags:
     - python
+- name: C++ deps
+  pip:
+    name: ["cmakelang"]
+    executable: pip3
+  tags:
     - python
+    - cpp
+- name: SQL deps
+  pip:
+    name: ["sqlfluff"]
+    executable: pip3
+  tags:
+    - python
+    - sql

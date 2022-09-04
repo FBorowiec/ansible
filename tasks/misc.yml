@@ -1,0 +1,27 @@
+---
+- name: Download actionlint
+  become: true
+  become_user: "{{ main_user }}"
+  command:
+    cmd: "bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)"
+  register: action_lint_download
+  changed_when: action_lint_download.rc != 0
+  failed_when: action_lint_download.rc != 0
+  tags:
+    - actionlint
+- name: Move actionlint
+  command:
+    cmd: "mv actionlint /usr/local/bin/actionlint"
+  register: action_lint_mv
+  changed_when: action_lint_mv.rc != 0
+  failed_when: action_lint_mv.rc != 0
+- name: Symbolic link actionlint
+  become: true
+  vars:
+    version: 0.5.2
+  file:
+    src: "/usr/local/bin/actionlint"
+    dest: "/usr/bin/actionlint"
+    state: link
+  tags:
+    - bazel
