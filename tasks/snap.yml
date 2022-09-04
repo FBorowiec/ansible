@@ -15,3 +15,11 @@
   become: true
   tags:
     - snap
+- name: Install shfmt
+  ansible.builtin.command: snap install shfmt
+  register: shfmt_install
+  changed_when: shfmt_install.rc != 0
+  failed_when: shfmt_install.rc != 0
+  become: true
+  tags:
+    - snap
