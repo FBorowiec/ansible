@@ -77,3 +77,9 @@
     global: true
   tags:
     - node
+- name: Neovim deps
+  npm:
+    name: neovim
+    global: true
+  tags:
+    - node
