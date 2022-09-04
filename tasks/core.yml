@@ -33,6 +33,7 @@
       - libtool
       - libtool-bin
       - libxinerama-dev
+      - lm-sensors
       - lua5.1
       - nload
       - nvidia-settings
@@ -41,6 +42,7 @@
       - psensor
       - python3-pip
       - simplescreenrecorder
+      - snapd
       - software-properties-common
       - stow
       - unzip
