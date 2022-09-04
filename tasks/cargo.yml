@@ -1,0 +1,11 @@
+---
+- name: install stylua
+  shell: cargo install stylua
+  tags:
+    - rust
+    - lua
+
+- name: install shellharden
+  shell: cargo install shellharden
+  tags:
+    - rust
