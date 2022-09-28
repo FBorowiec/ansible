@@ -1,0 +1,47 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: true
+    update_cache: true
+  tags:
+    - ergodox
+- name: Install Libusb
+  become: true
+  apt:
+    pkg:
+      - libusb-1.0-0-dev
+  tags:
+    - ergodox
+- name: Udev rule
+  become: true
+  copy:
+    src: files/ergodox/50-zsa.rules
+    dest: /etc/udev/rules.d/
+  tags:
+    - ergodox
+- name: Add plugdev to sudoers
+  become: true
+  shell: 'groupadd plugdev'
+  tags:
+    - ergodox
+- name: Add user to plugdev group
+  become: true
+  shell: 'usermod -aG plugdev {{ main_user }}'
+  tags:
+    - ergodox
+- name: Download wally
+  become: true
+  become_user: "{{ main_user }}"
+  get_url:
+    url: https://configure.ergodox-ez.com/wally/linux
+    dest: "{{ main_user_dir }}/Downloads"
+  tags:
+    - ergodox
+- name: Make wally executable
+  become: true
+  file:
+    dest: "{{ main_user_dir }}/Downloads/wally"
+    mode: a+x
+  tags:
+    - ergodox

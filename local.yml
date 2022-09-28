@@ -9,7 +9,7 @@
     source_key: "./.ssh/id_ed25519"
     dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_ed25519"
     discord:
-      version: 0.0.19
+      version: 0.0.20
       libfixed: false
   pre_tasks:
     - name: Pre-run | update package cache (arch)
@@ -46,6 +46,7 @@
     - include_tasks: tasks/cargo.yml
     - include_tasks: tasks/snap.yml
     - include_tasks: tasks/misc.yml
+    - include_tasks: tasks/keyboard-ergodox.yml
     - include_tasks: tasks/brave.yml
     - include_tasks: tasks/spotify.yml
     - include_tasks: tasks/discord.yml
