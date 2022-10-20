@@ -41,6 +41,7 @@
       - pandoc
       - pkg-config
       - psensor
+      - python3-dev
       - python3-pip
       - simplescreenrecorder
       - snapd
