@@ -201,3 +201,9 @@
   shell: 'gsettings set org.gnome.desktop.interface clock-show-seconds true'
   tags:
     - gtk
+- name: Show calendar week in cal
+  become: true
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.desktop.calendar show-weekdate true'
+  tags:
+    - gtk
