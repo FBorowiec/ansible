@@ -87,15 +87,15 @@
     name: ["fonts-powerline", "fonts-font-awesome", "fonts-firacode"]
   tags:
     - fonts
-- name: Install Jetbrains
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"'
-  register: install_jetbrains
-  changed_when: install_jetbrains.rc != 0
-  failed_when: install_jetbrains.rc != 0
-  tags:
-    - fonts
+# - name: Install Jetbrains
+#   become: true
+#   become_user: "{{ main_user }}"
+#   ansible.builtin.command: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/install_manual.sh)"'
+#   register: install_jetbrains
+#   changed_when: install_jetbrains.rc != 0
+#   failed_when: install_jetbrains.rc != 0
+#   tags:
+#     - fonts
 - name: X/fonts - Refresh font cache
   become: true
   become_user: "{{ main_user }}"
