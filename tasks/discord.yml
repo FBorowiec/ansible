@@ -19,6 +19,13 @@
   shell: discord &
   tags:
     - discord
+- name: Install AppImage deps
+  become: true
+  apt:
+    pkg:
+      - libfuse2
+  tags:
+    - discord
 - name: Download Better discord
   become: true
   become_user: "{{ main_user }}"
