@@ -1,16 +1,20 @@
 ---
-- name: Ensure alacritty apt repo is present
-  apt_repository:
-    repo: 'ppa:mmstick76/alacritty'
-    state: present
+- name: Install Alacritty deps
   become: true
+  apt:
+    pkg:
+      - cmake
+      - pkg-config
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libxcb-xfixes0-dev
+      - libxkbcommon-dev
   tags:
     - terminal
     - alacritty
-- name: Install alacritty
-  apt:
+- name: Install Alacritty
+  community.general.cargo:
     name: alacritty
-  become: true
   tags:
     - terminal
     - alacritty
