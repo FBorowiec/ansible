@@ -14,6 +14,7 @@
       - automake
       - apt-transport-https
       - build-essential
+      - cargo
       - clang-format
       - cmake
       - curl
@@ -39,6 +40,7 @@
       - nload
       - nvidia-settings
       - pandoc
+      - pgformatter
       - pkg-config
       - psensor
       - python3-dev
@@ -122,3 +124,8 @@
   tags:
     - core
     - zsh
+# - name: Update nvidia-drivers
+#   become: true
+#   cmd:
+#   tags:
+#     - core
