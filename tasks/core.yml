@@ -18,6 +18,7 @@
       - clang-format
       - cmake
       - curl
+      - firefox
       - gettext
       - gimp
       - git

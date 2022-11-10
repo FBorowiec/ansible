@@ -6,46 +6,10 @@
   changed_when: discord_check_deb.rc == 1
   tags:
     - discord
-- name: "Download discord"
-  get_url:
-    url: "https://dl.discordapp.net/apps/linux/{{ discord.version }}/discord-{{ discord.version }}.deb"
-    dest: "/tmp/discord.deb"
-  when: discord_check_deb.rc == 1
-  tags:
-    - discord
-- name: "Fix que package for Debian 11"
-  when: not discord.libfixed and discord_check_deb.rc == 1
-  block:
-    - name: "unpack package"
-      command:
-        cmd: "dpkg-deb -x discord.deb unpack"
-        chdir: "/tmp"
-    - name: "extract discord control "
-      command:
-        cmd: "dpkg-deb --control discord.deb"
-        chdir: "/tmp"
-    - name: "delete downloaded package"
-      file:
-        path: "/tmp/discord.deb"
-        state: absent
-    - name: "move debian control"
-      command:
-        cmd: "mv -f DEBIAN unpack"
-        chdir: "/tmp"
-    - name: "Fix the package"
-      replace:
-        path: "/tmp/unpack/DEBIAN/control"
-        regexp: "libappindicator1"
-        replace: "libayatana-appindicator1"
-    - name: "Rebuild the package"
-      command:
-        cmd: "dpkg -b unpack discord.deb"
-        chdir: "/tmp"
-  tags:
-    - discord
-- name: "Install Discord"
+- name: Install discord
+  become: true
   apt:
-    deb: "/tmp/discord.deb"
+    deb: https://discord.com/api/download?platform=linux&format=deb
   when: discord_check_deb.rc == 1
   tags:
     - discord
