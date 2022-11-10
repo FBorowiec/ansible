@@ -10,11 +10,13 @@
     name: ["lookatme"]
     executable: pip3
   tags:
+    - python
 - name: Install lookatme with extensions
   pip:
     name: ["lookatme.contrib.image-ueberzug", "lookatme.contrib.render"]
     executable: pip3
   tags:
+    - python
 - name: Install zsh deps
   pip:
     name: ["poppler-utils", "thefuck"]

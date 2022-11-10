@@ -74,6 +74,15 @@
     version: master
   tags:
     - zsh
+- name: Install zsh nord colors
+  become: true
+  become_user: "{{ main_user }}"
+  ansible.builtin.git:
+    repo: https://github.com/coltondick/zsh-dircolors-nord
+    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-dircolors-nord"
+    version: master
+  tags:
+    - zsh
 - name: Install zsh vi mode
   become: true
   become_user: "{{ main_user }}"
