@@ -1,11 +1,12 @@
 ---
-- name: install stylua
-  shell: cargo install stylua
+- name: Install stylua
+  community.general.cargo:
+    name: stylua
   tags:
     - rust
     - lua
-
-- name: install shellharden
-  shell: cargo install shellharden
+- name: Install shellharden
+  community.general.cargo:
+    name: shellharden
   tags:
     - rust
