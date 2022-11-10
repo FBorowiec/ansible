@@ -27,35 +27,6 @@
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
   tags:
     - gtk
-# - name: Create extensions directory
-#   become: true
-#   become_user: "{{ main_user }}"
-#   file:
-#     path: "{{ main_user_dir }}/.local/share/gnome-shell/extensions/"
-#     state: directory
-#   tags:
-#     - gtk
-# - name: Copy extensions
-#   become: true
-#   become_user: "{{ main_user }}"
-#   shell: 'cp files/gnome-shell-extensions.zip {{ main_user_dir }}/.local/share/gnome-shell/extensions/'
-#   tags:
-#     - gtk
-# - name: Extract extensions
-#   become: true
-#   become_user: "{{ main_user }}"
-#   shell: 'cd {{ main_user_dir }}/.local/share/gnome-shell/extensions/ && unzip gnome-shell-extensions.zip && rm gnome-shell-extensions.zip'
-#   tags:
-#     - gtk
-# - name: Enable user extensions
-#   become: true
-#   become_user: "{{ main_user }}"
-#   shell: |
-#     gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com &&
-#     gnome-extensions enable dynamic-panel-transparency@rockon999.github.io &&
-#     gnome-extensions enable transparent-window-moving@noobsai.github.com
-#   tags:
-#     - gtk
 - name: Set user nordic theme
   become: true
   become_user: "{{ main_user }}"
@@ -118,43 +89,43 @@
   shell: gsettings set org.gnome.desktop.interface cursor-theme "Nordzy-cursors"
   tags:
     - gtk
-- name: Other gsettings - 1
+- name: Unset extended height
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false'
   tags:
     - gtk
-- name: Other gsettings - 2
+- name: Set launcher on the bottom
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM'
   tags:
     - gtk
-- name: Other gsettings - 3
-  become: true
-  become_user: "{{ main_user }}"
-  shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED'
-  tags:
-    - gtk
-- name: Other gsettings - 4
+- name: Resize dash icons
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48'
   tags:
     - gtk
-- name: Other gsettings - 5
+- name: Launcher transparency settings 1
+  become: true
+  become_user: "{{ main_user }}"
+  shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED'
+  tags:
+    - gtk
+- name: Launcher transparency settings 2
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.0'
   tags:
     - gtk
-- name: Other gsettings - 6
+- name: Launcher transparency settings 3
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false'
   tags:
     - gtk
-- name: Other gsettings - 7
+- name: Set close button to the left
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences button-layout close,minimize,maximize:'
@@ -165,31 +136,31 @@
   shell: cp files/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
   tags:
     - gtk
-- name: Other gsettings - 8
+- name: Set wallpaper
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.background picture-uri "file:///usr/share/backgrounds/star_wars_last_supper.jpg"'
   tags:
     - gtk
-- name: Other gsettings - 9
+- name: Disable fixed dock
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false'
   tags:
     - gtk
-- name: Other gsettings - 10
+- name: Autohid launcher
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock autohide true'
   tags:
     - gtk
-- name: Other gsettings - 11
+- name: Hide trash icon
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false'
   tags:
     - gtk
-- name: Other gsettings - 12
+- name: Disable home
   become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.ding show-home false'

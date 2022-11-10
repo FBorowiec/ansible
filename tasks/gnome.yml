@@ -1,0 +1,36 @@
+---
+# https://github.com/cyfrost/install-gnome-extensions
+- name: Ensure gnome shell extensions dependencies are installed
+  become: true
+  apt:
+    name:
+      - unzip
+      - curl
+      - wget
+      - jq
+      - gnome-shell-extensions
+      - gnome-tweaks
+    state: present
+  when: ansible_facts['os_family'] == "Debian"
+  tags:
+    - gnome_shell_extensions
+- name: Download install gnome extensions
+  tags: gnome_shell_extensions
+  get_url:
+    url: https://raw.githubusercontent.com/cyfrost/install-gnome-extensions/master/install-gnome-extensions.sh
+    dest: "{{ main_user_dir }}/dev/ansible/files/install-gnome-extensions.sh"
+    mode: a+x
+- name: Install gnome extensions
+  become: true
+  become_user: "{{ main_user }}"
+  command: "bash {{ main_user_dir }}/files/install-gnome-extensions.sh --enable --file files/gnome_extensions.txt"
+  changed_when: false
+  tags:
+    - gnome_shell_extensions
+- name: Remove install-gnome-extensions.sh
+  file:
+    path:
+      dest: "{{ main_user_dir }}/dev/ansible/files/install-gnome-extensions.sh"
+    state: absent
+  tags:
+    - gnome_shell_extensions
