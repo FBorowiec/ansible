@@ -207,3 +207,9 @@
   shell: 'gsettings set org.gnome.desktop.calendar show-weekdate true'
   tags:
     - gtk
+- name: Hide mounted disks
+  become: true
+  become_user: "{{ main_user }}"
+  shell: gsettings set org.gnome.nautilus.desktop volumes-visible 'false'
+  tags:
+    - gtk

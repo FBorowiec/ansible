@@ -28,11 +28,12 @@
       - doxygen
     update_cache: true
   tags:
-    - nvim
+    - neovim
 - name: Neovim Plugin Development 1
   apt: name=luarocks
   become: true
   tags:
+    - neovim
 - name: Neovim Plugin Development 2 luacheck
   ansible.builtin.command: luarocks install luacheck
   register: luacheck_install
