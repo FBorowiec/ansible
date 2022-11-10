@@ -8,9 +8,6 @@
     rsa_dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_rsa"
     source_key: "./.ssh/id_ed25519"
     dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_ed25519"
-    discord:
-      version: 0.0.21
-      libfixed: false
   pre_tasks:
     - name: Pre-run | update package cache (arch)
       tags: always
