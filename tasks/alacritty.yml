@@ -18,11 +18,34 @@
   tags:
     - terminal
     - alacritty
+- name: Symbolic link alacritty
+  become: true
+  file:
+    src: "{{ main_user_dir }}/.cargo/bin/alacritty"
+    dest: "/usr/bin/alacritty"
+    state: link
+  tags:
+    - bazel
 - name: Make Alacritty default terminal
+  become: true
   shell: >-
     update-alternatives --install /usr/bin/x-terminal-emulator
     x-terminal-emulator /usr/bin/alacritty 60
+  tags:
+    - terminal
+    - alacritty
+- name: Copy alacritty icon
   become: true
+  copy:
+    src: "files/alacritty-simple.svg"
+    dest: /usr/share/pixmaps/Alacritty.svg
+    mode: 0644
+  tags:
+    - terminal
+    - alacritty
+- name: Create alacritty desktop entry
+  become: true
+  shell: desktop-file-install files/Alacritty.desktop && update-desktop-database
   tags:
     - terminal
     - alacritty
