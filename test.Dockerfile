@@ -22,8 +22,9 @@ COPY . .
 
 USER root
 RUN chown -R $USER /home/$USER
+RUN ln -sf /bin/bash /bin/sh
+
 USER $USER
 ENV USER=$USER
 
-RUN ln -sf /bin/bash /bin/sh
 CMD ["/bin/bash"]
