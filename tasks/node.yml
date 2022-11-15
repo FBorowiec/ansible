@@ -1,7 +1,18 @@
 ---
-- name: Install nodejs and npm
+- name: Install npm
   become: true
   apt:
-    name: ['nodejs', 'npm']
+    name: ['npm']
+  tags:
+    - node
+- name: Install n
+  npm:
+    name: n
+    global: true
+  tags:
+    - node
+- name: Install n
+  become: true
+  shell: sudo n latest
   tags:
     - node

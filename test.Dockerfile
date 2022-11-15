@@ -21,8 +21,8 @@ RUN mkdir /home/$USER/Downloads
 COPY . .
 
 USER root
-RUN chown -R $USER /home/$USER
 RUN ln -sf /bin/bash /bin/sh
+RUN chown -R $USER:$USER /home/$USER
 
 USER $USER
 ENV USER=$USER
