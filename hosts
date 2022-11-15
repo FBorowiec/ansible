@@ -4,4 +4,3 @@ localhost
 
 [local:vars]
 ansible_connection=local
-

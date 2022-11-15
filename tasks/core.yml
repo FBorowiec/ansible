@@ -14,7 +14,6 @@
       - automake
       - apt-transport-https
       - build-essential
-      - cargo
       - clang-format
       - cmake
       - curl
@@ -46,6 +45,7 @@
       - psensor
       - python3-dev
       - python3-pip
+      - python3-tk
       - simplescreenrecorder
       - snapd
       - software-properties-common
