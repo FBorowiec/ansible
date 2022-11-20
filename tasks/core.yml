@@ -40,6 +40,7 @@
       - nload
       - nvidia-settings
       - pandoc
+      - postgresql
       - pgformatter
       - pkg-config
       - psensor
