@@ -55,3 +55,21 @@
   tags:
     - python
     - sql
+- name: Libs I use a lot
+  pip:
+    name:
+      - "pydantic"
+      - "tenacity"
+      - "pandas"
+      - "numpy"
+      - "pylint-pydantic"
+      - "pylint"
+    executable: pip3
+  tags:
+    - python
+- name: OpenAI
+  pip:
+    name: ["click", "openai"]
+    executable: pip3
+  tags:
+    - python
