@@ -120,6 +120,13 @@
   when: not bashrc.found
   lineinfile:
     path: "{{ main_user_dir }}/.bashrc"
-    line: "zsh && exit"
+    line: "zsh; exit"
   tags:
     - zsh
+- name: Add chat gpt key
+  become: true
+  copy:
+    src: files/.open_ai
+    dest: "{{ main_user_dir }}/.config/"
+  tags:
+    - dwm
