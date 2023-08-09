@@ -37,6 +37,7 @@
       - libxinerama-dev
       - lm-sensors
       - lua5.1
+      - netcat
       - nload
       - nvidia-settings
       - pandoc
