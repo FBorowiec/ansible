@@ -96,6 +96,26 @@
 #   failed_when: install_jetbrains.rc != 0
 #   tags:
 #     - fonts
+- name: Download fonts zip file
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/3270.zip"
+    dest: "{{ main_user_dir }}/3270.zip"
+  tags:
+    - fonts
+- name: Unzip fonts
+  unarchive:
+    src: "{{ main_user_dir }}/3270.zip"
+    dest: "{{ main_user_dir }}/.local/share/fonts"
+    remote_src: true
+    extra_opts: --strip-components=1
+  tags:
+    - fonts
+- name: Remove old zip file
+  file:
+    path: "{{ main_user_dir }}/3270.zip"
+    state: absent
+  tags:
+    - fonts
 - name: X/fonts - Refresh font cache
   become: true
   become_user: "{{ main_user }}"
