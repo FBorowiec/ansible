@@ -10,3 +10,13 @@
     name: shellharden
   tags:
     - rust
+- name: Install tldr
+  community.general.cargo:
+    name: tealdeer
+  tags:
+    - rust
+- name: Install tldr
+  community.general.cargo:
+    name: git-delta
+  tags:
+    - rust
