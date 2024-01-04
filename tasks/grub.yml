@@ -1,21 +1,23 @@
 ---
 - name: Add grub-customizer apt repo
-  apt_repository:
-    repo: 'ppa:trebelnik-stefina/grub-customizer'
+  ansible.builtin.apt_repository:
+    repo: "ppa:trebelnik-stefina/grub-customizer"
     state: present
   become: true
   tags:
     - grub
+
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
   tags:
     - grub
+
 - name: Install grub customizer
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["grub-customizer"]
   tags:
     - grub

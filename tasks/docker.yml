@@ -6,15 +6,17 @@
   check_mode: false
   register: docker_command_result
   tags:
-  - docker
+    - docker
+
 - name: Download Docker install convenience script.
   ansible.builtin.get_url:
     url: https://get.docker.com/
     dest: /tmp/get-docker.sh
-    mode: 0775
+    mode: "0775"
   when: docker_command_result.rc == 1
   tags:
     - docker
+
 - name: Run Docker install convenience script.
   ansible.builtin.command: /tmp/get-docker.sh
   environment:
@@ -22,6 +24,7 @@
   when: docker_command_result.rc == 1
   tags:
     - docker
+
 - name: Ensure dependencies are installed (Debian).
   ansible.builtin.apt:
     name:
@@ -35,16 +38,18 @@
   when: ansible_facts.os_family == "Debian"
   tags:
     - docker
-- name: Add docker to sudoers
-  become: true
-  shell: 'groupadd docker'
-  tags:
-    - docker
-- name: Add user to docker group
-  become: true
-  shell: 'usermod -aG docker {{ main_user }}'
-  tags:
-    - docker
+
+# - name: Add docker to sudoers
+#   become: true
+#   shell: 'groupadd docker'
+#   tags:
+#     - docker
+# - name: Add user to docker group
+#   become: true
+#   shell: 'usermod -aG docker {{ main_user }}'
+#   tags:
+#     - docker
+#
 - name: Ensure dependencies are installed (Archlinux).
   community.general.pacman:
     name:
@@ -57,6 +62,7 @@
   when: ansible_facts.os_family == "Archlinux"
   tags:
     - docker
+
 - name: Install Docker Compose using Pip.
   ansible.builtin.pip:
     name: docker-compose
@@ -64,8 +70,9 @@
     executable: pip3
   tags:
     - docker
+
 # reset_connection doesn't support conditionals.
 - name: Reset connection so docker group is picked up.
-  meta: reset_connection
+  ansible.builtin.meta: reset_connection
   tags:
     - docker

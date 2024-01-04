@@ -1,19 +1,24 @@
 ---
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
   tags:
     - postgres
+
 - name: Install postgres
   become: true
-  apt:
-    name: ["postgres", "postgresql-contrib"]
+  ansible.builtin.apt:
+    name: ["postgresql", "postgresql-contrib"]
   tags:
     - postgres
+
 - name: Start postgres service
   become: true
-  shell: 'systemctl start postgresql.service'
+  ansible.builtin.systemd:
+    name: postgresql
+    state: started
+    enabled: true
   tags:
     - postgres

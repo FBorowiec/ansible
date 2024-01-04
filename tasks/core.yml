@@ -1,15 +1,15 @@
 ---
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
   tags:
     - core
 - name: Install System Packages
   become: true
-  apt:
-    pkg:
+  ansible.builtin.apt:
+    name:
       - autoconf
       - automake
       - apt-transport-https
@@ -62,14 +62,14 @@
     - core
 - name: Yaml linters
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["yamllint", "ansible-lint"]
   tags:
     - core
 - name: Install Clang, GCC, Boost
   become: true
-  apt:
-    pkg:
+  ansible.builtin.apt:
+    name:
       - clang
       - clang-11
       - clang-12
@@ -81,14 +81,14 @@
     - core
 - name: Java Development Kit
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["default-jdk"]
   tags:
     - core
 - name: Install Ranger with deps
   become: true
-  apt:
-    pkg:
+  ansible.builtin.apt:
+    name:
       - ranger
       - caca-utils
       - highlight
@@ -102,26 +102,26 @@
     - ranger
 - name: Install Neovim deps
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["python3-neovim", "python3-venv", "fzf", "ripgrep", "fd-find"]
   tags:
     - core
     - neovim
 - name: Pdf reader
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["zathura"]
   tags:
     - core
 - name: Install zsh deps
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["jq", "bc"]
   tags:
     - core
 - name: Symbolic link from python3 to python
   become: true
-  file:
+  ansible.builtin.file:
     src: "/usr/bin/python3"
     dest: "/usr/bin/python"
     state: link

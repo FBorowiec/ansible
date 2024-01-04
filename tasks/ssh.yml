@@ -2,45 +2,49 @@
 - name: Ensure .ssh directory exists.
   become: true
   become_user: "{{ main_user }}"
-  file:
+  ansible.builtin.file:
     dest: "{{ dest_key | dirname }}"
-    mode: 0700
+    mode: "0700"
     state: directory
   tags:
     - ssh
+
 - name: Install rsa ssh key
   become: true
   become_user: "{{ main_user }}"
-  copy:
+  ansible.builtin.copy:
     src: "{{ rsa_source_key }}"
     dest: "{{ rsa_dest_key }}"
-    mode: 0600
+    mode: "0600"
   tags:
     - ssh
+
 - name: Install rsa ssh key public
   become: true
   become_user: "{{ main_user }}"
-  copy:
+  ansible.builtin.copy:
     src: "{{ rsa_source_key }}.pub"
     dest: "{{ rsa_dest_key }}.pub"
-    mode: 0644
+    mode: "0644"
   tags:
     - ssh
+
 - name: Install ssh key
   become: true
   become_user: "{{ main_user }}"
-  copy:
+  ansible.builtin.copy:
     src: "{{ source_key }}"
     dest: "{{ dest_key }}"
-    mode: 0600
+    mode: "0600"
   tags:
     - ssh
+
 - name: Install ssh key public
   become: true
   become_user: "{{ main_user }}"
-  copy:
+  ansible.builtin.copy:
     src: "{{ source_key }}.pub"
     dest: "{{ dest_key }}.pub"
-    mode: 0644
+    mode: "0644"
   tags:
     - ssh

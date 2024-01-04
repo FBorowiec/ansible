@@ -6,22 +6,25 @@
   check_mode: false
   register: kubectl_command_results
   tags:
-  - kubernetes
+    - kubernetes
+
 - name: Add an apt signing key for Kubernetes
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     state: present
   tags:
     - kubernetes
+
 - name: Adding apt repository for Kubernetes
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
     filename: kubernetes.list
   tags:
     - kubernetes
+
 - name: Install Kubernetes binaries
-  apt:
+  ansible.builtin.apt:
     name: "kubectl"
     state: present
     update_cache: true

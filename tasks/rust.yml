@@ -1,24 +1,17 @@
 ---
-- name: check if cargo is installed
-  ansible.builtin.command: which cargo
-  failed_when: false
-  changed_when: false
-  check_mode: false
-  register: cargo_exists
+- name: Check if Cargo is installed
+  ansible.builtin.command: cargo --version
+  register: cargo_installed
   ignore_errors: true
+  changed_when: false
+
+- name: Download and install Rust and Cargo
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source $HOME/.cargo/env
+  when: cargo_installed is failed
+  changed_when: false
   tags:
     - rust
-- name: Download Installer
-  when: cargo_exists is failed
-  get_url:
-    url: https://sh.rustup.rs
-    dest: /tmp/sh.rustup.rs
-    mode: '0755'
-    force: 'yes'
-  tags:
-    - rust
-- name: install rust/cargo
-  when: cargo_exists is failed
-  shell: /tmp/sh.rustup.rs -y
-  tags:
-    - rust
+    - cargo

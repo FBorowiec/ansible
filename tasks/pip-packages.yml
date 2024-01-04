@@ -1,62 +1,71 @@
 ---
 - name: Install python lsp server
-  pip:
-    name: 'python-lsp-server[all]'
+  ansible.builtin.pip:
+    name: "python-lsp-server[all]"
     executable: pip3
   tags:
     - python
+
 - name: Install lookatme with extensions
-  pip:
+  ansible.builtin.pip:
     name: ["lookatme"]
     executable: pip3
   tags:
     - python
+
 - name: Install lookatme with extensions
-  pip:
+  ansible.builtin.pip:
     name: ["lookatme.contrib.image-ueberzug", "lookatme.contrib.render"]
     executable: pip3
   tags:
     - python
+
 - name: Install zsh deps
-  pip:
+  ansible.builtin.pip:
     name: ["poppler-utils", "thefuck"]
     executable: pip3
   tags:
     - python
+
 - name: Neovim deps part 1
-  pip:
+  ansible.builtin.pip:
     name: ["pynvim", "pylint", "pycodestyle", "pydocstyle", "jedi", "mypy"]
     executable: pip3
   tags:
     - python
+
 - name: Neovim deps part 2
-  pip:
+  ansible.builtin.pip:
     name: ["pylsp-mypy", "black", "python-lsp-black", "flake8", "pyls-flake8"]
     executable: pip3
   tags:
     - python
+
 - name: Neovim deps part 3
-  pip:
+  ansible.builtin.pip:
     name: ["isort", "pyls-isort", "rope", "pylsp-rope"]
     executable: pip3
   tags:
     - python
+
 - name: C++ deps
-  pip:
+  ansible.builtin.pip:
     name: ["cmakelang"]
     executable: pip3
   tags:
     - python
     - cpp
+
 - name: SQL deps
-  pip:
+  ansible.builtin.pip:
     name: ["sqlfluff"]
     executable: pip3
   tags:
     - python
     - sql
+
 - name: Libs I use a lot
-  pip:
+  ansible.builtin.pip:
     name:
       - "pydantic"
       - "tenacity"
@@ -67,8 +76,9 @@
     executable: pip3
   tags:
     - python
+
 - name: OpenAI
-  pip:
+  ansible.builtin.pip:
     name: ["click", "openai"]
     executable: pip3
   tags:

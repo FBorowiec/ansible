@@ -1,30 +1,73 @@
 ---
 - name: Install picom deps
   become: true
-  apt:
+  ansible.apt:
     update_cache: true
-    name: ["libxext-dev", "libxcb1-dev", "libxcb-damage0-dev", "libxcb-xfixes0-dev", "libxcb-shape0-dev", "libxcb-render-util0-dev", "libxcb-render0-dev", "libxcb-randr0-dev", "libxcb-composite0-dev", "libxcb-image0-dev", "libxcb-present-dev", "libxcb-xinerama0-dev", "libxcb-glx0-dev", "libpixman-1-dev", "libdbus-1-dev", "libconfig-dev", "libgl1-mesa-dev", "libpcre2-dev", "libpcre3-dev", "libevdev-dev", "uthash-dev", "libev-dev", "libx11-xcb-dev", "meson", "x11-xserver-utils"]
+    name:
+      [
+        "libxext-dev",
+        "libxcb1-dev",
+        "libxcb-damage0-dev",
+        "libxcb-xfixes0-dev",
+        "libxcb-shape0-dev",
+        "libxcb-render-util0-dev",
+        "libxcb-render0-dev",
+        "libxcb-randr0-dev",
+        "libxcb-composite0-dev",
+        "libxcb-image0-dev",
+        "libxcb-present-dev",
+        "libxcb-xinerama0-dev",
+        "libxcb-glx0-dev",
+        "libpixman-1-dev",
+        "libdbus-1-dev",
+        "libconfig-dev",
+        "libgl1-mesa-dev",
+        "libpcre2-dev",
+        "libpcre3-dev",
+        "libevdev-dev",
+        "uthash-dev",
+        "libev-dev",
+        "libx11-xcb-dev",
+        "meson",
+        "x11-xserver-utils",
+      ]
   tags:
     - dwm
 - name: Install dwm deps
   become: true
-  apt:
+  ansible.apt:
     update_cache: true
-    name: ["meson", "suckless-tools", "stterm", "libpulse-dev", "xsettingsd", "alsa-utils", "cmus", "brightnessctl", "xbacklight", "playerctl", "libplayerctl-dev", "calcurse", "connman", "connman-dev"]
+    name:
+      [
+        "meson",
+        "suckless-tools",
+        "stterm",
+        "libpulse-dev",
+        "xsettingsd",
+        "alsa-utils",
+        "cmus",
+        "brightnessctl",
+        "xbacklight",
+        "playerctl",
+        "libplayerctl-dev",
+        "calcurse",
+        "connman",
+        "connman-dev",
+      ]
   tags:
     - dwm
 - name: Clone picom
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
-    repo: 'https://github.com/yshui/picom.git'
+    repo: "https://github.com/yshui/picom.git"
     dest: "{{ main_user_dir }}/picom"
   tags:
     - dwm
 - name: Build picom
   become: true
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/picom && meson --buildtype=release . build && ninja -C build"
+  ansible.shell: "cd {{ main_user_dir }}/picom && meson --buildtype=release . build && ninja -C build"
   tags:
     - dwm
 - name: Install picom
@@ -36,14 +79,14 @@
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
-    repo: 'https://github.com/cdemoulins/pamixer.git'
+    repo: "https://github.com/cdemoulins/pamixer.git"
     dest: "{{ main_user_dir }}/pamixer"
   tags:
     - dwm
 - name: Build pamixer
   become: true
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/pamixer && meson setup build"
+  ansible.shell: "cd {{ main_user_dir }}/pamixer && meson setup build"
   tags:
     - dwm
 - name: Install pamixer
@@ -53,22 +96,22 @@
     - dwm
 - name: Install Rofi with deps
   become: true
-  apt:
+  ansible.apt:
     update_cache: true
     name: ["rofi", "mpc", "xclip", "xdotool"]
   tags:
     - dwm
 - name: Install Dunst
   become: true
-  apt:
+  ansible.apt:
     update_cache: true
     name: ["dunst"]
   tags:
     - dwm
 - name: dwm - Install dwm dependencies
   become: true
-  apt:
-    pkg:
+  ansible.apt:
+    name:
       - libx11-dev
       - libxft-dev
       - libxinerama-dev
@@ -85,17 +128,17 @@
 - name: dwm - Build
   become: true
   become_user: "{{ main_user }}"
-  shell: "cd {{ main_user_dir }}/dwm && make"
+  ansible.builtin.shell: "cd {{ main_user_dir }}/dwm && make"
   tags:
     - dwm
 - name: dwm - Install
   become: true
-  shell: "cd {{ main_user_dir }}/dwm && make install"
+  ansible.builtin.shell: "cd {{ main_user_dir }}/dwm && make install"
   tags:
     - dwm
 - name: dwm   - dwm.desktop
   become: true
-  copy:
+  ansible.builtin.copy:
     src: files/dwm.desktop
     dest: /usr/share/xsessions
   tags:
