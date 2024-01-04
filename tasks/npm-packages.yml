@@ -1,85 +1,23 @@
 ---
-- name: Install Yarn
+- name: Install npm packages
   npm:
-    name: yarn
+    name: "{{ item }}"
     global: true
-  tags:
-    - node
-- name: Install eslint
-  npm:
-    name: eslint
-    global: true
-  tags:
-    - node
-- name: Install Typescript server
-  npm:
-    name: typescript-language-server
-    global: true
-  tags:
-    - node
-- name: Install Typescript
-  npm:
-    name: typescript
-    global: true
-  tags:
-    - node
-- name: Install TS-Node
-  npm:
-    name: ts-node
-    global: true
-  tags:
-    - node
-- name: Install bash lsp
-  npm:
-    name: bash-language-server
-    global: true
-  tags:
-    - node
-- name: Install lua formatter
-  npm:
-    name: lua-fmt
-    global: true
-  tags:
-    - node
-- name: Install jsonlint
-  npm:
-    name: jsonlint
-    global: true
-  tags:
-    - node
-- name: Install fixjson
-  npm:
-    name: fixjson
-    global: true
-  tags:
-    - node
-- name: Install markdownlint
-  npm:
-    name: markdownlint
-    global: true
-  tags:
-    - node
-- name: Install PG format
-  npm:
-    name: pg-format
-    global: true
-  tags:
-    - node
-- name: Install emojione
-  npm:
-    name: emojione
-    global: true
-  tags:
-    - node
-- name: Install live-server
-  npm:
-    name: live-server
-    global: true
-  tags:
-    - node
-- name: Neovim deps
-  npm:
-    name: neovim
-    global: true
+  loop:
+    - yarn
+    - eslint
+    - typescript-language-server
+    - typescript
+    - ts-node
+    - bash-language-server
+    - lua-fmt
+    - jsonlint
+    - fixjson
+    - markdownlint
+    - pg-format
+    - emojione
+    - live-server
+    - neovim
+    - "@githubnext/github-copilot-cli"
   tags:
     - node

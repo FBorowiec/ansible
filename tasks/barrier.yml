@@ -1,13 +1,14 @@
 ---
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
   tags:
     - barrier
+
 - name: Install barrier
-  apt:
+  ansible.builtin.apt:
     name: ["rclone", "barrier"]
   become: true
   tags:

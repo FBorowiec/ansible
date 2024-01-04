@@ -1,18 +1,20 @@
 ---
 - name: Install npm
   become: true
-  apt:
-    name: ['npm']
+  ansible.builtin.apt:
+    name: ["npm"]
   tags:
     - node
+
 - name: Install n
   npm:
     name: n
     global: true
   tags:
     - node
+
 - name: Install n
   become: true
-  shell: sudo n latest
+  ansible.builtin.shell: sudo n latest
   tags:
     - node

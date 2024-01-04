@@ -1,6 +1,6 @@
 ---
 - name: Configure Mozilla Firefox repository
-  become: yes
+  become: true
   apt_repository:
     repo: "ppa:mozillateam/ppa"
     state: present
@@ -8,7 +8,7 @@
     - firefox
 
 - name: Create apt preferences for Mozilla Firefox
-  become: yes
+  become: true
   blockinfile:
     path: /etc/apt/preferences.d/mozilla-firefox
     block: |
@@ -23,14 +23,14 @@
     - firefox
 
 - name: Remove Mozilla Firefox snap package
-  become: yes
+  become: true
   shell: snap remove firefox
-  ignore_errors: yes
+  ignore_errors: true
   tags:
     - firefox
 
 - name: Install Mozilla Firefox using apt
-  become: yes
+  become: true
   apt:
     name: firefox
     state: latest
@@ -38,7 +38,7 @@
     - firefox
 
 - name: Configure unattended-upgrades for Mozilla Firefox repository
-  become: yes
+  become: true
   blockinfile:
     path: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
     block: |

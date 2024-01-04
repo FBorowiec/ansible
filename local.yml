@@ -50,7 +50,9 @@
     - include_tasks: tasks/discord.yml
     - include_tasks: tasks/obsidian.yml
     - include_tasks: tasks/gtk.yml
-    - include_tasks: tasks/firefox.yml
+    # - include_tasks: tasks/theme_nord.yml
+    # - include_tasks: tasks/theme_tokyonight.yml
+    # - include_tasks: tasks/firefox.yml
     - include_tasks: tasks/grub.yml
     # - include_tasks: tasks/dwm.yml
     - include_tasks: tasks/restart.yml

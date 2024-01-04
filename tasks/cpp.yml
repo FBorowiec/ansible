@@ -2,19 +2,19 @@
 - name: Download vscode-cpptools
   become: true
   become_user: "{{ main_user }}"
-  get_url:
-    url:
-      "https://github.com/microsoft/vscode-cpptools/releases/download/1.7.1/cpptools-linux.vsix"
+  ansible.builtin.get_url:
+    url: "https://github.com/microsoft/vscode-cpptools/releases/download/1.7.1/cpptools-linux.vsix"
     dest: "{{ main_user_dir }}"
+    mode: "0644"
   tags:
     - cpp
 - name: Create cpptools directory
   become: true
   become_user: "{{ main_user }}"
-  file:
+  ansible.builtin.file:
     path: "{{ main_user_dir }}/.cpptools/cpptools-linux"
     state: directory
-    mode: 0755
+    mode: "0755"
   tags:
     - cpp
 - name: Extract cpptools
@@ -27,7 +27,7 @@
     - cpp
 - name: Make cpptools an executable
   become: true
-  file:
+  ansible.builtin.file:
     src: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/OpenDebugAD7"
     dest: "/usr/local/bin/OpenDebugAD7"
     mode: a+x
@@ -37,11 +37,11 @@
 - name: Create copy of json config
   become: true
   become_user: "{{ main_user }}"
-  file:
+  ansible.builtin.file:
     src: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/cppdbg.ad7Engine.json"
     dest: "{{ main_user_dir }}/.cpptools/cpptools-linux/extension/debugAdapters/bin/nvim-dap.ad7Engine.json"
     state: hard
-    mode: 0644
+    mode: "0644"
   tags:
     - cpp
 - name: Cleanup

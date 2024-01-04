@@ -10,10 +10,11 @@
     version: master
   tags:
     - neovim
+
 - name: Install build requirements for neovim
   become: true
-  apt:
-    pkg:
+  ansible.builtin.apt:
+    name:
       - ninja-build
       - gettext
       - libtool
@@ -26,15 +27,12 @@
       - unzip
       - curl
       - doxygen
+      - luarocks
     update_cache: true
   tags:
     - neovim
-- name: Neovim Plugin Development 1
-  apt: name=luarocks
-  become: true
-  tags:
-    - neovim
-- name: Neovim Plugin Development 2 luacheck
+
+- name: Neovim Plugin Development luacheck
   ansible.builtin.command: luarocks install luacheck
   register: luacheck_install
   changed_when: luacheck_install.rc != 0
@@ -44,6 +42,7 @@
   ignore_errors: true
   tags:
     - neovim
+
 - name: Build neovim
   become: true
   become_user: "{{ main_user }}"
@@ -53,9 +52,10 @@
   failed_when: build_neovim.rc != 0
   tags:
     - neovim
+
 - name: Install neovim
   become: true
-  shell: "cd {{ main_user_dir }}/neovim && make install"
+  ansible.builtin.shell: "cd {{ main_user_dir }}/neovim && make install"
   register: install_neovim
   changed_when: install_neovim.rc != 0
   failed_when: install_neovim.rc != 0

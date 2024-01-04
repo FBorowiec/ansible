@@ -1,66 +1,93 @@
 ---
-- name: Download spotify apt keys
-  shell: curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | apt-key add -
+- name: Download Spotify apt keys
+  ansible.builtin.get_url:
+    url: https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg
+    dest: /tmp/spotify_key.gpg
+    mode: "0644"
   become: true
   tags:
     - spotify
-- name: Add spotify to sources list
-  shell: echo "deb http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
+
+- name: Add Spotify apt key
+  ansible.builtin.apt_key:
+    file: /tmp/spotify_key.gpg
+    state: present
   become: true
   tags:
     - spotify
+
+- name: Add Spotify to sources list
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/spotify.list
+    line: "deb http://repository.spotify.com stable non-free"
+    mode: "0644"
+    create: true
+  become: true
+  tags:
+    - spotify
+
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: true
     update_cache: true
   tags:
     - spotify
+
 - name: Install Spotify
   become: true
-  apt:
+  ansible.builtin.apt:
     name: ["spotify-client"]
   tags:
     - spotify
-- name: Launch spotify to create default config
+
+- name: Launch Spotify to create default config
   become: true
   become_user: "{{ main_user }}"
-  shell: spotify &
+  ansible.builtin.command: spotify
+  async: 20
+  poll: 0
+  changed_when: false
   tags:
     - spotify
-- name: Add write permission to Spotify files
-  become: true
-  shell: chmod a+wr /usr/share/spotify && chmod a+wr /usr/share/spotify/Apps -R
-  tags:
-    - spotify
-- name: Install Spicetify
-  become: true
-  become_user: "{{ main_user }}"
-  shell: curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
-  tags:
-    - spotify
-- name: Run spicetify once to generate config file
-  become: true
-  become_user: "{{ main_user }}"
-  command: "{{ main_user_dir }}/.spicetify/spicetify"
-  check_mode: false
-  tags:
-    - spotify
-- name: Enable spicetify devtool
-  become: true
-  become_user: "{{ main_user }}"
-  command: "{{ main_user_dir }}/.spicetify/spicetify backup apply enable-devtool"
-  check_mode: false
-  tags:
-    - spotify
-- name: Copy spotify preferences
-  become: true
-  become_user: "{{ main_user }}"
-  copy:
-    src: files/spotify/prefs
-    dest: "{{ main_user_dir}}/.config/spotify/prefs"
-  tags:
-    - spotify
+# - name: Add write permission to Spotify files
+#   become: true
+#   shell: chmod a+wr /usr/share/spotify && chmod a+wr /usr/share/spotify/Apps -R
+#   tags:
+#     - spotify
+
+# - name: Install Spicetify
+#   become: true
+#   become_user: "{{ main_user }}"
+#   shell: curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
+#   tags:
+#     - spotify
+
+# - name: Run spicetify once to generate config file
+#   become: true
+#   become_user: "{{ main_user }}"
+#   command: "{{ main_user_dir }}/.spicetify/spicetify"
+#   check_mode: false
+#   tags:
+#     - spotify
+
+# - name: Enable spicetify devtool
+#   become: true
+#   become_user: "{{ main_user }}"
+#   command: "{{ main_user_dir }}/.spicetify/spicetify backup apply enable-devtool"
+#   check_mode: false
+#   tags:
+#     - spotify
+
+# - name: Copy spotify preferences
+#   become: true
+#   become_user: "{{ main_user }}"
+#   copy:
+#     src: files/spotify/prefs
+#     dest: "{{ main_user_dir}}/.config/spotify/prefs"
+#   tags:
+#     - spotify
+
 # - name: Enable Dribbblish extensions
 #   become: true
 #   become_user: "{{ main_user }}"
@@ -68,27 +95,31 @@
 #   check_mode: false
 #   tags:
 #     - spotify
+
 # - name: Set theme
 #   become: true
 #   become_user: "{{ main_user }}"
 #   command: "{{ main_user_dir }}/.spicetify/spicetify config current_theme Dribbblish color_scheme nord-dark"
 #   tags:
 #     - spotify
-- name: Install nord theme
-  become: true
-  become_user: "{{ main_user }}"
-  shell: curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
-  tags:
-    - spotify
-- name: Inject settings
-  become: true
-  become_user: "{{ main_user }}"
-  command: "{{ main_user_dir }}/.spicetify/spicetify config inject_css 1 replace_colors 1 overwrite_assets 1"
-  tags:
-    - spotify
-- name: Apply spicetify
-  become: true
-  become_user: "{{ main_user }}"
-  command: "{{ main_user_dir }}/.spicetify/spicetify apply"
-  tags:
-    - spotify
+
+# - name: Install nord theme
+#   become: true
+#   become_user: "{{ main_user }}"
+#   shell: curl -fsSL https://raw.githubusercontent.com/Tetrax-10/Nord-Spotify/master/install-scripts/install.sh | sh
+#   tags:
+#     - spotify
+
+# - name: Inject settings
+#   become: true
+#   become_user: "{{ main_user }}"
+#   command: "{{ main_user_dir }}/.spicetify/spicetify config inject_css 1 replace_colors 1 overwrite_assets 1"
+#   tags:
+#     - spotify
+
+# - name: Apply spicetify
+#   become: true
+#   become_user: "{{ main_user }}"
+#   command: "{{ main_user_dir }}/.spicetify/spicetify apply"
+#   tags:
+#     - spotify

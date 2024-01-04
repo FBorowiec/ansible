@@ -5,48 +5,54 @@
     global: true
   tags:
     - bazel
+
 - name: Download bazel-compilation-database
   become: true
   become_user: "{{ main_user }}"
   vars:
     version: 0.5.2
-  get_url:
+  ansible.builtin.get_url:
     url: "https://github.com/grailbio/bazel-compilation-database/archive/refs/tags/{{ version }}.tar.gz"
     dest: "{{ main_user_dir }}/Downloads"
+    mode: "0644"
   tags:
     - bazel
+
 - name: Install bazel compilation database
   become: true
   vars:
     version: 0.5.2
   ansible.builtin.unarchive:
-    src:
-      "{{ main_user_dir }}/Downloads/bazel-compilation-database-{{ version }}.tar.gz"
+    src: "{{ main_user_dir }}/Downloads/bazel-compilation-database-{{ version }}.tar.gz"
     dest: "/usr/local/bin/"
   tags:
     - bazel
+
 - name: Symbolic link bazel compdb
   become: true
   vars:
     version: 0.5.2
-  file:
-    src: "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.sh"
+  ansible.builtin.file:
+    src: "/usr/local/bin/bazel-compilation-database-{{ version }}/generate.py"
     dest: "/usr/local/bin/bazel-compdb"
     state: link
   tags:
     - bazel
+
 - name: Install buildifier
   become: true
   vars:
     version: 5.1.0
-  get_url:
+  ansible.builtin.get_url:
     url: "https://github.com/bazelbuild/buildtools/releases/download/{{ version }}/buildifier-linux-amd64"
     dest: "/usr/local/bin/buildifier-linux-amd64"
+    mode: "0644"
   tags:
     - bazel
+
 - name: Make buildifier executable
   become: true
-  file:
+  ansible.builtin.file:
     src: "/usr/local/bin/buildifier-linux-amd64"
     dest: "/usr/local/bin/buildifier"
     mode: a+x
