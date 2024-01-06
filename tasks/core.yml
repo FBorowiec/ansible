@@ -6,6 +6,7 @@
     update_cache: true
   tags:
     - core
+
 - name: Install System Packages
   become: true
   ansible.builtin.apt:
@@ -60,12 +61,14 @@
       - xournal
   tags:
     - core
+
 - name: Yaml linters
   become: true
   ansible.builtin.apt:
     name: ["yamllint", "ansible-lint"]
   tags:
     - core
+
 - name: Install Clang, GCC, Boost
   become: true
   ansible.builtin.apt:
@@ -79,12 +82,14 @@
       - libboost-all-dev
   tags:
     - core
+
 - name: Java Development Kit
   become: true
   ansible.builtin.apt:
     name: ["default-jdk"]
   tags:
     - core
+
 - name: Install Ranger with deps
   become: true
   ansible.builtin.apt:
@@ -100,6 +105,7 @@
   tags:
     - core
     - ranger
+
 - name: Install Neovim deps
   become: true
   ansible.builtin.apt:
@@ -107,18 +113,21 @@
   tags:
     - core
     - neovim
+
 - name: Pdf reader
   become: true
   ansible.builtin.apt:
     name: ["zathura"]
   tags:
     - core
+
 - name: Install zsh deps
   become: true
   ansible.builtin.apt:
     name: ["jq", "bc"]
   tags:
     - core
+
 - name: Symbolic link from python3 to python
   become: true
   ansible.builtin.file:

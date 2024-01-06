@@ -1,7 +1,24 @@
 ---
-- name: Install obsidian
+- name: Fetch all releases for Obsidian
+  uri:
+    url: "https://api.github.com/repos/obsidianmd/obsidian-releases/releases"
+    return_content: true
+    method: GET
+    headers:
+      Accept: "application/vnd.github.v3+json"
+  register: obsidian_releases
+  tags:
+    - obsidian
+
+- name: Extract the most recent release tag for Obsidian
+  set_fact:
+    obsidian_latest_version: "{{ (obsidian_releases.json | sort(attribute='published_at') | last).tag_name }}"
+  tags:
+    - obsidian
+
+- name: Install Obsidian
   ansible.builtin.apt:
-    deb: https://github.com/obsidianmd/obsidian-releases/releases/download/v1.0.3/obsidian_1.0.3_amd64.deb
+    deb: "https://github.com/obsidianmd/obsidian-releases/releases/download/{{ obsidian_latest_version }}/obsidian_{{ obsidian_latest_version[1:] }}_amd64.deb"
   when: obsidian_package_check is failed and ansible_facts['os_family'] == "Debian"
   tags:
     - obsidian
