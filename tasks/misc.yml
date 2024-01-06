@@ -19,8 +19,6 @@
 
 - name: Symbolic link actionlint
   become: true
-  vars:
-    version: 0.5.2
   ansible.builtin.file:
     src: "/usr/local/bin/actionlint"
     dest: "/usr/bin/actionlint"
