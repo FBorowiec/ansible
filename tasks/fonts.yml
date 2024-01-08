@@ -13,7 +13,7 @@
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
-    src: ansible.builtin.files/monaco.ttf
+    src: files/monaco.ttf
     dest: "{{ main_user_dir }}/.local/share/fonts"
     mode: "0644"
   tags:
@@ -116,11 +116,30 @@
   tags:
     - fonts
 
-- name: Download fonts zip ansible.builtin.file
+- name: Fetch all releases for Nerd Fonts
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/ryanoasis/nerd-fonts/releases"
+    return_content: true
+    method: GET
+    headers:
+      Accept: "application/vnd.github.v3+json"
+  register: nerd_fonts_releases
+  tags:
+    - fonts
+
+- name: Extract the most recent release tag for Nerd Fonts
+  ansible.builtin.set_fact:
+    nerd_fonts_latest_version: "{{ (nerd_fonts_releases.json | sort(attribute='published_at') | last).tag_name }}"
+  tags:
+    - fonts
+
+- name: Download fonts zip file
+  become: true
+  become_user: "{{ main_user }}"
   ansible.builtin.get_url:
-    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/3270.zip"
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_latest_version }}/3270.zip"
     dest: "{{ main_user_dir }}/3270.zip"
-    mode: "0644"
+    mode: "0664"
   tags:
     - fonts
 
@@ -129,14 +148,6 @@
     src: "{{ main_user_dir }}/3270.zip"
     dest: "{{ main_user_dir }}/.local/share/fonts"
     remote_src: true
-    extra_opts: --strip-components=1
-  tags:
-    - fonts
-
-- name: Remove old zip ansible.builtin.file
-  ansible.builtin.file:
-    path: "{{ main_user_dir }}/3270.zip"
-    state: absent
   tags:
     - fonts
 

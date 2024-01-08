@@ -17,6 +17,8 @@
 - name: Install Alacritty
   community.general.cargo:
     name: alacritty
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
     - terminal
     - alacritty

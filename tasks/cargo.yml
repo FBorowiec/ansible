@@ -2,6 +2,8 @@
 - name: Install stylua
   community.general.cargo:
     name: stylua
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
     - rust
     - lua
@@ -9,17 +11,23 @@
 - name: Install shellharden
   community.general.cargo:
     name: shellharden
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
     - rust
 
 - name: Install tldr
   community.general.cargo:
     name: tealdeer
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
     - rust
 
 - name: Install tldr
   community.general.cargo:
     name: git-delta
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
     - rust

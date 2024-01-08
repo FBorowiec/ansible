@@ -10,18 +10,24 @@
   tags:
     - cpp
 
-- name: Extract the most recent release tag for vscode-cpptools
+- name: Filter out pre-releases
   set_fact:
-    vscode_cpp_latest_version: "{{ (vscode_cpp_releases.json | sort(attribute='published_at') | last).tag_name }}"
+    stable_releases: "{{ vscode_cpp_releases.json | selectattr('prerelease', 'equalto', false) | sort(attribute='published_at') }}"
   tags:
     - cpp
 
-- name: Download vscode-cpptools
+- name: Extract the most recent stable release tag
+  set_fact:
+    latest_stable_release_tag: "{{ stable_releases | last | json_query('tag_name') }}"
+  tags:
+    - cpp
+
+- name: Download the latest stable version of cpptools-linux.vsix
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
-    url: "https://github.com/microsoft/vscode-cpptools/releases/download/{{ vscode_cpp_latest_version }}/cpptools-linux.vsix"
-    dest: "{{ main_user_dir }}"
+    url: "https://github.com/microsoft/vscode-cpptools/releases/download/{{ latest_stable_release_tag }}/cpptools-linux.vsix"
+    dest: "{{ main_user_dir }}/cpptools-linux.vsix"
     mode: "0644"
   tags:
     - cpp

@@ -4,6 +4,8 @@
     set -o pipefail
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v*([^"]+)".*/\1/')
     echo $LAZYGIT_VERSION
+  args:
+    executable: /bin/bash
   register: lazygit_version
   changed_when: false
   tags:

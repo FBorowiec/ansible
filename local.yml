@@ -46,7 +46,7 @@
     - include_tasks: tasks/lazygit.yml
     - include_tasks: tasks/keyboard-ergodox.yml
     - include_tasks: tasks/brave.yml
-    - include_tasks: tasks/spotify.yml
+    # - include_tasks: tasks/spotify.yml
     - include_tasks: tasks/discord.yml
     - include_tasks: tasks/obsidian.yml
     - include_tasks: tasks/gtk.yml

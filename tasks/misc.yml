@@ -2,8 +2,9 @@
 - name: Download actionlint
   become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.command:
-    cmd: "bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)"
+  ansible.builtin.shell:
+    cmd: "curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash | bash"
+    executable: /bin/bash
   register: action_lint_download
   changed_when: action_lint_download.rc != 0
   failed_when: action_lint_download.rc != 0

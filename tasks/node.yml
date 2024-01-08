@@ -13,7 +13,7 @@
   tags:
     - node
 
-- name: Install n
+- name: Install latest n
   become: true
   ansible.builtin.shell: sudo n latest
   tags:

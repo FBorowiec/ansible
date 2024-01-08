@@ -19,7 +19,6 @@
 - name: Install Obsidian
   ansible.builtin.apt:
     deb: "https://github.com/obsidianmd/obsidian-releases/releases/download/{{ obsidian_latest_version }}/obsidian_{{ obsidian_latest_version[1:] }}_amd64.deb"
-  when: obsidian_package_check is failed and ansible_facts['os_family'] == "Debian"
   tags:
     - obsidian
 
