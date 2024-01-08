@@ -6,18 +6,37 @@
   tags:
     - rust
 
+- name: Check if Rust installer exists
+  ansible.builtin.stat:
+    path: /tmp/sh.rustup.rs
+  register: rust_installer
+  tags:
+    - rust
+
 - name: Download Installer
-  when: cargo_exists is failed
+  become: true
+  become_user: "{{ main_user }}"
+  when: cargo_exists is failed and rust_installer.stat.exists == false
   ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: /tmp/sh.rustup.rs
     mode: "0755"
-    force: "yes"
+    force: "no"
   tags:
     - rust
 
 - name: Install rust/cargo
+  become: true
+  become_user: "{{ main_user }}"
   when: cargo_exists is failed
   ansible.builtin.shell: /tmp/sh.rustup.rs -y
+  tags:
+    - rust
+
+- name: Source cargo environment
+  become: true
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: "source $HOME/.cargo/env"
+  when: cargo_exists is failed
   tags:
     - rust

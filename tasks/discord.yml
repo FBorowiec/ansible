@@ -14,50 +14,49 @@
   when: discord_check_deb.rc == 1
   tags:
     - discord
-
-- name: Launch Discord in background to create config files
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: discord
-  async: 10
-  poll: 0
-  changed_when: false
-  tags:
-    - discord
-
-- name: Install AppImage dependencies
-  become: true
-  ansible.builtin.apt:
-    name: ["libfuse2"]
-  tags:
-    - discord
-
-- name: Download BetterDiscord
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage
-    dest: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
-  mode: "0755"
-  tags:
-    - discord
-
-- name: Make BetterDiscord an executable
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
-    mode: "0755"
-  changed_when: false
-  tags:
-    - discord
-
-- name: Launch BetterDiscord installer
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
-  async: 10
-  poll: 0
-  changed_when: false
-  tags:
-    - discord
+# - name: Launch Discord in background to create config files
+#   become: true
+#   become_user: "{{ main_user }}"
+#   ansible.builtin.command: discord
+#   async: 10
+#   poll: 0
+#   changed_when: false
+#   tags:
+#     - discord
+#
+# - name: Install AppImage dependencies
+#   become: true
+#   ansible.builtin.apt:
+#     name: ["libfuse2"]
+#   tags:
+#     - discord
+#
+# - name: Download BetterDiscord
+#   become: true
+#   become_user: "{{ main_user }}"
+#   ansible.builtin.get_url:
+#     url: https://github.com/BetterDiscord/Installer/releases/latest/download/BetterDiscord-Linux.AppImage
+#     dest: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+#   mode: "0755"
+#   tags:
+#     - discord
+#
+# - name: Make BetterDiscord an executable
+#   become: true
+#   become_user: "{{ main_user }}"
+#   ansible.builtin.file:
+#     path: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+#     mode: "0755"
+#   changed_when: false
+#   tags:
+#     - discord
+#
+# - name: Launch BetterDiscord installer
+#   become: true
+#   become_user: "{{ main_user }}"
+#   ansible.builtin.command: "{{ main_user_dir }}/Downloads/BetterDiscord-Linux.AppImage"
+#   async: 10
+#   poll: 0
+#   changed_when: false
+#   tags:
+#     - discord

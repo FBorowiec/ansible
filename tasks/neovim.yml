@@ -46,7 +46,7 @@
 - name: Build neovim
   become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "cd {{ main_user_dir }}/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo"
+  ansible.builtin.shell: "cd {{ main_user_dir }}/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo"
   register: build_neovim
   changed_when: build_neovim.rc != 0
   failed_when: build_neovim.rc != 0

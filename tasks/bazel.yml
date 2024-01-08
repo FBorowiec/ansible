@@ -1,6 +1,6 @@
 ---
 - name: Fetch all releases for bazel-compilation-database
-  uri:
+  ansible.builtin.uri:
     url: "https://api.github.com/repos/grailbio/bazel-compilation-database/releases"
     return_content: true
     method: GET
@@ -11,7 +11,7 @@
     - bazel
 
 - name: Extract the most recent release tag
-  set_fact:
+  ansible.builtin.set_fact:
     latest_version: "{{ (releases_info.json | sort(attribute='published_at') | last).tag_name }}"
   tags:
     - bazel
@@ -50,7 +50,7 @@
     - bazel
 
 - name: Fetch all releases for buildifier
-  uri:
+  ansible.builtin.uri:
     url: "https://api.github.com/repos/bazelbuild/buildtools/releases"
     return_content: true
     method: GET
@@ -61,7 +61,7 @@
     - bazel
 
 - name: Extract the most recent release tag for buildifier
-  set_fact:
+  ansible.builtin.set_fact:
     buildifier_latest_version: "{{ (buildifier_releases_info.json | sort(attribute='published_at') | last).tag_name }}"
   tags:
     - bazel
