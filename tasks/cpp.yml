@@ -1,6 +1,6 @@
 ---
 - name: Fetch all releases for vscode-cpptools
-  uri:
+  ansible.builtin.uri:
     url: "https://api.github.com/repos/microsoft/vscode-cpptools/releases"
     return_content: true
     method: GET
@@ -11,13 +11,13 @@
     - cpp
 
 - name: Filter out pre-releases
-  set_fact:
+  ansible.builtin.set_fact:
     stable_releases: "{{ vscode_cpp_releases.json | selectattr('prerelease', 'equalto', false) | sort(attribute='published_at') }}"
   tags:
     - cpp
 
 - name: Extract the most recent stable release tag
-  set_fact:
+  ansible.builtin.set_fact:
     latest_stable_release_tag: "{{ stable_releases | last | json_query('tag_name') }}"
   tags:
     - cpp

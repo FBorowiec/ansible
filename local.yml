@@ -24,7 +24,7 @@
   tasks:
     - include_tasks: tasks/ssh.yml
     - include_tasks: tasks/core.yml
-    - include_tasks: tasks/rust.yml
+    - include_tasks: tasks/cargo.yml
     - include_tasks: tasks/alacritty.yml
     - include_tasks: tasks/fonts.yml
     - include_tasks: tasks/tmux.yml
@@ -40,7 +40,6 @@
     - include_tasks: tasks/helm.yml
     - include_tasks: tasks/bazel.yml
     - include_tasks: tasks/cpp.yml
-    - include_tasks: tasks/cargo.yml
     - include_tasks: tasks/snap.yml
     - include_tasks: tasks/misc.yml
     - include_tasks: tasks/lazygit.yml
