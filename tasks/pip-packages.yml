@@ -74,6 +74,7 @@
       - "numpy"
       - "pylint-pydantic"
       - "pylint"
+      - "proselint"
     executable: pip3
   tags:
     - python

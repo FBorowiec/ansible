@@ -18,6 +18,7 @@
     - emojione
     - live-server
     - neovim
+    - write-good
     - "@githubnext/github-copilot-cli"
   tags:
     - node
