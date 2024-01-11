@@ -143,7 +143,7 @@
 - name: Hide mounted disks
   become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.command: gsettings set org.gnome.nautilus.desktop volumes-visible 'false'
+  ansible.builtin.command: "gsettings set org.gnome.nautilus.desktop volumes-visible 'false'"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
   tags:
