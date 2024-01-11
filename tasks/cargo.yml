@@ -33,9 +33,16 @@
   tags:
     - cargo
 
+- name: Set default Rust toolchain to stable
+  ansible.builtin.shell: rustup default stable
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
+  when: cargo_exists is failed
+  tags: rust
+
 - name: Install Cargo packages
   community.general.cargo:
-    name: ["stylua", "shellharden", "tealdeer", "git-delta"]
+    name: ["alacritty", "git-delta", "shellharden", "stylua", "tealdeer"]
   environment:
     PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   tags:
