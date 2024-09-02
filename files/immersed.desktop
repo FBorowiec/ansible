@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Immersed
+Icon=/home/sf33267/immersed/immersed.png
+Exec=/home/sf33267/immersed/Immersed-x86_64.AppImage
+Categories=Office;
+Terminal=false
