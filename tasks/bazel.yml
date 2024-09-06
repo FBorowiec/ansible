@@ -1,21 +1,4 @@
 ---
-- name: Fetch all releases for bazel-compilation-database
-  ansible.builtin.uri:
-    url: "https://api.github.com/repos/grailbio/bazel-compilation-database/releases"
-    return_content: true
-    method: GET
-    headers:
-      Accept: "application/vnd.github.v3+json"
-  register: releases_info
-  tags:
-    - bazel
-
-- name: Extract the most recent release tag
-  ansible.builtin.set_fact:
-    latest_version: "{{ (releases_info.json | sort(attribute='published_at') | last).tag_name }}"
-  tags:
-    - bazel
-
 - name: Install Bazel
   npm:
     name: "@bazel/bazelisk"
@@ -23,64 +6,19 @@
   tags:
     - bazel
 
-- name: Download the latest bazel-compilation-database
-  become: true
-  become_user: "{{ main_user }}"
+- name: Download and install StarPLS
   ansible.builtin.get_url:
-    url: "https://github.com/grailbio/bazel-compilation-database/archive/refs/tags/{{ latest_version }}.tar.gz"
-    dest: "{{ main_user_dir }}/Downloads"
-    mode: "0644"
-  tags:
-    - bazel
-- name: Install bazel compilation database
-  become: true
-  ansible.builtin.unarchive:
-    src: "{{ main_user_dir }}/Downloads/bazel-compilation-database-{{ latest_version }}.tar.gz"
-    dest: "/usr/local/bin/"
-  tags:
-    - bazel
+    url: https://github.com/withered-magic/starpls/releases/download/v0.1.14/starpls-linux-amd64
+    dest: /usr/local/bin/starpls
+    mode: "0755"
 
-- name: Symbolic link bazel compdb
-  become: true
-  ansible.builtin.file:
-    src: "/usr/local/bin/bazel-compilation-database-{{ latest_version }}/generate.py"
-    dest: "/usr/local/bin/bazel-compdb"
-    state: link
-  tags:
-    - bazel
-
-- name: Fetch all releases for buildifier
-  ansible.builtin.uri:
-    url: "https://api.github.com/repos/bazelbuild/buildtools/releases"
-    return_content: true
-    method: GET
-    headers:
-      Accept: "application/vnd.github.v3+json"
-  register: buildifier_releases_info
-  tags:
-    - bazel
-
-- name: Extract the most recent release tag for buildifier
-  ansible.builtin.set_fact:
-    buildifier_latest_version: "{{ (buildifier_releases_info.json | sort(attribute='published_at') | last).tag_name }}"
-  tags:
-    - bazel
+- name: Ensure Go is installed
+  ansible.builtin.apt:
+    name: golang-go
+    state: present
+    update_cache: true
 
 - name: Install buildifier
-  become: true
-  ansible.builtin.get_url:
-    url: "https://github.com/bazelbuild/buildtools/releases/download/{{ buildifier_latest_version }}/buildifier-linux-amd64"
-    dest: "/usr/local/bin/buildifier-linux-amd64"
-    mode: "0755"
-  tags:
-    - bazel
-
-- name: Make buildifier executable
-  become: true
-  ansible.builtin.file:
-    src: "/usr/local/bin/buildifier-linux-amd64"
-    dest: "/usr/local/bin/buildifier"
-    mode: a+x
-    state: link
-  tags:
-    - bazel
+  ansible.builtin.command: "/usr/bin/go install github.com/bazelbuild/buildtools/buildifier@latest"
+  environment:
+    GOPATH: "{{ main_user_dir }}/go"
