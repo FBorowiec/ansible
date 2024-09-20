@@ -3,15 +3,24 @@
   ansible.builtin.shell: command -v cargo
   register: cargo_exists
   ignore_errors: true
-  tags:
-    - cargo
 
 - name: Check if Rust installer exists
   ansible.builtin.stat:
     path: /tmp/sh.rustup.rs
   register: rust_installer
-  tags:
-    - rust
+
+- name: Ensure dependencies are installed (curl)
+  apt:
+    name: curl
+    state: present
+
+- name: Install Rust and Cargo using rustup
+  shell: |
+    export RUSTUP_HOME={{ rustup_home }}
+    export CARGO_HOME={{ cargo_home }}
+    curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --profile minimal
+  args:
+    creates: "{{ cargo_home }}/bin/rustc"
 
 - name: Download Installer
   become: true
@@ -22,37 +31,21 @@
     dest: /tmp/sh.rustup.rs
     mode: "0755"
     force: "no"
-  tags:
-    - cargo
 
 - name: Install rust/cargo
   become: true
   become_user: "{{ main_user }}"
   when: cargo_exists is failed
   ansible.builtin.shell: /tmp/sh.rustup.rs -y
-  tags:
-    - cargo
 
 - name: Set default Rust toolchain to stable
   ansible.builtin.shell: rustup default stable
   environment:
     PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
   when: cargo_exists is failed
-  tags: rust
 
 - name: Install Cargo packages
   community.general.cargo:
-    name: ["alacritty", "git-delta", "shellharden", "stylua", "tealdeer"]
+    name: ["git-delta", "tealdeer"]
   environment:
     PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
-  tags:
-    - cargo
-    - lua
-
-- name: Source cargo environment
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.shell: "source $HOME/.cargo/env"
-  when: cargo_exists is failed
-  tags:
-    - cargo

@@ -1,0 +1,31 @@
+---
+# https://github.com/ToasterUwU/install-gnome-extensions
+- name: Ensure gnome shell extensions dependencies are installed
+  become: true
+  ansible.builtin.apt:
+    name:
+      - unzip
+      - curl
+      - wget
+      - jq
+      - gnome-extensions
+      - gnome-tweaks
+    state: present
+
+- name: Download install gnome extensions
+  tags: gnome_shell_extensions
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ToasterUwU/install-gnome-extensions/master/install-gnome-extensions.sh
+    dest: "{{ home_dir }}/Downloads/install-gnome-extensions.sh"
+    mode: a+x
+
+- name: Install gnome extensions
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "bash {{ home_dir }}/files/install-gnome-extensions.sh --enable --file files/gnome_extensions.txt"
+  changed_when: false
+
+- name: Remove install-gnome-extensions.sh
+  ansible.builtin.file:
+    path:
+      dest: "{{ main_user_dir }}/Downloads/install-gnome-extensions.sh"
+    state: absent

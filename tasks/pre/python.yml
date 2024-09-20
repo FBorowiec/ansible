@@ -1,0 +1,38 @@
+---
+- name: Install additional python packages
+  ansible.builtin.apt:
+    name: python3-dev
+
+- name: Ensure pipx is installed
+  ansible.builtin.apt:
+    name: pipx
+    update_cache: true
+    state: present
+
+- name: Ensure pipx is in PATH
+  ansible.builtin.command: "pipx ensurepath"
+
+- name: Install yamllint
+  community.general.pipx:
+    name: "yamllint"
+
+- name: Install sqlfluff
+  community.general.pipx:
+    name: "sqlfluff"
+
+- name: Install zsh deps
+  community.general.pipx:
+    name: ["poppler-utils", "thefuck"]
+
+- name: Neovim deps part
+  community.general.pipx:
+    name: "pynvim"
+
+- name: Libs I use a lot
+  community.general.pipx:
+    name:
+      - "pydantic"
+      - "tenacity"
+      - "pandas"
+      - "numpy"
+      - "pylint"

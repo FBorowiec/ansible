@@ -1,0 +1,15 @@
+---
+- name: Install System Packages
+  ansible.builtin.apt:
+    name:
+      - autoconf
+      - automake
+      - clang
+      - clang-format
+      - clang-tidy
+      - clangd
+      - cmake
+      - meson
+      - gcc
+      - g++
+      - libboost-all-dev

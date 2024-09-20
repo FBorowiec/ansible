@@ -1,66 +1,28 @@
 ---
 - name: Update and upgrade apt packages
-  become: true
   ansible.builtin.apt:
     upgrade: true
     update_cache: true
-  tags:
-    - core
 
 - name: Install System Packages
-  become: true
   ansible.builtin.apt:
     name:
-      - autoconf
-      - automake
       - apt-transport-https
       - build-essential
-      - clang-format
-      - cmake
       - curl
-      - firefox
       - gettext
-      - gimp
       - git
       - gitlint
       - global
-      - golang
-      - htop
-      - libfreetype6-dev
-      - libfontconfig1-dev
-      - libxft-dev
-      - libx11-dev
-      - libxcb-xfixes0-dev
-      - libxcomposite-dev
-      - libxkbcommon-dev
-      - libtool
-      - libtool-bin
-      - libxinerama-dev
       - lm-sensors
-      - lua5.1
-      - meson
-      - netcat
-      - nload
       - nvidia-settings
       - pandoc
-      - postgresql
-      - pgformatter
-      - pkg-config
-      - psensor
-      - python3-dev
-      - python3-pip
-      - python3-tk
-      - simplescreenrecorder
-      - snapd
       - software-properties-common
       - stow
       - unzip
       - vlc
       - wget
       - xclip
-      - xournal
-  tags:
-    - core
 
 - name: Yaml linters
   become: true
@@ -74,8 +36,6 @@
   ansible.builtin.apt:
     name:
       - clang
-      - clang-11
-      - clang-12
       - clangd
       - gcc
       - g++
@@ -87,8 +47,6 @@
   become: true
   ansible.builtin.apt:
     name: ["default-jdk"]
-  tags:
-    - core
 
 - name: Install Ranger with deps
   become: true
@@ -102,43 +60,18 @@
       - mediainfo
       - lynx
       - ffmpegthumbnailer
-  tags:
-    - core
-    - ranger
 
 - name: Install Neovim deps
   become: true
   ansible.builtin.apt:
     name: ["python3-neovim", "python3-venv", "fzf", "ripgrep", "fd-find"]
-  tags:
-    - core
-    - neovim
 
 - name: Pdf reader
   become: true
   ansible.builtin.apt:
     name: ["zathura"]
-  tags:
-    - core
 
 - name: Install zsh deps
   become: true
   ansible.builtin.apt:
     name: ["jq", "bc"]
-  tags:
-    - core
-
-- name: Symbolic link from python3 to python
-  become: true
-  ansible.builtin.file:
-    src: "/usr/bin/python3"
-    dest: "/usr/bin/python"
-    state: link
-  tags:
-    - core
-    - zsh
-# - name: Update nvidia-drivers
-#   become: true
-#   cmd:
-#   tags:
-#     - core

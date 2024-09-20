@@ -1,0 +1,21 @@
+---
+- name: Install Bazel
+  npm:
+    name: "@bazel/bazelisk"
+    global: true
+  tags:
+    - bazel
+
+- name: Install buildifier
+  ansible.builtin.command: "/usr/local/go/bin/go install github.com/bazelbuild/buildtools/buildifier@latest"
+  environment:
+    GOPATH: "{{ home_dir }}/go"
+    GOBIN: "{{ home_dir }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"
+
+- name: Install buildozer
+  ansible.builtin.command: "/usr/local/go/bin/go install github.com/bazelbuild/buildtools/buildozer@latest"
+  environment:
+    GOPATH: "{{ home_dir }}/go"
+    GOBIN: "{{ home_dir }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"

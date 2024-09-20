@@ -1,41 +1,27 @@
 ---
 - name: Install Stow
-  become: true
   ansible.builtin.apt:
     name:
       - stow
-  tags:
-    - stow
-    - dotfiles
 
 - name: "Check dotfiles dir exists"
   ansible.builtin.stat:
-    path: "{{ main_user_dir }}/dotfiles"
+    path: "{{ home_dir }}/dotfiles"
   register: dotfiles
-  tags:
-    - dotfiles
 
 - name: Clone the dotfiles repo
-  become: true
   become_user: "{{ main_user }}"
-  when: not dotfiles.stat.exists
   ansible.builtin.git:
     repo: "https://github.com/FBorowiec/dotfiles.git"
-    dest: "{{ main_user_dir }}/dotfiles"
+    dest: "{{ home_dir }}/dotfiles"
     version: main
     key_file: "{{ dest_key }}"
-  tags:
-    - stow
-    - dotfiles
+  when: not dotfiles.stat.exists
 
 - name: Stow dotfiles
-  become: true
   become_user: "{{ main_user }}"
-  when: not dotfiles.stat.exists
-  ansible.builtin.command: "{{ main_user_dir }}/dotfiles/install"
+  ansible.builtin.command: "cd {{ home_dir }}/dotfiles && ./install"
   register: dotfiles_install
   changed_when: dotfiles_install.rc != 0
   failed_when: dotfiles_install.rc != 0
-  tags:
-    - stow
-    - dotfiles
+  when: not dotfiles.stat.exists
