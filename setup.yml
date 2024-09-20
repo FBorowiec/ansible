@@ -14,30 +14,30 @@
         update_cache: true
     - include_tasks: tasks/pre/ssh.yml
     - include_tasks: tasks/pre/core.yml
+    - include_tasks: tasks/pre/fonts.yml
+    - include_tasks: tasks/pre/dotfiles.yml
+    - include_tasks: tasks/pre/zsh.yml
     - include_tasks: tasks/pre/cargo.yml
     - include_tasks: tasks/pre/cpp.yml
-    - include_tasks: tasks/pre/dotfiles.yml
-    - include_tasks: tasks/pre/fonts.yml
+    - include_tasks: tasks/pre/python.yml
     - include_tasks: tasks/pre/go.yml
     - include_tasks: tasks/pre/lua.yml
     - include_tasks: tasks/pre/neovim.yml
-    - include_tasks: tasks/pre/python.yml
-    - include_tasks: tasks/pre/zsh.yml
+    - include_tasks: tasks/pre/lazygit.yml
 
   tasks:
+    - include_tasks: tasks/post/grub.yml
+    - include_tasks: tasks/post/tmux.yml
     - include_tasks: tasks/post/alacritty.yml
+    - include_tasks: tasks/post/gnome.yml
+    - include_tasks: tasks/post/gtk.yml
     - include_tasks: tasks/post/barrier.yml
     - include_tasks: tasks/post/bazel.yml
     - include_tasks: tasks/post/discord.yml
     - include_tasks: tasks/post/docker.yml
-    - include_tasks: tasks/post/gnome.yml
-    - include_tasks: tasks/post/grub.yml
-    - include_tasks: tasks/post/gtk.yml
     - include_tasks: tasks/post/i3.yml
     - include_tasks: tasks/post/immersed.yml
     - include_tasks: tasks/post/keyboard.yml
-    - include_tasks: tasks/post/lazygit.yml
     - include_tasks: tasks/post/npm-packages.yml
     - include_tasks: tasks/post/snap.yml
     - include_tasks: tasks/post/theme_nord.yml
-    - include_tasks: tasks/post/tmux.yml
