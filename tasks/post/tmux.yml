@@ -1,11 +1,9 @@
 ---
 - name: Install tmux deps
-  become: true
   ansible.builtin.apt:
     name: "tmux"
 
 - name: Clone tpm plugins
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/tmux-plugins/tpm.git"

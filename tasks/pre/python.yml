@@ -24,10 +24,6 @@
   community.general.pipx:
     name: ["poppler-utils", "thefuck"]
 
-- name: Neovim deps part
-  community.general.pipx:
-    name: "pynvim"
-
 - name: Libs I use a lot
   community.general.pipx:
     name:

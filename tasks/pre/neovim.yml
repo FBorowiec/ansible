@@ -1,4 +1,14 @@
 ---
+- name: Install Neovim deps
+  ansible.builtin.apt:
+    name:
+      - pynvim
+      - python3-neovim
+      - python3-venv
+      - fzf
+      - ripgrep
+      - fd-find
+
 - name: Clone Neovim
   become_user: "{{ main_user }}"
   retries: 3

@@ -23,7 +23,6 @@
     creates: "{{ cargo_home }}/bin/rustc"
 
 - name: Download Installer
-  become: true
   become_user: "{{ main_user }}"
   when: cargo_exists is failed and rust_installer.stat.exists == false
   ansible.builtin.get_url:
@@ -33,7 +32,6 @@
     force: "no"
 
 - name: Install rust/cargo
-  become: true
   become_user: "{{ main_user }}"
   when: cargo_exists is failed
   ansible.builtin.shell: /tmp/sh.rustup.rs -y

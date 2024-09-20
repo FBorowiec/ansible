@@ -6,7 +6,6 @@
   changed_when: discord_check_deb.rc == 1
 
 - name: Install Discord
-  become: true
   ansible.builtin.apt:
     deb: https://discord.com/api/download?platform=linux&format=deb
   when: discord_check_deb.rc == 1

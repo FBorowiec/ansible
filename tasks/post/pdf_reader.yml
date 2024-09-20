@@ -1,0 +1,4 @@
+---
+- name: Pdf reader
+  ansible.builtin.apt:
+    name: zathura

@@ -1,6 +1,5 @@
 ---
 - name: X/fonts - Create fonts directory
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.file:
     path: "{{ home_dir }}/.local/share/fonts/"
@@ -10,7 +9,6 @@
     - fonts
 
 - name: Install monaco font
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: files/monaco.ttf
@@ -20,7 +18,6 @@
     - fonts
 
 - name: Install font - Droid Sans Mono for Powerline Nerd Font Complete
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
@@ -30,7 +27,6 @@
     - fonts
 
 - name: Install font - Hack Regular Nerd Font Complete
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf
@@ -40,7 +36,6 @@
     - fonts
 
 - name: Install font - MesloLGS NF Regular
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Meslo/S/Regular/MesloLGSNerdFont-Regular.ttf
@@ -50,7 +45,6 @@
     - fonts
 
 - name: Install font - MesloLGS NF Bold
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
@@ -60,7 +54,6 @@
     - fonts
 
 - name: Install font - MesloLGS NF Italic
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
@@ -70,7 +63,6 @@
     - fonts
 
 - name: Install font - MesloLGS NF Bold Italic
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
@@ -80,7 +72,6 @@
     - fonts
 
 - name: Install font - Hermit medium mono
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Regular/HurmitNerdFontMono-Regular.otf
@@ -90,7 +81,6 @@
     - fonts
 
 - name: Install font - Hermit medium
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Regular/HurmitNerdFont-Regular.otf
@@ -100,14 +90,12 @@
     - fonts
 
 - name: Install additional fonts
-  become: true
   ansible.builtin.apt:
     name: ["fonts-powerline", "fonts-font-awesome", "fonts-firacode"]
   tags:
     - fonts
 
 - name: Install font - Hermit medium
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
@@ -134,7 +122,6 @@
     - fonts
 
 - name: Download fonts zip file
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_latest_version }}/3270.zip"
@@ -152,7 +139,6 @@
     - fonts
 
 - name: X/fonts - Refresh font cache
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: fc-cache -fv
   register: refreshed_font_cache
