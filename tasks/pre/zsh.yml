@@ -1,9 +1,10 @@
 ---
-- name: Install zsh
-  become: true
+- name: Install zsh with deps
   ansible.builtin.apt:
     name:
       - zsh
+      - jq
+      - bc
 
 - name: Remove existing configuration
   ansible.builtin.file:
@@ -11,7 +12,6 @@
     state: absent
 
 - name: Install ohmyzsh
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/robbyrussell/oh-my-zsh
@@ -19,7 +19,6 @@
     version: master
 
 - name: Install powelevel10k
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
@@ -27,7 +26,6 @@
     version: master
 
 - name: Install autocomplete
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/marlonrichert/zsh-autocomplete
@@ -35,7 +33,6 @@
     version: main
 
 - name: Install autosuggestions
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
@@ -43,7 +40,6 @@
     version: master
 
 - name: Install k
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/supercrabtree/k
@@ -51,7 +47,6 @@
     version: master
 
 - name: Install syntax highlight
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting
@@ -59,7 +54,6 @@
     version: master
 
 - name: Install fzf tab
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Aloxaf/fzf-tab
@@ -67,7 +61,6 @@
     version: master
 
 - name: Install zsh vi mode
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/jeffreytse/zsh-vi-mode
@@ -75,7 +68,6 @@
     version: master
 
 - name: Change shell
-  become: true
   ansible.builtin.command: chsh -s /usr/bin/zsh
   changed_when: false
 

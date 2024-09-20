@@ -1,0 +1,12 @@
+---
+- name: Install Ranger with deps
+  ansible.builtin.apt:
+    name:
+      - ranger
+      - caca-utils
+      - highlight
+      - atool
+      - w3m
+      - mediainfo
+      - lynx
+      - ffmpegthumbnailer

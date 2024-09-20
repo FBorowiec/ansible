@@ -1,7 +1,6 @@
 ---
 # https://github.com/ToasterUwU/install-gnome-extensions
 - name: Ensure gnome shell extensions dependencies are installed
-  become: true
   ansible.builtin.apt:
     name:
       - unzip

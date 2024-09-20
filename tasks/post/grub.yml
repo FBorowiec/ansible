@@ -9,6 +9,5 @@
     update_cache: true
 
 - name: Install grub customizer
-  become: true
   ansible.builtin.apt:
     name: "grub-customizer"
