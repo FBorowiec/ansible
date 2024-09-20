@@ -1,99 +1,14 @@
 ---
-- name: X/fonts - Create fonts directory
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path: "{{ home_dir }}/.local/share/fonts/"
-    state: directory
-    mode: "0755"
-  tags:
-    - fonts
-
-- name: Install monaco font
+- name: X/fonts - Copy fonts directory
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: files/monaco.ttf
     dest: "{{ home_dir }}/.local/share/fonts"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - Droid Sans Mono for Powerline Nerd Font Complete
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/DroidSansMNerdFont-Regular.otf
-    dest: "{{ home_dir }}/.local/share/fonts/Droid_Sans_Mono_for_Powerline_Nerd_Font_Complete.otf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - Hack Regular Nerd Font Complete
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/Hack_Regular_Nerd_Font_Complete.ttf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - MesloLGS NF Regular
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Meslo/S/Regular/MesloLGSNerdFont-Regular.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/MesloLGS_NF_Regular.ttf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - MesloLGS NF Bold
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/MesloLGS_NF_Bold.ttf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - MesloLGS NF Italic
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/MesloLGS_NF_Italic.ttf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - MesloLGS NF Bold Italic
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/MesloLGS_NF_Bold_Italic.ttf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - Hermit medium mono
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Regular/HurmitNerdFontMono-Regular.otf
-    dest: "{{ home_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete_Mono.otf"
-    mode: "0644"
-  tags:
-    - fonts
-
-- name: Install font - Hermit medium
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hermit/Regular/HurmitNerdFont-Regular.otf
-    dest: "{{ home_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete.otf"
-    mode: "0644"
-  tags:
-    - fonts
+    mode: "0755"
 
 - name: Install additional fonts
   ansible.builtin.apt:
     name: ["fonts-powerline", "fonts-font-awesome", "fonts-firacode"]
-  tags:
-    - fonts
 
 - name: Install font - Hermit medium
   become_user: "{{ main_user }}"
@@ -101,8 +16,6 @@
     url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
     dest: "{{ home_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete.otf"
     mode: "0644"
-  tags:
-    - fonts
 
 - name: Fetch all releases for Nerd Fonts
   ansible.builtin.uri:
@@ -112,14 +25,10 @@
     headers:
       Accept: "application/vnd.github.v3+json"
   register: nerd_fonts_releases
-  tags:
-    - fonts
 
 - name: Extract the most recent release tag for Nerd Fonts
   ansible.builtin.set_fact:
     nerd_fonts_latest_version: "{{ (nerd_fonts_releases.json | sort(attribute='published_at') | last).tag_name }}"
-  tags:
-    - fonts
 
 - name: Download fonts zip file
   become_user: "{{ main_user }}"
@@ -127,16 +36,18 @@
     url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_latest_version }}/3270.zip"
     dest: "{{ home_dir }}/3270.zip"
     mode: "0664"
-  tags:
-    - fonts
 
 - name: Unzip fonts
   ansible.builtin.unarchive:
     src: "{{ home_dir }}/3270.zip"
     dest: "{{ home_dir }}/.local/share/fonts"
     remote_src: true
-  tags:
-    - fonts
+
+- name: Remove zip file
+  ansible.builtin.file:
+    path:
+      dest: "{{ home_dir }}/3270.zip"
+    state: absent
 
 - name: X/fonts - Refresh font cache
   become_user: "{{ main_user }}"
@@ -144,5 +55,3 @@
   register: refreshed_font_cache
   changed_when: refreshed_font_cache.rc != 0
   failed_when: refreshed_font_cache.rc != 0
-  tags:
-    - fonts
