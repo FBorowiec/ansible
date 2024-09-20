@@ -6,17 +6,6 @@
     dest: "{{ home_dir }}/.local/share/fonts"
     mode: "0755"
 
-- name: Install additional fonts
-  ansible.builtin.apt:
-    name: ["fonts-powerline", "fonts-font-awesome", "fonts-firacode"]
-
-- name: Install font - Hermit medium
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/JetBrainsMonoNLNerdFont-Regular.ttf
-    dest: "{{ home_dir }}/.local/share/fonts/Hurmit_Medium_Nerd_Font_Complete.otf"
-    mode: "0644"
-
 - name: Fetch all releases for Nerd Fonts
   ansible.builtin.uri:
     url: "https://api.github.com/repos/ryanoasis/nerd-fonts/releases"
@@ -48,6 +37,13 @@
     path:
       dest: "{{ home_dir }}/3270.zip"
     state: absent
+
+- name: Install additional fonts
+  ansible.builtin.apt:
+    name:
+      - fonts-powerline
+      - fonts-font-awesome
+      - fonts-firacode
 
 - name: X/fonts - Refresh font cache
   become_user: "{{ main_user }}"
