@@ -13,6 +13,7 @@
       - gettext
       - fzf
       - git
+      - git-lfs
       - gitlint
       - ripgrep
       - nvidia-settings
