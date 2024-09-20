@@ -1,97 +1,54 @@
 ---
 - name: Create themes directory
-  become: true
   become_user: "{{ main_user }}"
   file:
-    path: "{{ main_user_dir }}/.themes"
+    path: "{{ home_dir }}/.themes"
     state: directory
-  tags:
-    - gtk
 
 - name: Clone Nordic theme
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "https://github.com/EliverLara/Nordic.git"
-    dest: "{{ main_user_dir }}/.themes/Nordic"
-  tags:
-    - gtk
+    dest: "{{ home_dir }}/.themes/Nordic"
 
 - name: Set gtk theme
-  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.interface gtk-theme "Nordic"'
-  tags:
-    - gtk
 
 - name: Set user nordic theme
-  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.shell.extensions.user-theme name "Nordic"'
-  tags:
-    - gtk
 
 - name: Set wm theme
-  become: true
   become_user: "{{ main_user }}"
   shell: 'gsettings set org.gnome.desktop.wm.preferences theme "Nordic"'
-  tags:
-    - gtk
 
 - name: Create icons directory
-  become: true
   become_user: "{{ main_user }}"
   file:
-    path: "{{ main_user_dir }}/.icons"
+    path: "{{ home_dir }}/.icons"
     state: directory
-  tags:
-    - gtk
 
 - name: Add papirus icons
-  become: true
   apt_repository:
     repo: "ppa:papirus/papirus"
     state: present
-  tags:
-    - gtk
 
-- name: Install papirus-icon-theme
+- name: Install papirus themes
   apt:
-    name: papirus-icon-theme
-  become: true
-  tags:
-    - gtk
-
-- name: Install papirus-folders
-  apt:
-    name: papirus-folders
-  become: true
-  tags:
-    - gtk
+    name: ["papirus-icon-theme", "papirus-folders"]
 
 - name: Set icons
-  become: true
   become_user: "{{ main_user }}"
   shell: gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
-  tags:
-    - gtk
 
 - name: Set nordic icons theme
-  become: true
   shell: papirus-folders -C nordic --theme Papirus-Dark && papirus-folders -C nordic --theme Papirus
-  tags:
-    - gtk
 
 - name: Download Nordzy cursors
-  become: true
   become_user: "{{ main_user }}"
-  shell: 'cd {{ main_user_dir }}/.icons && curl -L "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.1.0/Nordzy-cursors.tar.gz" | tar -xz'
-  tags:
-    - gtk
+  shell: 'cd {{ home_dir }}/.icons && curl -L "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.1.0/Nordzy-cursors.tar.gz" | tar -xz'
 
 - name: Set Nordzy cursors
-  become: true
   become_user: "{{ main_user }}"
   shell: gsettings set org.gnome.desktop.interface cursor-theme "Nordzy-cursors"
-  tags:
-    - gtk

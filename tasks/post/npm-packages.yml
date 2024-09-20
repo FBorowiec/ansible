@@ -1,20 +1,24 @@
 ---
 - name: Install npm
-  become: true
   ansible.builtin.apt:
     name: ["npm"]
-  tags:
-    - node
 
 - name: Install n
   npm:
     name: n
     global: true
-  tags:
-    - node
 
 - name: Install latest n
-  become: true
   ansible.builtin.shell: sudo n latest
-  tags:
-    - node
+
+- name: Install npm packages
+  npm:
+    name: "{{ item }}"
+    global: true
+  loop:
+    - yarn
+    - typescript
+    - ts-node
+    - emojione
+    - live-server
+    - neovim

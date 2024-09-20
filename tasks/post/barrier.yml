@@ -1,0 +1,46 @@
+---
+- name: Install Barrier and rclone
+  apt:
+    name:
+      - barrier
+      - rclone
+    state: present
+
+- name: Create Barrier SSL Fingerprints directory
+  file:
+    path: "/home/{{ main_user }}/.local/share/barrier/SSL/Fingerprints"
+    state: directory
+    mode: "0755"
+    owner: "{{ barrier_user }}"
+    group: "{{ barrier_user }}"
+
+- name: Generate Barrier SSL certificate
+  command: >
+    openssl req -x509 -nodes -days 365 -subj /CN=Barrier
+    -newkey rsa:4096
+    -keyout /home/{{ barrier_user }}/.local/share/barrier/SSL/Barrier.pem
+    -out /home/{{ barrier_user }}/.local/share/barrier/SSL/Barrier.pem
+  args:
+    creates: "/home/{{ barrier_user }}/.local/share/barrier/SSL/Barrier.pem"
+  become_user: "{{ barrier_user }}"
+
+- name: Get SSL certificate fingerprint
+  command: >
+    openssl x509 -fingerprint -sha256 -noout
+    -in /home/{{ barrier_user }}/.local/share/barrier/SSL/Barrier.pem
+  register: fingerprint_output
+  become_user: "{{ barrier_user }}"
+  args:
+    warn: no
+
+- name: Extract fingerprint value
+  set_fact:
+    fingerprint: "{{ fingerprint_output.stdout.split('=')[1] | trim }}"
+
+- name: Write fingerprint to Local.txt
+  copy:
+    content: "v2:sha256:{{ fingerprint }}"
+    dest: "/home/{{ barrier_user }}/.local/share/barrier/SSL/Fingerprints/Local.txt"
+    owner: "{{ barrier_user }}"
+    group: "{{ barrier_user }}"
+    mode: "0644"

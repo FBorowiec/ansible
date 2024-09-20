@@ -1,150 +1,90 @@
 ---
 - name: Install deps
-  become: true
   ansible.builtin.apt:
-    name: ["chrome-gnome-shell", "gnome-shell-extensions", "curl", "unzip"]
-  tags:
-    - gtk
+    name: ["chrome-gnome-shell", "curl", "unzip"]
 
 - name: Unset extended height
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Set launcher on the bottom
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM" # LEFT, RIGHT, BOTTOM, TOP
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Resize dash icons
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48" # icons size
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
-- name: Launcher transparency settings 1
-  become: true
+- name: Launcher transparency settings
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED" # FIXED, DEFAULT, DYNAMIC
+  ansible.builtin.command: |
+    gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED &&
+    gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 1.0 &&
+    gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
-
-- name: Launcher transparency settings 2
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 1.0" # border for icons panel
-  environment:
-    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
-
-- name: Launcher transparency settings 3
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false" # disable icons background
-  environment:
-    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Set close button to the left
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.wm.preferences button-layout close,minimize,maximize:"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
-- name: Download wallpaper
-  become: true
+- name: Copy wallpaper
   ansible.builtin.command: cp files/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Set wallpaper
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: 'gsettings set org.gnome.desktop.background picture-uri "file:///usr/share/backgrounds/star_wars_last_supper.jpg"'
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Disable fixed dock
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false" # enable dock overlay
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Autohide launcher
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock autohide true" # autohide
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Hide trash icon
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Disable home
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.ding show-home false"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Show seconds in clock
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.interface clock-show-seconds true"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Show calendar week in cal
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.calendar show-weekdate true"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk
 
 - name: Hide mounted disks
-  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.nautilus.desktop volumes-visible 'false'"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
-  tags:
-    - gtk

@@ -1,0 +1,6 @@
+---
+- name: Ensure Go is installed
+  ansible.builtin.apt:
+    name: golang-go
+    state: present
+    update_cache: true

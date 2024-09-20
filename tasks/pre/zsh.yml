@@ -4,128 +4,94 @@
   ansible.builtin.apt:
     name:
       - zsh
-  tags:
-    - zsh
 
 - name: Remove existing configuration
   ansible.builtin.file:
-    path: "{{ main_user_dir }}/.oh-my-zsh"
+    path: "{{ home_dir }}/.oh-my-zsh"
     state: absent
-  tags:
-    - zsh
 
 - name: Install ohmyzsh
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/robbyrussell/oh-my-zsh
-    dest: "{{ main_user_dir }}/.oh-my-zsh"
+    dest: "{{ home_dir }}/.oh-my-zsh"
     version: master
-  tags:
-    - zsh
 
 - name: Install powelevel10k
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
     version: master
-  tags:
-    - zsh
 
 - name: Install autocomplete
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/marlonrichert/zsh-autocomplete
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
     version: main
-  tags:
-    - zsh
 
 - name: Install autosuggestions
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     version: master
-  tags:
-    - zsh
 
 - name: Install k
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/supercrabtree/k
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/k"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/k"
     version: master
-  tags:
-    - zsh
 
 - name: Install syntax highlight
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
     version: master
-  tags:
-    - zsh
 
 - name: Install fzf tab
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Aloxaf/fzf-tab
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
     version: master
-  tags:
-    - zsh
-
-- name: Install zsh nord colors
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.git:
-    repo: https://github.com/coltondick/zsh-dircolors-nord
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-dircolors-nord"
-    version: master
-  tags:
-    - zsh
 
 - name: Install zsh vi mode
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/jeffreytse/zsh-vi-mode
-    dest: "{{ main_user_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
+    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
     version: master
-  tags:
-    - zsh
 
 - name: Change shell
   become: true
   ansible.builtin.command: chsh -s /usr/bin/zsh
   changed_when: false
-  tags:
-    - zsh
 
 - name: Check whether .bashrc has a reference to zsh
   ansible.builtin.lineinfile:
-    name: "{{ main_user_dir }}/.bashrc"
+    name: "{{ home_dir }}/.bashrc"
     regexp: "zsh.*"
     state: absent
   check_mode: true
   changed_when: false
   register: bashrc
-  tags:
-    - zsh
 
 - name: Launch zsh from bash (replace line)
   when: bashrc.found
   ansible.builtin.replace:
-    dest: "{{ main_user_dir }}/.bashrc"
+    dest: "{{ home_dir }}/.bashrc"
     regexp: "zsh.*"
     replace: "zsh && exit"
   tags:
@@ -134,17 +100,7 @@
 - name: Launch zsh from bash (add missing line)
   when: not bashrc.found
   ansible.builtin.lineinfile:
-    path: "{{ main_user_dir }}/.bashrc"
+    path: "{{ home_dir }}/.bashrc"
     line: "zsh; exit"
   tags:
     - zsh
-
-- name: Add chat gpt key
-  become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.copy:
-    src: files/.open_ai
-    dest: "{{ main_user_dir }}/.config/"
-    mode: "0644"
-  tags:
-    - dwm

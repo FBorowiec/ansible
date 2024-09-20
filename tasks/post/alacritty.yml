@@ -1,61 +1,27 @@
 ---
-- name: Install Alacritty dependencies
-  become: true
-  ansible.builtin.apt:
-    name:
-      - cmake
-      - pkg-config
-      - libfreetype6-dev
-      - libfontconfig1-dev
-      - libxcb-xfixes0-dev
-      - libxkbcommon-dev
-    update_cache: true
-  tags:
-    - terminal
-    - alacritty
-
 - name: Install Alacritty
   community.general.cargo:
     name: alacritty
   environment:
     PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
-  tags:
-    - terminal
-    - alacritty
 
 - name: Symbolic link for Alacritty
-  become: true
   ansible.builtin.file:
-    src: "{{ main_user_dir }}/.cargo/bin/alacritty"
+    src: "{{ home_dir }}/.cargo/bin/alacritty"
     dest: "/usr/bin/alacritty"
     state: link
-  tags:
-    - terminal
-    - alacritty
 
 - name: Set Alacritty as the default terminal
-  become: true
   ansible.builtin.command: update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 60
   args:
     creates: /usr/bin/x-terminal-emulator
-  tags:
-    - terminal
-    - alacritty
 
 - name: Copy Alacritty icon
-  become: true
   ansible.builtin.copy:
     src: "files/alacritty-simple.svg"
     dest: /usr/share/pixmaps/Alacritty.svg
     mode: "0644"
-  tags:
-    - terminal
-    - alacritty
 
 - name: Create Alacritty desktop entry
-  become: true
   ansible.builtin.shell:
     cmd: desktop-file-install files/Alacritty.desktop && update-desktop-database
-  tags:
-    - terminal
-    - alacritty

@@ -4,51 +4,21 @@
   register: spotify_install
   changed_when: spotify_install.rc != 0
   failed_when: spotify_install.rc != 0
-  become: true
-  tags:
-    - snap
 
 - name: Install btop
   ansible.builtin.command: snap install btop
   register: btop_install
   changed_when: btop_install.rc != 0
   failed_when: btop_install.rc != 0
-  become: true
-  tags:
-    - snap
 
 - name: Install mdl
   ansible.builtin.command: snap install mdl
   register: mdl_install
   changed_when: mdl_install.rc != 0
   failed_when: mdl_install.rc != 0
-  become: true
-  tags:
-    - snap
 
 - name: Install brave
   ansible.builtin.command: snap install brave
   register: brave_install
   changed_when: brave_install.rc != 0
   failed_when: brave_install.rc != 0
-  become: true
-  tags:
-    - snap
-
-- name: Install shfmt
-  ansible.builtin.command: snap install shfmt
-  register: shfmt_install
-  changed_when: shfmt_install.rc != 0
-  failed_when: shfmt_install.rc != 0
-  become: true
-  tags:
-    - snap
-
-- name: Install shellcheck
-  ansible.builtin.command: snap install shellcheck
-  register: shellcheck_install
-  changed_when: shellcheck_install.rc != 0
-  failed_when: shellcheck_install.rc != 0
-  become: true
-  tags:
-    - snap

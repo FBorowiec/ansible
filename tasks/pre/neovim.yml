@@ -1,0 +1,34 @@
+---
+- name: Clone Neovim
+  become_user: "{{ main_user }}"
+  retries: 3
+  delay: 10
+  ansible.builtin.git:
+    repo: "https://github.com/neovim/neovim.git"
+    dest: "{{ home_dir }}/neovim"
+    version: master
+
+- name: Install build requirements for neovim
+  ansible.builtin.apt:
+    name:
+      - ninja-build
+      - gettext
+      - cmake
+      - unzip
+      - curl
+      - build-essential
+      - luarocks
+    update_cache: true
+
+- name: Build neovim
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell: "cd {{ home_dir }}/neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo"
+  register: build_neovim
+  changed_when: build_neovim.rc != 0
+  failed_when: build_neovim.rc != 0
+
+- name: Install neovim
+  ansible.builtin.shell: "cd {{ home_dir }}/neovim && make install"
+  register: install_neovim
+  changed_when: install_neovim.rc != 0
+  failed_when: install_neovim.rc != 0

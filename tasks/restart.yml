@@ -1,8 +1,0 @@
----
-- name: Restart gdm
-  become: true
-  ansible.builtin.systemd:
-    name: gdm
-    state: restarted
-  tags:
-    - gtk

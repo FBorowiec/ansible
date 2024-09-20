@@ -1,0 +1,27 @@
+---
+- name: Ensure immersed directory exists
+  ansible.builtin.file:
+    path: "{{ home_dir }}/immersed"
+    state: directory
+    mode: "0755"
+
+- name: Install libfuse2
+  ansible.builtin.apt:
+    name: libfuse2
+    state: present
+
+- name: Download Immersed AppImage
+  ansible.builtin.get_url:
+    url: "https://static.immersed.com/dl/Immersed-x86_64.AppImage"
+    dest: "{{ home_dir }}/immersed/Immersed-x86_64.AppImage"
+    mode: "0755"
+
+- name: Copy Immersed icon
+  ansible.builtin.copy:
+    src: "files/immersed.png"
+    dest: "{{ home_dir }}/immersed"
+    mode: "0644"
+
+- name: Create Immersed desktop entry
+  ansible.builtin.shell:
+    cmd: "desktop-file-install --dir={{ home_dir }}/.local/share/applications files/immersed.desktop && update-desktop-database"
