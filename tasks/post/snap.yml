@@ -22,3 +22,9 @@
   register: brave_install
   changed_when: brave_install.rc != 0
   failed_when: brave_install.rc != 0
+
+- name: Install teams
+  ansible.builtin.command: snap install teams-for-linux
+  register: teams_install
+  changed_when: teams_install.rc != 0
+  failed_when: teams_install.rc != 0
