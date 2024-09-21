@@ -8,8 +8,6 @@
 
 - name: Fetch all releases for Nerd Fonts
   ansible.builtin.uri:
-    retries: 3
-    delay: 10
     url: "https://api.github.com/repos/ryanoasis/nerd-fonts/releases"
     return_content: true
     method: GET

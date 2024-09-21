@@ -4,8 +4,6 @@
   vars:
     main_user: "{{ lookup('env', 'USER') }}"
     home_dir: "{{ lookup('env', 'HOME') }}"
-    source_key: "./.ssh/id_ed25519"
-    dest_key: "/home/{{  lookup('env', 'USER')  }}/.ssh/id_ed25519"
 
   pre_tasks:
     - name: Update and upgrade apt packages
