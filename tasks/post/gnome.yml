@@ -12,7 +12,6 @@
     state: present
 
 - name: Download install gnome extensions
-  tags: gnome_shell_extensions
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/ToasterUwU/install-gnome-extensions/master/install-gnome-extensions.sh
     dest: "{{ home_dir }}/Downloads/install-gnome-extensions.sh"

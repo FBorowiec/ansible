@@ -86,13 +86,9 @@
     dest: "{{ home_dir }}/.bashrc"
     regexp: "zsh.*"
     replace: "zsh && exit"
-  tags:
-    - zsh
 
 - name: Launch zsh from bash (add missing line)
   when: not bashrc.found
   ansible.builtin.lineinfile:
     path: "{{ home_dir }}/.bashrc"
     line: "zsh; exit"
-  tags:
-    - zsh
