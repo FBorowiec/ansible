@@ -19,10 +19,3 @@
     src: ".ssh/id_ed25519.pub"
     dest: "{{ home_dir }}/.ssh/id_ed25519.pub"
     mode: "0644"
-
-- name: Config file
-  become_user: "{{ main_user }}"
-  ansible.builtin.copy:
-    src: ".ssh/config"
-    dest: "{{ home_dir }}/.ssh/config"
-    mode: "0644"
