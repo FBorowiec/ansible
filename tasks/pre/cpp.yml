@@ -1,5 +1,5 @@
 ---
-- name: Install System Packages
+- name: Install cpp packages
   ansible.builtin.apt:
     name:
       - autoconf
