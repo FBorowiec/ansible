@@ -2,7 +2,7 @@
 - name: Install lua
   ansible.builtin.apt:
     name:
-      - lua5
+      - lua5.1
       - luarocks
 
 - name: Install luacheck
