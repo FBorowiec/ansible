@@ -16,11 +16,11 @@
 
 - name: Install Rust and Cargo using rustup
   shell: |
-    export RUSTUP_HOME={{ rustup_home }}
-    export CARGO_HOME={{ cargo_home }}
+    export RUSTUP_HOME={{ home_dir }}
+    export CARGO_HOME={{ home_dir }}
     curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --profile minimal
   args:
-    creates: "{{ cargo_home }}/bin/rustc"
+    creates: "{{ home_dir }}/bin/rustc"
 
 - name: Download Installer
   become_user: "{{ main_user }}"
