@@ -12,7 +12,7 @@
 - name: Clone the dotfiles repo
   become_user: "{{ main_user }}"
   ansible.builtin.git:
-    repo: "https://github.com/FBorowiec/dotfiles.git"
+    repo: "git@github.com:FBorowiec/dotfiles.git"
     dest: "{{ home_dir }}/dotfiles"
     version: main
     key_file: "{{ dest_key }}"
