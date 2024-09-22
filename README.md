@@ -1,8 +1,15 @@
 # Ansible
 
-Repo I use to setup my computer from scratch.
+Repo I use to set up my work environment from scratch.
 
-`./ansible-install`
+## Installing
 
-And that's it.
+```bash
+./install
+```
 
+## Testing
+
+```bash
+./test-docker-build
+```
