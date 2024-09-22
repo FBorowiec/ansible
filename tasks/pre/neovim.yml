@@ -16,6 +16,7 @@
     repo: "https://github.com/neovim/neovim.git"
     dest: "{{ home_dir }}/neovim"
     version: master
+    depth: 1
 
 - name: Install build requirements for neovim
   ansible.builtin.apt:
