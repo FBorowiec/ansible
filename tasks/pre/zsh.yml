@@ -5,6 +5,7 @@
       - zsh
       - jq
       - bc
+      - poppler-utils
 
 - name: Remove existing configuration
   ansible.builtin.file:

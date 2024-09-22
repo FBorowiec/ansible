@@ -19,17 +19,17 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update && \
   apt-get install -y software-properties-common curl git sudo gsettings-desktop-schemas && \
   apt-add-repository -y ppa:ansible/ansible && \
-  apt-add-repository -y ppa:neovim-ppa/unstable && \
   apt-get update && \
-  apt-get install -y ansible build-essential neovim && \
+  apt-get install -y ansible build-essential vim && \
   echo 'root:root' | chpasswd && \
   useradd --create-home -m -s /bin/bash $USER && \
   echo "$USER:$PASS" | chpasswd && \
   adduser $USER sudo && \
   mkdir -p /home/$USER/Downloads && \
-  chown -R $USER:$USER /home/$USER && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
+  touch /home/$USER/.bashrc && \
+  chown -R $USER:$USER /home/$USER
+# apt-get clean && \
+# rm -rf /var/lib/apt/lists/*
 
 # Copying the application files
 COPY . /home/$USER/

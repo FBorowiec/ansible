@@ -2,7 +2,6 @@
 - name: Install Neovim deps
   ansible.builtin.apt:
     name:
-      - pynvim
       - python3-neovim
       - python3-venv
       - fzf
