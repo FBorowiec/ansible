@@ -6,16 +6,37 @@
     mode: "0700"
     state: directory
 
-- name: Install ssh key
+- name: Install ssh key ed25519
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: "files/ssh/id_ed25519"
     dest: "{{ home_dir }}/.ssh/id_ed25519"
     mode: "0600"
 
-- name: Install ssh key public
+- name: Install ssh key rsa
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: "files/ssh/id_rsa"
+    dest: "{{ home_dir }}/.ssh/id_rsa"
+    mode: "0600"
+
+- name: Install ssh key public ed25519
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: "files/ssh/id_ed25519.pub"
     dest: "{{ home_dir }}/.ssh/id_ed25519.pub"
+    mode: "0644"
+
+- name: Install ssh key public rsa
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: "files/ssh/id_rsa.pub"
+    dest: "{{ home_dir }}/.ssh/id_rsa.pub"
+    mode: "0644"
+
+- name: Add known hosts
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: "files/ssh/known_hosts"
+    dest: "{{ home_dir }}/.ssh/known_hosts"
     mode: "0644"

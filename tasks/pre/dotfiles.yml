@@ -12,10 +12,9 @@
 - name: Clone the dotfiles repo
   become_user: "{{ main_user }}"
   ansible.builtin.git:
-    repo: git@github.com:FBorowiec/dotfiles.git
+    repo: "git@github.com:FBorowiec/dotfiles.git"
     dest: "{{ home_dir }}/dotfiles"
     version: main
-    key_file: "{{ home_dir }}/.ssh/id_ed25519"
   when: not dotfiles.stat.exists
 
 - name: Stow dotfiles
