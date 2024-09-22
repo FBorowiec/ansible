@@ -4,3 +4,4 @@ docker rmi -f new-computer 2>/dev/null
 docker build . -f test.Dockerfile -t new-computer
 echo "ANSIBLE BECOME PASS (sudo): ansible"
 echo "docker run --network host -it --rm --name new-computer new-computer:latest /bin/bash"
+docker run --network host -it --rm --name new-computer new-computer:latest /bin/bash
