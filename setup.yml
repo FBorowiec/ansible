@@ -4,14 +4,15 @@
   vars:
     main_user: "{{ lookup('env', 'USER') }}"
     home_dir: "{{ lookup('env', 'HOME') }}"
-  vars_file: vars/vars.yml
+  vars_files:
+    - vars/vars.yml
 
   pre_tasks:
     - include_tasks: tasks/pre/ssh.yml
     - name: Update and upgrade apt packages
       ansible.builtin.apt:
-        upgrade: true
         update_cache: true
+        upgrade: true
     - include_tasks: tasks/pre/core.yml
     # ---
     - include_tasks: tasks/pre/cargo.yml
