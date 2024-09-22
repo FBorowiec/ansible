@@ -44,6 +44,8 @@
       - fonts-powerline
       - fonts-font-awesome
       - fonts-firacode
+      - fonts-hack-ttf
+      - fonts-ubuntu
 
 - name: X/fonts - Refresh font cache
   become_user: "{{ main_user }}"
