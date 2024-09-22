@@ -1,14 +1,16 @@
 ---
 - name: Install dependencies
   apt:
-    name:
-      - wget
-      - curl
-      - jq
-      - sed
-      - gnome-shell
-      - gnome-shell-extension-prefs
-    state: present
+    name: "{{ item }}"
+  loop:
+    - wget
+    - curl
+    - jq
+    - sed
+    - gnome-shell
+    - gnome-shell-extension-prefs
+    - gnome-browser-connector
+    - gtk2-engines-murrine
 
 - name: Extract extension IDs from URLs or IDs
   vars:
