@@ -39,11 +39,14 @@
 - name: Set default Rust toolchain to stable
   ansible.builtin.shell: rustup default stable
   environment:
-    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
   when: cargo_exists is failed
 
 - name: Install Cargo packages
   community.general.cargo:
-    name: ["git-delta", "tealdeer"]
+    name: "{{ item }}"
+  loop:
+    - git-delta
+    - tealdeer
   environment:
-    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
