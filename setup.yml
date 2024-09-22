@@ -22,6 +22,7 @@
     - include_tasks: tasks/pre/lazygit.yml
     - include_tasks: tasks/pre/lua.yml
     - include_tasks: tasks/pre/neovim.yml
+    - include_tasks: tasks/pre/npm_packages.yml
     - include_tasks: tasks/pre/python.yml
     - include_tasks: tasks/pre/tmux.yml
     - include_tasks: tasks/pre/zsh.yml
@@ -37,7 +38,6 @@
     - include_tasks: tasks/post/grub.yml
     - include_tasks: tasks/post/immersed.yml
     - include_tasks: tasks/post/keyboard.yml
-    - include_tasks: tasks/post/npm-packages.yml
     - include_tasks: tasks/post/pdf_reader.yml
     - include_tasks: tasks/post/ranger.yml
     - include_tasks: tasks/post/snap.yml

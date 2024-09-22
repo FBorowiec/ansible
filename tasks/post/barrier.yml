@@ -1,14 +1,14 @@
 ---
 - name: Install Barrier and rclone
   ansible.builtin.apt:
-    name:
-      - barrier
-      - rclone
-    state: present
+    name: "{{ item }}"
+  loop:
+    - barrier
+    - rclone
 
 - name: Create Barrier SSL Fingerprints directory
   ansible.builtin.file:
-    path: "/home/{{ main_user }}/.local/share/barrier/SSL/Fingerprints"
+    path: "{{ home_dir }}/.local/share/barrier/SSL/Fingerprints"
     state: directory
     mode: "0755"
     owner: "{{ main_user }}"
@@ -19,16 +19,16 @@
   ansible.builtin.command: >
     openssl req -x509 -nodes -days 365 -subj /CN=Barrier
     -newkey rsa:4096
-    -keyout /home/{{ main_user }}/.local/share/barrier/SSL/Barrier.pem
-    -out /home/{{ main_user }}/.local/share/barrier/SSL/Barrier.pem
+    -keyout {{ home_dir }}/.local/share/barrier/SSL/Barrier.pem
+    -out {{ home_dir }}/.local/share/barrier/SSL/Barrier.pem
   args:
-    creates: "/home/{{ main_user }}/.local/share/barrier/SSL/Barrier.pem"
+    creates: "{{ home_dir }}/.local/share/barrier/SSL/Barrier.pem"
 
 - name: Get SSL certificate fingerprint
   become_user: "{{ main_user }}"
   ansible.builtin.command: >
     openssl x509 -fingerprint -sha256 -noout
-    -in /home/{{ main_user }}/.local/share/barrier/SSL/Barrier.pem
+    -in {{ home_dir }}/.local/share/barrier/SSL/Barrier.pem
   register: fingerprint_output
   args:
     warn: false

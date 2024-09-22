@@ -3,7 +3,7 @@
   community.general.cargo:
     name: alacritty
   environment:
-    PATH: "{{ ansible_env.PATH }}:/home/{{ main_user }}/.cargo/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
 
 - name: Symbolic link for Alacritty
   ansible.builtin.file:

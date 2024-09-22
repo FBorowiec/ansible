@@ -1,12 +1,13 @@
 ---
 - name: Install Neovim deps
   ansible.builtin.apt:
-    name:
-      - python3-neovim
-      - python3-venv
-      - fzf
-      - ripgrep
-      - fd-find
+    name: "{{ item }}"
+  loop:
+    - python3-neovim
+    - python3-venv
+    - fzf
+    - ripgrep
+    - fd-find
 
 - name: Clone Neovim
   become_user: "{{ main_user }}"
@@ -20,15 +21,16 @@
 
 - name: Install build requirements for neovim
   ansible.builtin.apt:
-    name:
-      - ninja-build
-      - gettext
-      - cmake
-      - unzip
-      - curl
-      - build-essential
-      - luarocks
+    name: "{{ item }}"
     update_cache: true
+  loop:
+    - ninja-build
+    - gettext
+    - cmake
+    - unzip
+    - curl
+    - build-essential
+    - luarocks
 
 - name: Build neovim
   become_user: "{{ main_user }}"

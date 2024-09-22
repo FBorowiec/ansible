@@ -6,20 +6,21 @@
 
 - name: Install System Packages
   ansible.builtin.apt:
-    name:
-      - apt-transport-https
-      - build-essential
-      - curl
-      - gettext
-      - fzf
-      - git
-      - git-lfs
-      - gitlint
-      - ripgrep
-      - nvidia-settings
-      - software-properties-common
-      - stow
-      - unzip
-      - vlc
-      - wget
-      - xclip
+    name: "{{ item }}"
+  loop:
+    - apt-transport-https
+    - build-essential
+    - curl
+    - gettext
+    - fzf
+    - git
+    - git-lfs
+    - gitlint
+    - ripgrep
+    - nvidia-settings
+    - software-properties-common
+    - stow
+    - unzip
+    - vlc
+    - wget
+    - xclip

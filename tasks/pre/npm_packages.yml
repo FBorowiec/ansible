@@ -4,7 +4,7 @@
     name: ["npm"]
 
 - name: Install n
-  npm:
+  ansible.builtin.npm:
     name: n
     global: true
 
@@ -12,7 +12,7 @@
   ansible.builtin.shell: sudo n latest
 
 - name: Install npm packages
-  npm:
+  ansible.builtin.npm:
     name: "{{ item }}"
     global: true
   loop:
@@ -21,4 +21,3 @@
     - ts-node
     - emojione
     - live-server
-    - neovim

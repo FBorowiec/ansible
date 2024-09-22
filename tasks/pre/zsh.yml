@@ -1,11 +1,12 @@
 ---
 - name: Install zsh with deps
   ansible.builtin.apt:
-    name:
-      - zsh
-      - jq
-      - bc
-      - poppler-utils
+    name: "{{ item }}"
+  loop:
+    - zsh
+    - jq
+    - bc
+    - poppler-utils
 
 - name: Remove existing configuration
   ansible.builtin.file:

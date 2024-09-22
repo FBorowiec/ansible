@@ -1,9 +1,10 @@
 ---
 - name: Install lua
   ansible.builtin.apt:
-    name:
-      - lua5.4
-      - luarocks
+    name: "{{ item }}"
+  loop:
+    - lua5.4
+    - luarocks
 
 - name: Install luacheck
   ansible.builtin.command: luarocks install luacheck
