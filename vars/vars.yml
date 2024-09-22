@@ -1,0 +1,14 @@
+---
+gnome_extensions:
+  - https://extensions.gnome.org/extension/19/user-themes/
+  - https://extensions.gnome.org/extension/595/autohide-battery/
+  - https://extensions.gnome.org/extension/750/openweather/
+  - https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/
+  - https://extensions.gnome.org/extension/3193/blur-my-shell/
+  - https://extensions.gnome.org/extension/2569/gnordvpn-local/
+  - https://extensions.gnome.org/extension/744/hide-activities-button/
+  - https://extensions.gnome.org/extension/2182/noannoyance/
+  - https://extensions.gnome.org/extension/1113/nothing-to-say/
+  - https://extensions.gnome.org/extension/906/sound-output-device-chooser/
+  - https://extensions.gnome.org/extension/3960/transparent-top-bar-adjustable-transparency/
+  - https://extensions.gnome.org/extension/4916/volume-scroller/
