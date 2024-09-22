@@ -1,7 +1,13 @@
 ---
 - name: Install deps
   ansible.builtin.apt:
-    name: ["chrome-gnome-shell", "curl", "unzip"]
+    name: "{{ item }}"
+  loop:
+    - gnome-browser-connector
+    - curl
+    - unzip
+    - gtk2-engines-murrine
+    - sassc
 
 - name: Unset extended height
   become_user: "{{ main_user }}"
@@ -17,7 +23,7 @@
 
 - name: Resize dash icons
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 48" # icons size
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 40" # icons size
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
@@ -56,6 +62,12 @@
 - name: Autohide launcher
   become_user: "{{ main_user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock autohide true" # autohide
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
+
+- name: Autohide launcher
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0" # 0-1
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
