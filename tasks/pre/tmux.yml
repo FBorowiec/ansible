@@ -9,3 +9,4 @@
     repo: "https://github.com/tmux-plugins/tpm.git"
     dest: "{{ home_dir }}/.tmux/plugins/tpm"
     version: master
+    depth: 1

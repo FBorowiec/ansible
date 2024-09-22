@@ -18,6 +18,7 @@
     repo: https://github.com/robbyrussell/oh-my-zsh
     dest: "{{ home_dir }}/.oh-my-zsh"
     version: master
+    depth: 1
 
 - name: Install powelevel10k
   become_user: "{{ main_user }}"
@@ -25,6 +26,7 @@
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: "{{ home_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
     version: master
+    depth: 1
 
 - name: Install autocomplete
   become_user: "{{ main_user }}"
@@ -32,6 +34,7 @@
     repo: https://github.com/marlonrichert/zsh-autocomplete
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
     version: main
+    depth: 1
 
 - name: Install autosuggestions
   become_user: "{{ main_user }}"
@@ -39,6 +42,7 @@
     repo: https://github.com/zsh-users/zsh-autosuggestions
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     version: master
+    depth: 1
 
 - name: Install k
   become_user: "{{ main_user }}"
@@ -46,6 +50,7 @@
     repo: https://github.com/supercrabtree/k
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/k"
     version: master
+    depth: 1
 
 - name: Install syntax highlight
   become_user: "{{ main_user }}"
@@ -53,6 +58,7 @@
     repo: https://github.com/zsh-users/zsh-syntax-highlighting
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
     version: master
+    depth: 1
 
 - name: Install fzf tab
   become_user: "{{ main_user }}"
@@ -60,6 +66,7 @@
     repo: https://github.com/Aloxaf/fzf-tab
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
     version: master
+    depth: 1
 
 - name: Install zsh vi mode
   become_user: "{{ main_user }}"
@@ -67,6 +74,7 @@
     repo: https://github.com/jeffreytse/zsh-vi-mode
     dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
     version: master
+    depth: 1
 
 - name: Change shell
   ansible.builtin.command: chsh -s /usr/bin/zsh
