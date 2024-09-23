@@ -18,7 +18,7 @@
 
 - name: Copy Immersed icon
   ansible.builtin.copy:
-    src: "files/immersed.png"
+    src: "files/icons/immersed.png"
     dest: "{{ home_dir }}/immersed"
     mode: "0644"
 
