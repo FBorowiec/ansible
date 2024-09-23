@@ -30,8 +30,6 @@
     openssl x509 -fingerprint -sha256 -noout
     -in {{ home_dir }}/.local/share/barrier/SSL/Barrier.pem
   register: fingerprint_output
-  args:
-    warn: false
 
 - name: Extract fingerprint value
   ansible.builtin.set_fact:
