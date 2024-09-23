@@ -9,6 +9,8 @@
     - sed
     - gnome-shell
     - gnome-shell-extension-prefs
+    - gnome-shell-extensions
+    - gnome-shell-extension-manager
     - gnome-browser-connector
     - gtk2-engines-murrine
 
