@@ -24,19 +24,27 @@
     - item.strip() != ''
     - (item | regex_search('^(\d+)/', '\\1')) is not none
 
+- name: Debug extracted extension IDs
+  ansible.builtin.debug:
+    msg: "Extracted extension ID: {{ extension_ids }}"
+  when: extension_ids is defined
+
 - name: Get GNOME Shell version
   ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
   register: gnome_shell_version
   changed_when: false
   become_user: "{{ main_user }}"
 
-- name: Install GNOME extensions
-  include_tasks: tasks/theme/gnome_extensions.yml
-  loop: "{{ extension_ids }}"
-  loop_control:
-    label: "{{ item }}"
-  vars:
-    extension_id: "{{ item }}"
-    gnome_shell_version: "{{ gnome_shell_version.stdout }}"
-    display: "{{ display }}"
-    dbus_address: "{{ dbus_address }}"
+- name: Debug GNOME Shell version
+  ansible.builtin.debug:
+    msg: "GNOME Shell version: {{ gnome_shell_version.stdout }}"
+# - name: Install GNOME extensions
+#   include_tasks: tasks/theme/gnome_extensions.yml
+#   loop: "{{ extension_ids }}"
+#   loop_control:
+#     label: "{{ item }}"
+#   vars:
+#     extension_id: "{{ item }}"
+#     gnome_shell_version: "{{ gnome_shell_version.stdout }}"
+#     display: "{{ display }}"
+#     dbus_address: "{{ dbus_address }}"
