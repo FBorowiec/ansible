@@ -16,15 +16,13 @@
 
 - name: Extract extension IDs from URLs or IDs
   vars:
-    ext_id: >-
-      {{ (item | regex_search('^(\d+)/'), '\\1') }}
+    ext_id: "{{ item | regex_search('^(\\d+)/', '\\1') }}"
   ansible.builtin.set_fact:
     extension_ids: "{{ extension_ids | default([]) + [ ext_id ] }}"
   loop: "{{ gnome_extensions }}"
   when:
     - item.strip() != ''
     - (item | regex_search('^(\d+)/', '\\1')) is not none
-  ignore_errors: true
 
 - name: Get GNOME Shell version
   ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
