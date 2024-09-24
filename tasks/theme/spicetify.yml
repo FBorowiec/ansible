@@ -36,7 +36,7 @@
     recurse: true
 
 - name: Install spicetify-cli
-  ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh -s -- -y
+  ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh -s
   args:
     creates: /usr/local/bin/spicetify
 
@@ -44,25 +44,25 @@
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Gspr-bit/Spotify-Tokyo-Night-Theme.git
-    dest: "/home/{{ spotify_user }}/Spotify-Tokyo-Night-Theme"
+    dest: "{{home_dir }}/Spotify-Tokyo-Night-Theme"
     update: false
 
 - name: Create Tokyo theme directory
   become_user: "{{ main_user }}"
   ansible.builtin.file:
-    path: "/home/{{ spotify_user }}/.config/spicetify/Themes/Tokyo"
+    path: "{{ home_dir }}/.config/spicetify/Themes/Tokyo"
     state: directory
     mode: "0755"
-    owner: "{{ spotify_user }}"
-    group: "{{ spotify_user }}"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
 
 - name: Copy theme files
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
-    src: "/home/{{ spotify_user }}/Spotify-Tokyo-Night-Theme/{{ item }}"
-    dest: "/home/{{ spotify_user }}/.config/spicetify/Themes/Tokyo/{{ item }}"
-    owner: "{{ spotify_user }}"
-    group: "{{ spotify_user }}"
+    src: "{{ home_dir }}/Spotify-Tokyo-Night-Theme/{{ item }}"
+    dest: "{{ home_dir }}/.config/spicetify/Themes/Tokyo/{{ item }}"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
     mode: "0644"
   with_items:
     - color.ini
