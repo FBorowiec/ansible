@@ -1,8 +1,4 @@
 ---
-- name: Install dependencies
-  ansible.builtin.apt:
-    name: ssasc
-
 - name: Ensure the ~/dev directory exists
   ansible.builtin.file:
     path: "{{ home_dir }}/dev"
@@ -10,17 +6,12 @@
     mode: "0755"
 
 - name: Clone the Tokyonight-GTK-Theme repository
-  become_user: "{{ ansible_env.USER }}"
+  become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme.git
     dest: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
-    update: yes
+    update: true
     depth: 1
-
-- name: Run the installer script
-  ansible.builtin.command: "./themes/install.sh"
-  args:
-    chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
 
 - name: Ensure the ~/.icons directory exists
   ansible.builtin.file:
@@ -30,18 +21,18 @@
 
 - name: Copy gtk-4.0 css configs
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/dev/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0"
-    dest: "{{ ansible_env.HOME }}/.config/gtk-4.0"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
+    src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0/"
+    dest: "{{ home_dir }}/.config/gtk-4.0"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
     mode: "0755"
 
 - name: Copy gtk-4.0 assets
   ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/dev/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets"
-    dest: "{{ ansible_env.HOME }}/.config/gtk-4.0/assets"
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ ansible_env.USER }}"
+    src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets/"
+    dest: "{{ home_dir }}/.config/gtk-4.0/assets"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
     mode: "0755"
 
 - name: Copy Tokyonight-Dark icons to ~/.icons
@@ -53,10 +44,9 @@
     mode: "0755"
 
 - name: Run the installer script
-  become_user: "{{ ansible_env.USER }}"
   ansible.builtin.command: "./themes/install.sh"
   args:
-    chdir: "{{ ansible_env.HOME }}/dev/Tokyonight-GTK-Theme"
+    chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
 
 - name: Set user theme
   become_user: "{{ main_user }}"
