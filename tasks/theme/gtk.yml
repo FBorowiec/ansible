@@ -10,7 +10,7 @@
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme.git
-    dest: "{{ home_dir }}/dev/"
+    dest: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
     update: true
     depth: 1
 
