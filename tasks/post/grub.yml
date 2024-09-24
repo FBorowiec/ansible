@@ -1,8 +1,14 @@
 ---
+- name: Ensure software-properties-common is installed
+  ansible.builtin.apt:
+    name: software-properties-common
+    state: present
+
 - name: Add grub-customizer apt repo
   ansible.builtin.apt_repository:
-    repo: "ppa:trebelnik-stefina/grub-customizer"
+    repo: "ppa:danielrichter2007/grub-customizer"
     state: present
+    codename: "{{ ansible_distribution_release | lower }}"
 
 - name: Update apt cache
   ansible.builtin.apt:
