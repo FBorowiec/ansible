@@ -13,15 +13,22 @@
     state: present
 
 - name: Ensure pipx is in PATH
+  become_user: "{{ main_user }}"
   ansible.builtin.command: "pipx ensurepath"
 
 - name: Install some pipx tools
+  become_user: "{{ main_user }}"
   community.general.pipx:
     name: "{{ item }}"
   loop:
     - yamllint
     - sqlfluff
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.local/bin"
 
 - name: Install zsh deps
+  become_user: "{{ main_user }}"
   community.general.pipx:
     name: thefuck
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.local/bin"
