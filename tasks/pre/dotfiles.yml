@@ -19,8 +19,10 @@
 
 - name: Stow dotfiles
   become_user: "{{ main_user }}"
-  ansible.builtin.shell: "cd {{ home_dir }}/dotfiles && ./install"
+  ansible.builtin.shell: "./install"
   register: dotfiles_install
   changed_when: dotfiles_install.rc != 0
   failed_when: dotfiles_install.rc != 0
   when: not dotfiles.stat.exists
+  args:
+    chdir: "{{ home_dir }}/dotfiles"
