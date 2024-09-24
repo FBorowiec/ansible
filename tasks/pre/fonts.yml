@@ -27,12 +27,14 @@
     mode: "0664"
 
 - name: Unzip fonts
+  become_user: "{{ main_user }}"
   ansible.builtin.unarchive:
     src: "{{ home_dir }}/3270.zip"
     dest: "{{ home_dir }}/.local/share/fonts"
     remote_src: true
 
 - name: Remove zip file
+  become_user: "{{ main_user }}"
   ansible.builtin.file:
     path:
       dest: "{{ home_dir }}/3270.zip"
@@ -48,7 +50,6 @@
       - fonts-ubuntu
 
 - name: X/fonts - Refresh font cache
-  become_user: "{{ main_user }}"
   ansible.builtin.command: fc-cache -fv
   register: refreshed_font_cache
   changed_when: refreshed_font_cache.rc != 0

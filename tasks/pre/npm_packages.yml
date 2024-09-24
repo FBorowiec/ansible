@@ -9,7 +9,7 @@
     global: true
 
 - name: Install latest n
-  ansible.builtin.shell: sudo n latest
+  ansible.builtin.shell: n latest
 
 - name: Install npm packages
   ansible.builtin.npm:
