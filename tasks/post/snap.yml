@@ -21,6 +21,7 @@
     seconds: 5
 
 - name: Paste Brave bookmarks
+  become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: "files/brave/Bookmarks"
     dest: "{{ home_dir }}/snap/brave/current/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"

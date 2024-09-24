@@ -1,5 +1,6 @@
 ---
 - name: Ensure immersed directory exists
+  become_user: "{{ main_user }}"
   ansible.builtin.file:
     path: "{{ home_dir }}/immersed"
     state: directory
@@ -11,12 +12,14 @@
     state: present
 
 - name: Download Immersed AppImage
+  become_user: "{{ main_user }}"
   ansible.builtin.get_url:
     url: "https://static.immersed.com/dl/Immersed-x86_64.AppImage"
     dest: "{{ home_dir }}/immersed/Immersed-x86_64.AppImage"
     mode: "0755"
 
 - name: Copy Immersed icon
+  become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: "files/icons/immersed.png"
     dest: "{{ home_dir }}/immersed"

@@ -5,6 +5,7 @@
     global: true
 
 - name: Install buildtools
+  become_user: "{{ main_user }}"
   ansible.builtin.command: "go install github.com/bazelbuild/buildtools/{{ item }}@latest"
   environment:
     GOPATH: "{{ home_dir }}/go"

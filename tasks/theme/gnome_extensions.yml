@@ -10,11 +10,12 @@
       failed_when: ext_info.status == 404
 
     - name: Parse extension info
+      become_user: "{{ main_user }}"
       ansible.builtin.set_fact:
         extension_name: "{{ (ext_info.content | from_json).name }}"
         download_url: "https://extensions.gnome.org{{ (ext_info.content | from_json).download_url }}"
         ext_uuid: "{{ (ext_info.content | from_json).uuid }}"
-      become_user: "{{ main_user }}"
+
     - name: Download extension
       become_user: "{{ main_user }}"
       ansible.builtin.get_url:

@@ -91,6 +91,7 @@
   register: bashrc
 
 - name: Launch zsh from bash (replace line)
+  become_user: "{{ main_user }}"
   when: bashrc.found
   ansible.builtin.replace:
     dest: "{{ home_dir }}/.bashrc"
@@ -98,6 +99,7 @@
     replace: "zsh && exit"
 
 - name: Launch zsh from bash (add missing line)
+  become_user: "{{ main_user }}"
   when: not bashrc.found
   ansible.builtin.lineinfile:
     path: "{{ home_dir }}/.bashrc"

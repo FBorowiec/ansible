@@ -35,7 +35,7 @@
     - include_tasks: tasks/post/bazel.yml
     - include_tasks: tasks/post/discord.yml
     - include_tasks: tasks/post/docker.yml
-    - include_tasks: tasks/post/grub.yml
+    # - include_tasks: tasks/post/grub.yml # broken
     - include_tasks: tasks/post/immersed.yml
     - include_tasks: tasks/post/keyboard.yml
     - include_tasks: tasks/post/pdf_reader.yml
