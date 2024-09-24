@@ -16,11 +16,9 @@
     mode: "0644"
 
 - name: Extract Lazygit binary
-  ansible.builtin.unarchive:
-    src: "/tmp/lazygit.tar.gz"
-    dest: "/usr/local/bin"
-    extra_opts: "--strip-components=1"
-    creates: "/usr/local/bin/lazygit"
+  ansible.builtin.command: "tar xzf /tmp/lazygit.tar.gz -C /usr/local/bin lazygit"
+  args:
+    creates: /usr/local/bin/lazygit
 
 - name: Clean up downloaded archive
   ansible.builtin.file:
