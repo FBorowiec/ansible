@@ -14,41 +14,19 @@
     - gnome-browser-connector
     - gtk2-engines-murrine
 
-- name: Extract extension IDs using split
-  vars:
-    ext_id: "{{ item.split('/')[0] if '/' in item else item }}"
-  ansible.builtin.set_fact:
-    extension_ids: "{{ extension_ids | default([]) + \\[ ext_id ] }}"
-  loop: "{{ gnome_extensions }}"
-  when: item.strip() != ''
-
-- name: Debug individual ext_id (split method)
-  ansible.builtin.debug:
-    msg: "Extracted ext_id (split): {{ ext_id }}"
-  loop: "{{ gnome_extensions }}"
-  when: item.strip() != ''
-
-- name: Debug collected extension_ids (split method)
-  ansible.builtin.debug:
-    msg: "Collected extension_ids (split): {{ extension_ids }}"
-  when: extension_ids is defined
-
 - name: Get GNOME Shell version
   ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
   register: gnome_shell_version
   changed_when: false
   become_user: "{{ main_user }}"
 
-- name: Debug GNOME Shell version
-  ansible.builtin.debug:
-    msg: "GNOME Shell version: {{ gnome_shell_version.stdout }}"
-# - name: Install GNOME extensions
-#   include_tasks: tasks/theme/gnome_extensions.yml
-#   loop: "{{ extension_ids }}"
-#   loop_control:
-#     label: "{{ item }}"
-#   vars:
-#     extension_id: "{{ item }}"
-#     gnome_shell_version: "{{ gnome_shell_version.stdout }}"
-#     display: "{{ display }}"
-#     dbus_address: "{{ dbus_address }}"
+- name: Install GNOME extensions
+  include_tasks: tasks/theme/gnome_extensions.yml
+  loop: "{{ gnome_extensions }}"
+  loop_control:
+    label: "{{ item }}"
+  vars:
+    extension_id: "{{ item }}"
+    shell_version: "{{ gnome_shell_version.stdout }}"
+    display: "{{ display }}"
+    dbus_address: "{{ dbus_address }}"

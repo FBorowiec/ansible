@@ -1,11 +1,11 @@
 ---
 gnome_extensions:
-  - 595/autohide-battery
-  - 1401/bluetooth-quick-connect
-  - 2569/gnordvpn-local
-  - 744/hide-activities-button
-  - 1113/nothing-to-say
-  - 3960/transparent-top-bar-adjustable-transparency
-  - 4684/useless-gaps
-  - 19/user-themes
-  - 4916/volume-scroller
+  - 595 # autohide-battery
+  - 1401 # bluetooth-quick-connect
+  - 2569 # gnordvpn-local
+  - 744 # hide-activities-button
+  - 1113 # nothing-to-say
+  - 3960 # transparent-top-bar-adjustable-transparency
+  - 4684 # useless-gaps
+  - 19 # user-themes
+  - 5904 # volume-scroller
