@@ -1,6 +1,6 @@
 ---
 - name: Install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
   loop:
     - wget
@@ -22,18 +22,18 @@
         (item | regex_search('^\\s*(\\d+)\\s*$', '\\1')) or
         ''
       }}
-  set_fact:
+  ansible.builtin.set_fact:
     extension_ids: "{{ extension_ids | default([]) + [ ext_id ] }}"
   loop: "{{ gnome_extensions }}"
   when: item.strip() != ''
   ignore_errors: true
 
 - name: Filter out invalid extension IDs
-  set_fact:
+  ansible.builtin.set_fact:
     extension_ids: "{{ extension_ids | select('match', '^[0-9]+$') | list }}"
 
 - name: Get GNOME Shell version
-  shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
+  ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
   register: gnome_shell_version
   changed_when: false
   become_user: "{{ main_user }}"
@@ -41,7 +41,7 @@
 - name: Install GNOME extensions
   block:
     - name: Fetch extension info
-      uri:
+      ansible.builtin.uri:
         url: "https://extensions.gnome.org/extension-info/?pk={{ item }}&shell_version={{ gnome_shell_version.stdout }}"
         return_content: true
       register: ext_info
@@ -49,33 +49,33 @@
       become_user: "{{ main_user }}"
 
     - name: Parse extension info
-      set_fact:
+      ansible.builtin.set_fact:
         extension_name: "{{ (ext_info.content | from_json).name }}"
         download_url: "https://extensions.gnome.org{{ (ext_info.content | from_json).download_url }}"
         ext_uuid: "{{ (ext_info.content | from_json).uuid }}"
       become_user: "{{ main_user }}"
 
     - name: Download extension
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ download_url }}"
         dest: "/tmp/{{ extension_name }}.zip"
       become_user: "{{ main_user }}"
 
     - name: Install extension
-      shell: "gnome-extensions install /tmp/{{ extension_name }}.zip -f"
+      ansible.builtin.shell: "gnome-extensions install /tmp/{{ extension_name }}.zip -f"
       environment:
         DISPLAY: "{{ lookup('env', 'DISPLAY') | default(':0') }}"
         DBUS_SESSION_BUS_ADDRESS: "{{ lookup('env', 'DBUS_SESSION_BUS_ADDRESS') | default('unix:path=/run/user/{{ ansible_user_uid }}/bus') }}"
       become_user: "{{ main_user }}"
 
     - name: Remove extension archive
-      file:
+      ansible.builtin.file:
         path: "/tmp/{{ extension_name }}.zip"
         state: absent
       become_user: "{{ main_user }}"
 
     - name: Enable extension
-      shell: "gnome-extensions enable {{ ext_uuid }}"
+      ansible.builtin.shell: "gnome-extensions enable {{ ext_uuid }}"
       environment:
         DISPLAY: "{{ lookup('env', 'DISPLAY') | default(':0') }}"
         DBUS_SESSION_BUS_ADDRESS: "{{ lookup('env', 'DBUS_SESSION_BUS_ADDRESS') | default('unix:path=/run/user/{{ ansible_user_uid }}/bus') }}"
