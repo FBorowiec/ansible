@@ -26,9 +26,6 @@
     CHANNEL: stable
   when: docker_command_result.rc == 1
 
-- name: Add docker to sudoers
-  shell: "groupadd docker"
-
 - name: Add user to docker group
   shell: "usermod -aG docker {{ main_user }}"
 
@@ -68,7 +65,7 @@
 
 - name: Adding apt repository for Kubernetes
   ansible.builtin.apt_repository:
-    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    repo: deb [trusted=yes] https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
     filename: kubernetes.list
 
