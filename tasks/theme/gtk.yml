@@ -1,3 +1,7 @@
+- name: Install dependencies
+  ansible.builtin.apt:
+    name: ssasc
+
 - name: Ensure the ~/dev directory exists
   ansible.builtin.file:
     path: "{{ home_dir }}/dev"
@@ -12,9 +16,9 @@
     depth: 1
 
 - name: Run the installer script
-  ansible.builtin.command: "./install.sh"
+  ansible.builtin.command: "./themes/install.sh"
   args:
-    chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/themes"
+    chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
 
 - name: Ensure the ~/.icons directory exists
   ansible.builtin.file:
