@@ -43,6 +43,7 @@
   when: cargo_exists is failed
 
 - name: Install Cargo packages
+  become_user: "{{ main_user }}"
   community.general.cargo:
     name: "{{ item }}"
   loop:
