@@ -11,8 +11,9 @@
     - libxkbcommon-dev
 
 - name: Install Alacritty
+  become_user: "{{ main_user }}"
   community.general.cargo:
-    name: alacritty
+    name: "alacritty"
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
 
@@ -29,10 +30,10 @@
 
 - name: Copy Alacritty icon
   ansible.builtin.copy:
-    src: "files/alacritty-simple.svg"
+    src: "files/icons/alacritty-simple.svg"
     dest: /usr/share/pixmaps/Alacritty.svg
     mode: "0644"
 
 - name: Create Alacritty desktop entry
   ansible.builtin.shell:
-    cmd: desktop-file-install files/Alacritty.desktop && update-desktop-database
+    cmd: desktop-file-install files/icons/Alacritty.desktop && update-desktop-database
