@@ -24,4 +24,4 @@
 
 - name: Create Immersed desktop entry
   ansible.builtin.shell:
-    cmd: "desktop-file-install --dir={{ home_dir }}/.local/share/applications files/immersed.desktop && update-desktop-database"
+    cmd: "desktop-file-install --dir={{ home_dir }}/.local/share/applications files/icons/immersed.desktop && update-desktop-database"
