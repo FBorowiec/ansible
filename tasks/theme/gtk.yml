@@ -14,13 +14,6 @@
     update: true
     depth: 1
 
-- name: Ensure the ~/.icons directory exists
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path: "{{ home_dir }}/.icons"
-    state: directory
-    mode: "0755"
-
 - name: Copy gtk-4.0 css configs
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
@@ -39,14 +32,18 @@
     group: "{{ main_user }}"
     mode: "0755"
 
-- name: Copy Tokyonight-Dark icons to ~/.icons
+- name: Ensure the ~/.icons directory exists
+  become_user: "{{ main_user }}"
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.icons"
+    state: directory
+    mode: "0755"
+
+- name: Copy Tokyonight-Dark icons to ~/.icons (this might take a while...)
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
     src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark"
-    dest: "{{ home_dir }}/.icons/Tokyonight-Dark"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
-    mode: "0755"
+    dest: "{{ home_dir }}/.icons/"
 
 - name: Run the installer script
   become_user: "{{ main_user }}"
