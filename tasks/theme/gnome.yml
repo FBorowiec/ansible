@@ -14,20 +14,23 @@
     - gnome-browser-connector
     - gtk2-engines-murrine
 
-- name: Extract extension IDs from URLs or IDs
+- name: Extract extension IDs using split
   vars:
-    ext_id: >-
-      {{ (item | regex_search('^(\d+)/'), '\\1') }}
+    ext_id: "{{ item.split('/')[0] if '/' in item else item }}"
   ansible.builtin.set_fact:
-    extension_ids: "{{ extension_ids | default([]) + [ ext_id ] }}"
+    extension_ids: "{{ extension_ids | default([]) + \\[ ext_id ] }}"
   loop: "{{ gnome_extensions }}"
-  when:
-    - item.strip() != ''
-    - (item | regex_search('^(\d+)/', '\\1')) is not none
+  when: item.strip() != ''
 
-- name: Debug extracted extension IDs
+- name: Debug individual ext_id (split method)
   ansible.builtin.debug:
-    msg: "Extracted extension ID: {{ extension_ids }}"
+    msg: "Extracted ext_id (split): {{ ext_id }}"
+  loop: "{{ gnome_extensions }}"
+  when: item.strip() != ''
+
+- name: Debug collected extension_ids (split method)
+  ansible.builtin.debug:
+    msg: "Collected extension_ids (split): {{ extension_ids }}"
   when: extension_ids is defined
 
 - name: Get GNOME Shell version
