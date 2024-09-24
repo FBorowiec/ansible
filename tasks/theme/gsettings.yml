@@ -17,12 +17,21 @@
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
-- name: Launcher transparency settings
+- name: Launcher transparency mode
   become_user: "{{ main_user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED &&
-    gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 1.0 &&
-    gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED"
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
+
+- name: Launcher background opacity
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 1.0"
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
+
+- name: Launcher backlit items
+  become_user: "{{ main_user }}"
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
@@ -33,7 +42,7 @@
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
 - name: Copy wallpaper
-  ansible.builtin.command: cp files/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
+  ansible.builtin.command: cp files/wallpapers/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
@@ -87,7 +96,7 @@
 
 - name: Hide mounted disks
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "gsettings set org.gnome.nautilus.desktop volumes-visible 'false'"
+  ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false"
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
