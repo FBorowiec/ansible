@@ -35,6 +35,15 @@
     mode: "a+rwX"
     recurse: true
 
+- name: Run Spotify
+  become_user: "{{ main_user }}"
+  ansible.builtin.shell:
+    cmd: "spotify &"
+
+- name: Allow time for Spotify to create default dir
+  ansible.builtin.pause:
+    seconds: 5
+
 - name: Install spicetify-cli
   ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh -s
 
