@@ -16,7 +16,8 @@
 
 - name: Extract extension IDs from URLs or IDs
   vars:
-    ext_id: "{{ item | regex_search('^(\\d+)/', '\\1') }}"
+    ext_id: >-
+      {{ (item | regex_search('^(\d+)/'), '\\1') }}
   ansible.builtin.set_fact:
     extension_ids: "{{ extension_ids | default([]) + [ ext_id ] }}"
   loop: "{{ gnome_extensions }}"
