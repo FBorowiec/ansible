@@ -37,14 +37,18 @@
 
 - name: Install spicetify-cli
   ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh -s
-  args:
-    creates: /usr/local/bin/spicetify
+
+- name: Symbolic link for spicetify
+  ansible.builtin.file:
+    src: "{{ home_dir }}/.spicetify/spicetify"
+    dest: "/usr/local/bin/spicetify"
+    state: link
 
 - name: Clone Spotify Tokyo Night Theme
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: https://github.com/Gspr-bit/Spotify-Tokyo-Night-Theme.git
-    dest: "{{home_dir }}/Spotify-Tokyo-Night-Theme"
+    dest: "{{home_dir }}/dev/Spotify-Tokyo-Night-Theme"
     update: false
 
 - name: Create Tokyo theme directory
@@ -59,7 +63,7 @@
 - name: Copy theme files
   become_user: "{{ main_user }}"
   ansible.builtin.copy:
-    src: "{{ home_dir }}/Spotify-Tokyo-Night-Theme/{{ item }}"
+    src: "{{ home_dir }}/dev/Spotify-Tokyo-Night-Theme/{{ item }}"
     dest: "{{ home_dir }}/.config/spicetify/Themes/Tokyo/{{ item }}"
     owner: "{{ main_user }}"
     group: "{{ main_user }}"
