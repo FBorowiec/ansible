@@ -39,11 +39,10 @@
     state: directory
     mode: "0755"
 
-- name: Copy Tokyonight-Dark icons to ~/.icons (this might take a while...)
+- name: Copy Tokyonight-Dark icons to ~/.icons (using shell due to size)
   become_user: "{{ main_user }}"
-  ansible.builtin.copy:
-    src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark"
-    dest: "{{ home_dir }}/.icons/"
+  ansible.builtin.shell: "cp {{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home_dir }}/.icons/"
+  changed_when: false
 
 - name: Run the installer script
   become_user: "{{ main_user }}"
