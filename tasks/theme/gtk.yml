@@ -41,7 +41,7 @@
 
 - name: Copy Tokyonight-Dark icons to ~/.icons (using shell due to size)
   become_user: "{{ main_user }}"
-  ansible.builtin.shell: "cp {{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home_dir }}/.icons/"
+  ansible.builtin.shell: "cp -r {{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home_dir }}/.icons/"
   changed_when: false
 
 - name: Run the installer script
