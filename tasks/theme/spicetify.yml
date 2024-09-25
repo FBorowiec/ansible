@@ -45,6 +45,7 @@
     seconds: 5
 
 - name: Install spicetify-cli
+  become_user: "{{ main_user }}"
   ansible.builtin.shell: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh -s
 
 - name: Symbolic link for spicetify
