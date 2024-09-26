@@ -50,6 +50,13 @@
   args:
     chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
 
+- name: Copy settings
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: files/gtk/settings.ini
+    dest: "{{ home_dir }}/.config/gtk-4.0/settings.ini"
+    mode: "0644"
+
 - name: Set user theme
   become_user: "{{ main_user }}"
   ansible.builtin.command: 'gsettings set org.gnome.shell.extensions.user-theme name "Tokyonight-Dark"'
