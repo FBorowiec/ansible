@@ -1,10 +1,5 @@
 ---
-- name: Update and upgrade apt packages
-  ansible.builtin.apt:
-    upgrade: true
-    update_cache: true
-
-- name: Install System Packages
+- name: Install System Packages and tools
   ansible.builtin.apt:
     name: "{{ item }}"
   loop:
@@ -24,3 +19,16 @@
     - vlc
     - wget
     - xclip
+
+- name: Ensure local bin directory exists
+  become_user: "{{ main_user }}"
+  ansible.builtin.file:
+    path: "{{ home_dir }}/local/bin"
+    state: directory
+    mode: "0755"
+
+- name: Symbolic link for batcat
+  ansible.builtin.file:
+    src: "/usr/bin/batcat"
+    dest: "{{ home_dir }}/.local/bin/bat"
+    state: link
