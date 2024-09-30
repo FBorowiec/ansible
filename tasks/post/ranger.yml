@@ -11,3 +11,6 @@
     - mediainfo
     - lynx
     - ffmpegthumbnailer
+    - fzf
+    - findutils
+    - unzip
