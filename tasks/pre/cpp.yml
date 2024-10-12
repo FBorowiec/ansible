@@ -9,7 +9,9 @@
     - clang-format
     - clang-tidy
     - clangd
+    - clazy
     - cmake
+    - cppcheck
     - meson
     - gcc
     - gdb
