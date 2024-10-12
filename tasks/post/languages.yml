@@ -1,0 +1,7 @@
+---
+- name: Install additional languages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+  loop:
+    - ruby-full
+    - opam

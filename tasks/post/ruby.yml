@@ -1,4 +1,0 @@
----
-- name: Install ruby
-  ansible.builtin.apt:
-    name: ruby-full
