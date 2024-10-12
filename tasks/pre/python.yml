@@ -23,6 +23,7 @@
   loop:
     - yamllint
     - sqlfluff
+    - git-filter-repo
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.local/bin"
 
