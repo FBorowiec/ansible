@@ -40,6 +40,7 @@
     - include_tasks: tasks/post/keyboard.yml
     - include_tasks: tasks/post/pdf_reader.yml
     - include_tasks: tasks/post/ranger.yml
+    - include_tasks: tasks/post/ruby.yml
     - include_tasks: tasks/post/snap.yml
     # ---
     - include_tasks: tasks/theme/gnome.yml

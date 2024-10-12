@@ -12,5 +12,6 @@
     - cmake
     - meson
     - gcc
+    - gdb
     - g++
     - libboost-all-dev
