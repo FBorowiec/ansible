@@ -3,5 +3,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
   loop:
-    - ruby-full
-    - opam
+    - ruby-full # ruby
+    - opam # ocaml
+    - latexmk # latex
+    - biber # latex
