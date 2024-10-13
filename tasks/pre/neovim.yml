@@ -48,3 +48,9 @@
   failed_when: install_neovim.rc != 0
   args:
     chdir: "{{ home_dir }}/neovim"
+
+- name: Install Telescope deps
+  ansible.builtin.apt:
+    name: "{{ item }}"
+  loop:
+    - chafa # media-preview
