@@ -10,8 +10,10 @@
     - fzf
     - git
     - git-lfs
+    - git-review
     - gitlint
     - ripgrep
+    - neofetch
     - nvidia-settings
     - software-properties-common
     - stow
