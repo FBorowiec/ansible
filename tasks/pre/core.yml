@@ -12,8 +12,10 @@
     - git-lfs
     - git-review
     - gitlint
+    - gping
     - ripgrep
     - neofetch
+    - net-tools
     - nvidia-settings
     - software-properties-common
     - stow
