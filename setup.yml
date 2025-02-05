@@ -42,7 +42,8 @@
     - include_tasks: tasks/post/ranger.yml
     - include_tasks: tasks/post/ruby.yml
     - include_tasks: tasks/post/snap.yml
-    # ---
+
+  post_tasks:
     - include_tasks: tasks/theme/gnome.yml
     - include_tasks: tasks/theme/gsettings.yml
     - include_tasks: tasks/theme/gtk.yml

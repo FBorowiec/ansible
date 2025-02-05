@@ -4,6 +4,7 @@
     name: "{{ item }}"
   loop:
     - apt-transport-https
+    - bat
     - build-essential
     - curl
     - gettext
@@ -12,7 +13,6 @@
     - git-lfs
     - git-review
     - gitlint
-    - gping
     - ripgrep
     - neofetch
     - net-tools
