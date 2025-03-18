@@ -1,0 +1,29 @@
+---
+- name: Fetch latest deskflow release info from GitHub
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/deskflow/deskflow/releases/latest"
+    return_content: true
+  register: release_info
+
+- name: Set download URL for latest deskflow binary
+  ansible.builtin.set_fact:
+    deskflow_download_url: >-
+      {{ release_info.json.assets | selectattr('name', 'search', 'linux.*amd64.*\\.tar\\.gz') | map(attribute='browser_download_url') | first }}
+
+- name: Download deskflow binary
+  ansible.builtin.get_url:
+    url: "{{ deskflow_download_url }}"
+    dest: "/tmp/deskflow_latest.tar.gz"
+    mode: "0644"
+
+- name: Extract deskflow binary
+  ansible.builtin.unarchive:
+    src: "/tmp/deskflow_latest.tar.gz"
+    dest: "/usr/local/bin/"
+    remote_src: true
+
+- name: Ensure deskflow binary is executable
+  ansible.builtin.file:
+    path: "/usr/local/bin/deskflow"
+    mode: "0755"
+    state: file

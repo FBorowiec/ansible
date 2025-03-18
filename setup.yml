@@ -31,8 +31,8 @@
 
   tasks:
     - include_tasks: tasks/post/alacritty.yml
-    - include_tasks: tasks/post/barrier.yml
     - include_tasks: tasks/post/bazel.yml
+    - include_tasks: tasks/post/deskflow.yml
     - include_tasks: tasks/post/discord.yml
     - include_tasks: tasks/post/docker.yml
     # - include_tasks: tasks/post/grub.yml # broken
