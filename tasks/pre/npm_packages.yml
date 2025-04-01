@@ -1,23 +1,29 @@
 ---
 - name: Install npm
-  ansible.builtin.apt:
-    name: ["npm"]
+  community.general.npm:
+    name: "npm"
+    global: true
 
 - name: Install n
-  ansible.builtin.npm:
-    name: n
+  community.general.npm:
+    name: "n"
     global: true
 
 - name: Install latest n
   ansible.builtin.shell: n latest
 
 - name: Install npm packages
-  ansible.builtin.npm:
+  community.general.npm:
     name: "{{ item }}"
     global: true
   loop:
-    - yarn
-    - typescript
-    - ts-node
-    - emojione
-    - live-server
+    - "yarn"
+    - "typescript"
+    - "ts-node"
+    - "emojione"
+    - "live-server"
+
+- name: Install Claude
+  community.general.npm:
+    name: "@anthropic-ai/claude-code"
+    global: true
