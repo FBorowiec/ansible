@@ -1,0 +1,14 @@
+---
+- name: Ensure .keys directory exists.
+  become_user: "{{ main_user }}"
+  ansible.builtin.file:
+    dest: "{{ home_dir }}/.keys"
+    mode: "0700"
+    state: directory
+
+- name: Install anthropic key
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: "files/ai/anthropic_key"
+    dest: "{{ home_dir }}/.keys/anthropic_key"
+    mode: "0600"
