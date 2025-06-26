@@ -3,7 +3,6 @@
 set -e
 
 if ! [ -x "$(command -v ansible)" ]; then
-	# Installs ansible
 	echo "Installing Ansible..."
 	sudo apt-add-repository -y ppa:ansible/ansible
 	sudo apt-get update -y
@@ -15,14 +14,10 @@ if ! ansible-galaxy collection list | grep -q 'community.general'; then
 	ansible-galaxy collection install community.general
 fi
 
-# Project root directory
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Host file location
 HOSTS="$ROOTDIR/hosts"
-# Main playbook
 PLAYBOOK="$ROOTDIR/setup.yml"
 
-# Runs Ansible playbook using user.
 ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
 
 if command -v terminal-notifier 1>/dev/null 2>&1; then

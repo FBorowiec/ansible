@@ -15,6 +15,7 @@
         upgrade: true
     - include_tasks: tasks/pre/core.yml
     # ---
+    - include_tasks: tasks/pre/ai.yml
     - include_tasks: tasks/pre/cargo.yml
     - include_tasks: tasks/pre/cpp.yml
     - include_tasks: tasks/pre/fonts.yml
