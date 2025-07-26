@@ -1,4 +1,4 @@
-# Ansible
+# `ansible`
 
 Repo I use to set up my work environment from scratch.
 
@@ -11,5 +11,11 @@ Repo I use to set up my work environment from scratch.
 ## Testing
 
 ```bash
-./test-docker-build
+./test/test-docker-build
+```
+
+## Linting
+
+```bash
+./test/ansible-lint
 ```

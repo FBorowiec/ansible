@@ -16,7 +16,7 @@ RUN apt-get update && \
   lsb-release \
   software-properties-common \
   sudo \
-  rm -rf /var/lib/apt/lists/* /tmp/core_packages && \
+  rm -rf /var/lib/apt/lists/* && \
   apt-get clean
 
 RUN useradd --create-home -m -s /bin/bash $USER && \
