@@ -15,7 +15,7 @@ RUN apt-get update && \
   gnupg \
   lsb-release \
   software-properties-common \
-  sudo \
+  sudo && \
   rm -rf /var/lib/apt/lists/* && \
   apt-get clean
 
