@@ -25,6 +25,7 @@
     - xclip
 
 - name: Ensure local bin directory exists
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.file:
     path: "{{ home_dir }}/local/bin"

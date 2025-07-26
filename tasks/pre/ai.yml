@@ -12,3 +12,8 @@
     src: "files/ai/anthropic_key"
     dest: "{{ home_dir }}/.keys/anthropic_key"
     mode: "0600"
+
+- name: Install Claude
+  community.general.npm:
+    name: "@anthropic-ai/claude-code"
+    global: true

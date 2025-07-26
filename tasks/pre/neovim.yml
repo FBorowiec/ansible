@@ -10,6 +10,7 @@
     - fd-find
 
 - name: Clone Neovim
+  become: true
   become_user: "{{ main_user }}"
   retries: 3
   delay: 10

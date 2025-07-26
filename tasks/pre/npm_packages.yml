@@ -22,8 +22,3 @@
     - "ts-node"
     - "emojione"
     - "live-server"
-
-- name: Install Claude
-  community.general.npm:
-    name: "@anthropic-ai/claude-code"
-    global: true
