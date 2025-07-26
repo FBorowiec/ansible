@@ -14,14 +14,17 @@ if ! ansible-galaxy collection list | grep -q 'community.general'; then
 	ansible-galaxy collection install community.general
 fi
 
-ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 HOSTS="$ROOTDIR/hosts"
 PLAYBOOK="$ROOTDIR/setup.yml"
 
-ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
-
-if command -v terminal-notifier 1>/dev/null 2>&1; then
-	terminal-notifier -title "Ansible: Bootstrap complete" -message "Successfully set up dev environment."
+if [[ -n "$CONTAINER" || -f /.dockerenv ]]; then
+	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become
+else
+	echo "The BECOME password is your sudo password."
+	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
 fi
+
+echo "Ansible: Bootstrap complete. Successfully set up dev environment."
 
 exit 0
