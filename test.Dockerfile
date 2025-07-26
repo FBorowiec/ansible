@@ -1,47 +1,43 @@
-# Using Ubuntu Focal as the base image
-FROM ubuntu:noble AS base
+ARG UBUNTU_VERSION=noble
+FROM ubuntu:${UBUNTU_VERSION}
 
-# Avoid prompting from apt
 ARG DEBIAN_FRONTEND=noninteractive
+ARG USER=bazel_user
 
-# Create a non-root user for better security
-ARG USER=ansible_tester
-ARG PASS="ansible"
-
-# Setting the work directory
-WORKDIR /home/$USER
-
-# Setting the default shell to bash
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install required packages and add repositories in one layer to reduce image size,
-# clean up the apt cache to reduce image size
+COPY bootstrap/docker/core_packages /tmp/core_packages
+
 RUN apt-get update && \
-  apt-get install -y software-properties-common curl git sudo gsettings-desktop-schemas && \
-  apt-add-repository -y ppa:ansible/ansible && \
-  apt-get update && \
-  apt-get install -y ansible build-essential vim && \
-  echo 'root:root' | chpasswd && \
-  useradd --create-home -m -s /bin/bash $USER && \
-  echo "$USER:$PASS" | chpasswd && \
-  adduser $USER sudo && \
-  mkdir -p /home/$USER/Downloads && \
+  apt-get install -y --no-install-recommends \
+  apt-transport-https \
+  build-essential \
+  ca-certificates \
+  curl \
+  git \
+  gnupg \
+  lsb-release \
+  software-properties-common \
+  sudo \
+  rm -rf /var/lib/apt/lists/* /tmp/core_packages && \
+  apt-get clean
+
+RUN useradd --create-home -m -s /bin/bash $USER && \
   touch /home/$USER/.bashrc && \
-  chown -R $USER:$USER /home/$USER
-# apt-get clean && \
-# rm -rf /var/lib/apt/lists/*
+  chown -R $USER:$USER /home/$USER && \
+  echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Copying the application files
-COPY . /home/$USER/
+RUN apt-add-repository -y ppa:ansible/ansible && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends ansible && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN ansible-galaxy collection install community.general community.docker
 
-# Change ownership of the copied files
-RUN chown -R $USER:$USER /home/$USER
+COPY --chown=$USER:$USER . /home/$USER/
+WORKDIR /home/$USER
 
-# Changing the user to non-root
+ENV USER=$USER
 USER $USER
 
-# Setting the environment variable
-ENV USER=$USER
-
-# Setting the default command
 CMD ["/bin/bash"]
+
