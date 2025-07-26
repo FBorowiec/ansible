@@ -15,6 +15,7 @@
     state: present
 
 - name: Install Rust and Cargo using rustup
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.shell: |
     export RUSTUP_HOME={{ home_dir }}
@@ -24,8 +25,9 @@
     creates: "{{ home_dir }}/bin/rustc"
 
 - name: Download Installer
+  become: true
   become_user: "{{ main_user }}"
-  when: cargo_exists is failed and rust_installer.stat.exists == false
+  when: cargo_exists is failed and not rust_installer.stat.exists
   ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: /tmp/sh.rustup.rs
@@ -33,11 +35,13 @@
     force: "no"
 
 - name: Install rust/cargo
+  become: true
   become_user: "{{ main_user }}"
   when: cargo_exists is failed
   ansible.builtin.shell: /tmp/sh.rustup.rs -y
 
 - name: Set default Rust toolchain to stable
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.shell: rustup default stable
   environment:
@@ -45,6 +49,7 @@
   when: cargo_exists is failed
 
 - name: Install Cargo packages
+  become: true
   become_user: "{{ main_user }}"
   community.general.cargo:
     name: "{{ item }}"

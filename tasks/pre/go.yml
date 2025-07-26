@@ -3,8 +3,8 @@
   become: true
   become_user: "{{ ansible_env.USER }}"
   ansible.builtin.get_url:
-    url: "https://go.dev/dl/{{ tools_versions.go }}.linux-amd64.tar.gz"
-    dest: "/tmp/{{ tools_versions.clang }}.linux-amd64.tar.gz"
+    url: "https://go.dev/dl/go{{ tools_versions.go }}.linux-amd64.tar.gz"
+    dest: "/tmp/go{{ tools_versions.go }}.linux-amd64.tar.gz"
     mode: "0644"
 
 - name: Remove any existing Go installation
@@ -14,6 +14,6 @@
 
 - name: Extract Go archive
   ansible.builtin.unarchive:
-    src: "/tmp/{{ tools_versions.clang }}.linux-amd64.tar.gz"
+    src: "/tmp/go{{ tools_versions.go }}.linux-amd64.tar.gz"
     dest: "/usr/local"
     remote_src: true

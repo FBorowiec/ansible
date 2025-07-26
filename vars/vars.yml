@@ -1,4 +1,6 @@
 ---
+tools_versions:
+  go: "1.24.5"
 gnome_extensions:
   - 595 # autohide-battery
   - 1401 # bluetooth-quick-connect
