@@ -1,12 +1,9 @@
-ARG UBUNTU_VERSION=noble
-FROM ubuntu:${UBUNTU_VERSION}
+FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG USER=bazel_user
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-COPY bootstrap/docker/core_packages /tmp/core_packages
 
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \

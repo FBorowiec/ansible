@@ -1,7 +1,42 @@
 #!/usr/bin/env bash
 
-docker rmi -f new-computer 2>/dev/null
-docker build . -f test.Dockerfile -t new-computer
-echo "ANSIBLE BECOME PASS (sudo): ansible"
-echo "docker run --network host -it --rm --name new-computer new-computer:latest /bin/bash"
-docker run --network host -it --rm --name new-computer new-computer:latest /bin/bash
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+IMAGE_PREFIX="ansible-test"
+
+check_success() {
+	local exit_code=$?
+	if [ "$exit_code" -ne 0 ]; then
+		echo "ERROR: $1 failed with exit code $exit_code" >&2
+		return "$exit_code"
+	fi
+	return 0
+}
+
+docker_cleanup() {
+	docker stop "$IMAGE_PREFIX" 2>/dev/null || true
+	docker rm "$IMAGE_PREFIX" 2>/dev/null || true
+	docker rmi -f "$IMAGE_PREFIX" 2>/dev/null || true
+}
+
+docker_cleanup
+check_success "Cleanup Docker environment"
+
+docker build "$REPO_ROOT" \
+	--network host \
+	--file "$REPO_ROOT"/test/test.Dockerfile \
+	--tag "$IMAGE_PREFIX"
+check_success "Building test docker image"
+
+docker run \
+	--network host --rm \
+	--name "$IMAGE_PREFIX" \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	"$IMAGE_PREFIX":latest \
+	/bin/bash install
+check_success "Test ansible setup"
+
+echo "Test install passed successfully."
+
+exit 0
