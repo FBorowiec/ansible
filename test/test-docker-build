@@ -21,7 +21,6 @@ docker_cleanup() {
 }
 
 docker_cleanup
-check_success "Cleanup Docker environment"
 
 docker build "$REPO_ROOT" \
 	--network host \
@@ -29,9 +28,16 @@ docker build "$REPO_ROOT" \
 	--tag "$IMAGE_PREFIX"
 check_success "Building test docker image"
 
+[[ -z "$ANSIBLE_VAULT_PASSWORD" ]] && {
+	echo "Enter vault password:"
+	read -rs ANSIBLE_VAULT_PASSWORD
+	export ANSIBLE_VAULT_PASSWORD
+}
+
 docker run \
 	--network host --rm \
 	--name "$IMAGE_PREFIX" \
+	-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
 	-v /var/run/docker.sock:/var/run/docker.sock \
 	"$IMAGE_PREFIX":latest \
 	/bin/bash install

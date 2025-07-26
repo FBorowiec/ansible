@@ -19,7 +19,7 @@ HOSTS="$ROOTDIR/hosts"
 PLAYBOOK="$ROOTDIR/setup.yml"
 
 if [[ -n "$CONTAINER" || -f /.dockerenv ]]; then
-	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become
+	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD")
 else
 	echo "The BECOME password is your sudo password."
 	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
