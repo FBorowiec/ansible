@@ -5,25 +5,32 @@
     return_content: true
   register: release_info
 
-- name: Set download URL for latest deskflow binary
+- name: Debug release assets
+  ansible.builtin.debug:
+    var: release_info.json.assets | map(attribute='name')
+
+- name: Set download URL for latest deskflow Debian package (Ubuntu x86_64)
   ansible.builtin.set_fact:
     deskflow_download_url: >-
-      {{ release_info.json.assets | selectattr('name', 'search', 'linux.*amd64.*\\.tar\\.gz') | map(attribute='browser_download_url') | first }}
+      {{
+        release_info.json.assets
+        | selectattr('name', 'match', 'deskflow-.*ubuntu.*x86_64\\.deb')
+        | map(attribute='browser_download_url')
+        | first
+        | default('')
+      }}
 
-- name: Download deskflow binary
+- name: Fail if no matching Debian package was found
+  ansible.builtin.fail:
+    msg: "No Ubuntu x86_64 Debian package found for deskflow."
+  when: deskflow_download_url == ""
+
+- name: Download deskflow Debian package
   ansible.builtin.get_url:
     url: "{{ deskflow_download_url }}"
-    dest: "/tmp/deskflow_latest.tar.gz"
+    dest: "/tmp/deskflow_latest.deb"
     mode: "0644"
 
-- name: Extract deskflow binary
-  ansible.builtin.unarchive:
-    src: "/tmp/deskflow_latest.tar.gz"
-    dest: "/usr/local/bin/"
-    remote_src: true
-
-- name: Ensure deskflow binary is executable
-  ansible.builtin.file:
-    path: "/usr/local/bin/deskflow"
-    mode: "0755"
-    state: file
+- name: Install deskflow Debian package
+  ansible.builtin.apt:
+    deb: "/tmp/deskflow_latest.deb"
