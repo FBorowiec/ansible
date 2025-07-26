@@ -1,6 +1,6 @@
 ---
 - name: Install Bazel
-  npm:
+  community.general.npm:
     name: "@bazel/bazelisk"
     global: true
 

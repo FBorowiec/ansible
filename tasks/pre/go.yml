@@ -1,6 +1,19 @@
 ---
-- name: Ensure Go is installed
-  ansible.builtin.apt:
-    name: golang-go
-    state: present
-    update_cache: true
+- name: Download latest Go version
+  become: true
+  become_user: "{{ ansible_env.USER }}"
+  ansible.builtin.get_url:
+    url: "https://go.dev/dl/{{ tools_versions.go }}.linux-amd64.tar.gz"
+    dest: "/tmp/{{ tools_versions.clang }}.linux-amd64.tar.gz"
+    mode: "0644"
+
+- name: Remove any existing Go installation
+  ansible.builtin.command: "rm -rf /usr/local/go"
+  register: go_removal
+  changed_when: go_removal.rc != 0
+
+- name: Extract Go archive
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ tools_versions.clang }}.linux-amd64.tar.gz"
+    dest: "/usr/local"
+    remote_src: true

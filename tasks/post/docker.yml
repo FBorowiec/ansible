@@ -29,6 +29,5 @@
 - name: Add user to docker group
   shell: "usermod -aG docker {{ main_user }}"
 
-# reset_connection doesn't support conditionals.
 - name: Reset connection so docker group is picked up.
   ansible.builtin.meta: reset_connection
