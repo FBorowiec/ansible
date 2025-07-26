@@ -4,6 +4,21 @@ set -e
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 IMAGE_PREFIX="ansible-test"
+INTERACTIVE=false
+
+while [[ $# -gt 0 ]]; do
+	case $1 in
+	-i | --interactive)
+		INTERACTIVE=true
+		shift
+		;;
+	*)
+		echo "Unknown option $1"
+		echo "Usage: $0 [-i|--interactive]"
+		exit 1
+		;;
+	esac
+done
 
 check_success() {
 	local exit_code=$?
@@ -21,28 +36,39 @@ docker_cleanup() {
 }
 
 docker_cleanup
-
 docker build "$REPO_ROOT" \
 	--network host \
 	--file "$REPO_ROOT"/test/test.Dockerfile \
 	--tag "$IMAGE_PREFIX"
 check_success "Building test docker image"
 
-[[ -z "$ANSIBLE_VAULT_PASSWORD" ]] && {
-	echo "Enter vault password:"
-	read -rs ANSIBLE_VAULT_PASSWORD
-	export ANSIBLE_VAULT_PASSWORD
-}
+if [[ "$INTERACTIVE" == "false" ]]; then
+	[[ -z "$ANSIBLE_VAULT_PASSWORD" ]] && {
+		echo "Enter vault password:"
+		read -rs ANSIBLE_VAULT_PASSWORD
+		export ANSIBLE_VAULT_PASSWORD
+	}
+fi
 
-docker run \
-	--network host --rm \
-	--name "$IMAGE_PREFIX" \
-	-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
-	-v /var/run/docker.sock:/var/run/docker.sock \
-	"$IMAGE_PREFIX":latest \
-	/bin/bash install
-check_success "Test ansible setup"
-
-echo "Test install passed successfully."
+if [[ "$INTERACTIVE" == "true" ]]; then
+	echo "Starting interactive container..."
+	docker run \
+		--network host --rm -it \
+		--name "$IMAGE_PREFIX" \
+		-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		"$IMAGE_PREFIX":latest \
+		/bin/bash
+else
+	docker run \
+		--network host --rm \
+		--name "$IMAGE_PREFIX" \
+		-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		"$IMAGE_PREFIX":latest \
+		/bin/bash install
+	check_success "Test ansible setup"
+	echo "Test install passed successfully."
+fi
 
 exit 0
