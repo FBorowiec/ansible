@@ -1,12 +1,35 @@
 ---
-- name: Install lua
+- name: Install Lua and LuaRocks
   ansible.builtin.apt:
-    name: luarocks
+    name:
+      - lua5.4
+      - luarocks
+    state: present
+    update_cache: true
 
-- name: Install luacheck
+- name: Check if luacheck is already installed
+  ansible.builtin.command: luarocks list luacheck
+  register: luacheck_check
+  changed_when: false
+  failed_when: false
+
+- name: Install luacheck via luarocks
   ansible.builtin.command: luarocks install luacheck
   register: luacheck_install
-  changed_when: luacheck_install.rc != 0
+  changed_when: "'Installing' in luacheck_install.stdout"
   failed_when: luacheck_install.rc != 0
-  retries: 3
-  delay: 10
+  when: "'luacheck' not in luacheck_check.stdout"
+  become: true
+
+- name: Ensure luarocks bin is in PATH
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.profile"
+    line: 'export PATH="/usr/local/bin:$PATH"'
+    regexp: "^export PATH=.*usr/local/bin"
+    state: present
+    create: true
+    mode: "0644"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
