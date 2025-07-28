@@ -52,11 +52,12 @@
 - name: Install npm packages globally
   become: true
   community.general.npm:
-    name:
-      - yarn
-      - typescript
-      - ts-node
-      - emojione
-      - live-server
+    name: "{{ item }}"
     global: true
     state: present
+  loop:
+    - yarn
+    - typescript
+    - ts-node
+    - emojione
+    - live-server
