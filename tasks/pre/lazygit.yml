@@ -1,26 +1,71 @@
 ---
-- name: Get latest Lazygit release version
-  ansible.builtin.shell: |
-    set -o pipefail
-    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v*([^"]+)".*/\1/')
-    echo $LAZYGIT_VERSION
-  args:
-    executable: /bin/bash
-  register: lazygit_version
+- name: Check if lazygit installed
+  ansible.builtin.command: /usr/local/bin/lazygit --version
+  register: lazygit_current
   changed_when: false
+  failed_when: false
 
-- name: Download and install Lazygit
-  ansible.builtin.get_url:
-    url: "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_{{ lazygit_version.stdout }}_Linux_x86_64.tar.gz"
-    dest: "/tmp/lazygit.tar.gz"
-    mode: "0644"
+- name: Get latest Lazygit release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/jesseduffield/lazygit/releases/latest
+    method: GET
+    return_content: true
+    timeout: 30
+  register: lazygit_release
+  failed_when: false
 
-- name: Extract Lazygit binary
-  ansible.builtin.command: "tar xzf /tmp/lazygit.tar.gz -C /usr/local/bin lazygit"
-  args:
-    creates: /usr/local/bin/lazygit
+- name: Extract version from API response
+  ansible.builtin.set_fact:
+    lazygit_latest_version: >
+      {{ lazygit_release.json.tag_name | regex_replace('^v', '') }}
+  when: lazygit_release.status == 200
 
-- name: Clean up downloaded archive
-  ansible.builtin.file:
-    path: "/tmp/lazygit.tar.gz"
-    state: absent
+- name: Install or update Lazygit
+  when: lazygit_release.status == 200
+  block:
+    - name: Set download URL and filename
+      ansible.builtin.set_fact:
+        lazygit_filename: >
+          lazygit_{{ lazygit_latest_version }}_Linux_x86_64.tar.gz
+        lazygit_url: "https://github.com/jesseduffield/lazygit/releases/\
+          download/v{{ lazygit_latest_version }}/lazygit_\
+          {{ lazygit_latest_version }}_Linux_x86_64.tar.gz"
+
+    - name: Download Lazygit archive
+      ansible.builtin.get_url:
+        url: "{{ lazygit_url }}"
+        dest: "/tmp/{{ lazygit_filename }}"
+        mode: "0644"
+        timeout: 120
+      register: lazygit_download
+
+    - name: Create temporary extraction directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: _lazygit
+      register: temp_dir
+
+    - name: Extract Lazygit archive
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ lazygit_filename }}"
+        dest: "{{ temp_dir.path }}"
+        remote_src: true
+        creates: "{{ temp_dir.path }}/lazygit"
+
+    - name: Install Lazygit binary
+      ansible.builtin.copy:
+        src: "{{ temp_dir.path }}/lazygit"
+        dest: /usr/local/bin/lazygit
+        mode: "0755"
+        owner: root
+        group: root
+        remote_src: true
+      become: true
+
+    - name: Clean up temporary files
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/{{ lazygit_filename }}"
+        - "{{ temp_dir.path }}"
