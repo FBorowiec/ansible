@@ -11,6 +11,7 @@
     - libxkbcommon-dev
 
 - name: Install Alacritty
+  become: true
   become_user: "{{ main_user }}"
   community.general.cargo:
     name: "alacritty"
@@ -24,7 +25,9 @@
     state: link
 
 - name: Set Alacritty as the default terminal
-  ansible.builtin.command: update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 60
+  ansible.builtin.command: >-
+    update-alternatives --install /usr/bin/x-terminal-emulator |
+    x-terminal-emulator /usr/bin/alacritty 60
   args:
     creates: /usr/bin/x-terminal-emulator
 
@@ -34,6 +37,9 @@
     dest: /usr/share/pixmaps/Alacritty.svg
     mode: "0644"
 
-- name: Create Alacritty desktop entry
-  ansible.builtin.shell:
-    cmd: desktop-file-install files/icons/Alacritty.desktop && update-desktop-database
+- name: Install Alacritty desktop file
+  ansible.builtin.copy:
+    src: files/icons/Alacritty.desktop
+    dest: /usr/share/applications/Alacritty.desktop
+    mode: "0644"
+  notify: update desktop database
