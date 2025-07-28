@@ -1,40 +1,52 @@
 ---
-- name: Remove existing bazel binary
-  ansible.builtin.file:
-    path: /usr/local/bin/bazel
-    state: absent
+- name: Check if bazelisk is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/bazelisk
+  register: bazelisk_stat
 
-- name: Get latest Bazelisk release info
-  ansible.builtin.uri:
-    url: https://api.github.com/repos/bazelbuild/bazelisk/releases/latest
-    method: GET
-    return_content: true
-  register: bazelisk_release
+- name: Install Bazelisk
+  when: not bazelisk_stat.stat.exists
+  block:
+    - name: Get latest Bazelisk release info
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/bazelbuild/bazelisk/releases/latest
+        method: GET
+        return_content: true
+        timeout: 30
+      register: bazelisk_release
+      failed_when: false
 
-- name: Set Bazelisk download URL for Linux
-  ansible.builtin.set_fact:
-    bazelisk_url: >-
-      {{ bazelisk_release.json.assets
-         | selectattr('name', 'match', 'bazelisk-linux-amd64')
-         | map(attribute='browser_download_url')
-         | first }}
-  when: ansible_system == "Linux" and ansible_architecture == "x86_64"
+    - name: Set Bazelisk download URL for Linux x86_64
+      ansible.builtin.set_fact:
+        bazelisk_url: >-
+          {{ bazelisk_release.json.assets
+             | selectattr('name', 'match', 'bazelisk-linux-amd64')
+             | map(attribute='browser_download_url')
+             | first }}
 
-- name: Download Bazelisk binary
-  ansible.builtin.get_url:
-    url: "{{ bazelisk_url }}"
-    dest: /usr/local/bin/bazelisk
-    mode: "0755"
-    owner: root
-    group: root
-  become: true
+    - name: Download Bazelisk binary
+      become: true
+      ansible.builtin.get_url:
+        url: "{{ bazelisk_url }}"
+        dest: /usr/local/bin/bazelisk
+        mode: "0755"
+        owner: root
+        group: root
+        backup: true
 
-- name: Create bazel symlink
-  ansible.builtin.file:
-    src: /usr/local/bin/bazelisk
-    dest: /usr/local/bin/bazel
-    state: link
-  become: true
+    - name: Remove existing bazel binary if it's not a symlink
+      become: true
+      ansible.builtin.file:
+        path: /usr/local/bin/bazel
+        state: absent
+
+    - name: Create bazel symlink
+      become: true
+      ansible.builtin.file:
+        src: /usr/local/bin/bazelisk
+        dest: /usr/local/bin/bazel
+        state: link
+        force: true
 
 - name: Install buildtools
   become: true
