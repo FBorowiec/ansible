@@ -1,19 +1,86 @@
 ---
-- name: Download latest Go version
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.get_url:
-    url: "https://go.dev/dl/go{{ tools_versions.go }}.linux-amd64.tar.gz"
-    dest: "/tmp/go{{ tools_versions.go }}.linux-amd64.tar.gz"
+- name: Check if Go is already installed with correct version
+  ansible.builtin.command: /usr/local/go/bin/go version
+  register: go_version_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Go
+  when: go_version_check.rc != 0
+  block:
+    - name: Set Go download URL and filename
+      ansible.builtin.set_fact:
+        go_filename: "go{{ tools_versions.go }}.linux-amd64.tar.gz"
+        go_url: >
+          https://go.dev/dl/go{{ tools_versions.go }}.linux-{{ go_arch }}.tar.gz
+
+    - name: Download Go archive
+      ansible.builtin.get_url:
+        url: "{{ go_url }}"
+        dest: "/tmp/{{ go_filename }}"
+        mode: "0644"
+        timeout: 300
+
+    - name: Remove existing Go installation
+      become: true
+      ansible.builtin.file:
+        path: /usr/local/go
+        state: absent
+      when: go_version_check.rc == 0
+
+    - name: Extract Go archive
+      become: true
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ go_filename }}"
+        dest: "/usr/local"
+        remote_src: true
+        owner: root
+        group: root
+        creates: "/usr/local/go/bin/go"
+
+    - name: Clean up downloaded archive
+      ansible.builtin.file:
+        path: "/tmp/{{ go_filename }}"
+        state: absent
+
+    - name: Verify Go installation
+      ansible.builtin.command: /usr/local/go/bin/go version
+      register: go_verify
+      changed_when: false
+      failed_when: >
+        go_verify.rc != 0 or
+        'go' + tools_versions.go not in go_verify.stdout
+
+- name: Ensure Go is in system PATH
+  ansible.builtin.copy:
+    content: |
+      export PATH="/usr/local/go/bin:$PATH"
+    dest: /etc/profile.d/go.sh
     mode: "0644"
+    owner: root
+    group: root
+  become: true
 
-- name: Remove any existing Go installation
-  ansible.builtin.command: "rm -rf /usr/local/go"
-  register: go_removal
-  changed_when: go_removal.rc != 0
+- name: Create GOPATH directory for main user
+  ansible.builtin.file:
+    path: "{{ home_dir }}/go"
+    state: directory
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    mode: "0755"
+  become: true
 
-- name: Extract Go archive
-  ansible.builtin.unarchive:
-    src: "/tmp/go{{ tools_versions.go }}.linux-amd64.tar.gz"
-    dest: "/usr/local"
-    remote_src: true
+- name: Add Go environment variables to user profile
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.profile"
+    line: "{{ item }}"
+    state: present
+    create: true
+    mode: "0644"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+  become: true
+  loop:
+    - 'export GOPATH="$HOME/go"'
+    - 'export GOBIN="$HOME/go/bin"'
+    - 'export PATH="/usr/local/go/bin:$GOPATH/bin:$PATH"'
