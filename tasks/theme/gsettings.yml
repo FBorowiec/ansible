@@ -6,17 +6,28 @@
     gsettings set org.gnome.shell.extensions.dash-to-dock \
     {{ item.key }} {{ item.value }}
   loop:
-    - { key: "extend-height", value: "false" }
-    - { key: "dock-position", value: "BOTTOM" }
-    - { key: "dash-max-icon-size", value: "40" }
-    - { key: "transparency-mode", value: "FIXED" }
-    - { key: "background-opacity", value: "1.0" }
-    - { key: "unity-backlit-items", value: "false" }
-    - { key: "dock-fixed", value: "false" }
-    - { key: "autohide", value: "true" }
-    - { key: "show-trash", value: "false" }
-    - { key: "show-mounts", value: "false" }
-    - { key: "show-icons-notifications-counter", value: "false" }
+    - key: "extend-height"
+      value: "false"
+    - key: "dock-position"
+      value: "BOTTOM"
+    - key: "dash-max-icon-size"
+      value: "40"
+    - key: "transparency-mode"
+      value: "FIXED"
+    - key: "background-opacity"
+      value: "1.0"
+    - key: "unity-backlit-items"
+      value: "false"
+    - key: "dock-fixed"
+      value: "false"
+    - key: "autohide"
+      value: "true"
+    - key: "show-trash"
+      value: "false"
+    - key: "show-mounts"
+      value: "false"
+    - key: "show-icons-notifications-counter"
+      value: "false"
   environment:
     DISPLAY: "{{ display | default(':0') }}"
     DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
