@@ -24,6 +24,7 @@
         CARGO_HOME: "{{ home }}/.cargo"
       args:
         creates: "{{ home }}/.cargo/bin/cargo"
+        executable: /bin/bash
 
     - name: Set default Rust toolchain to stable
       become: true

@@ -25,6 +25,8 @@
     gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2
   register: gnome_shell_version
   changed_when: false
+  args:
+    executable: /bin/bash
 
 - name: Install GNOME extensions
   ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml

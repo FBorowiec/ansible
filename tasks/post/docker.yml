@@ -29,6 +29,8 @@
   register: user_in_docker_group
   changed_when: false
   failed_when: false
+  args:
+    executable: /bin/bash
 
 - name: Add user to docker group
   become: true

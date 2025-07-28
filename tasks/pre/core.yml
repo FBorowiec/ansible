@@ -42,7 +42,6 @@
 
 - name: Create symbolic link for batcat to bat
   become: true
-  become_user: "{{ user }}"
   ansible.builtin.file:
     src: "/usr/bin/batcat"
     dest: "{{ home }}/.local/bin/bat"
@@ -53,6 +52,7 @@
   when: batcat_check.stat.exists
 
 - name: Ensure .local/bin is in PATH
+  become: true
   ansible.builtin.lineinfile:
     path: "{{ home }}/.profile"
     line: 'export PATH="$HOME/.local/bin:$PATH"'
@@ -63,4 +63,3 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     backup: true
-  become: true
