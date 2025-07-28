@@ -8,45 +8,39 @@
     - vars/vars.yml
 
   pre_tasks:
-    - include_tasks: tasks/pre/ssh.yml
+    - ansible.builtin.include_tasks: tasks/pre/ssh.yml
     - name: Update and upgrade apt packages
       ansible.builtin.apt:
         update_cache: true
         upgrade: true
-    - include_tasks: tasks/pre/core.yml
-    # ---
-    - include_tasks: tasks/pre/cargo.yml
-    - include_tasks: tasks/pre/cpp.yml
-    - include_tasks: tasks/pre/fonts.yml
-    - include_tasks: tasks/pre/go.yml
-    - include_tasks: tasks/pre/lazygit.yml
-    - include_tasks: tasks/pre/lua.yml
-    - include_tasks: tasks/pre/neovim.yml
-    - include_tasks: tasks/pre/npm_packages.yml
-    - include_tasks: tasks/pre/python.yml
-    - include_tasks: tasks/pre/tmux.yml
-    - include_tasks: tasks/pre/zsh.yml
-    # ---
-    - include_tasks: tasks/pre/dotfiles.yml
-
+    - ansible.builtin.include_tasks: tasks/pre/core.yml
+    - ansible.builtin.include_tasks: tasks/pre/cargo.yml
+    - ansible.builtin.include_tasks: tasks/pre/cpp.yml
+    - ansible.builtin.include_tasks: tasks/pre/fonts.yml
+    - ansible.builtin.include_tasks: tasks/pre/go.yml
+    - ansible.builtin.include_tasks: tasks/pre/lazygit.yml
+    - ansible.builtin.include_tasks: tasks/pre/lua.yml
+    - ansible.builtin.include_tasks: tasks/pre/neovim.yml
+    - ansible.builtin.include_tasks: tasks/pre/npm_packages.yml
+    - ansible.builtin.include_tasks: tasks/pre/python.yml
+    - ansible.builtin.include_tasks: tasks/pre/tmux.yml
+    - ansible.builtin.include_tasks: tasks/pre/zsh.yml
+    - ansible.builtin.include_tasks: tasks/pre/dotfiles.yml
   tasks:
-    - include_tasks: tasks/post/ai.yml
-    - include_tasks: tasks/post/alacritty.yml
-    - include_tasks: tasks/post/bazel.yml
-    - include_tasks: tasks/post/deskflow.yml
-    - include_tasks: tasks/post/discord.yml
-    - include_tasks: tasks/post/docker.yml
-    # - include_tasks: tasks/post/grub.yml # broken
-    - include_tasks: tasks/post/immersed.yml
-    - include_tasks: tasks/post/keyboard.yml
-    - include_tasks: tasks/post/pdf_reader.yml
-    - include_tasks: tasks/post/ranger.yml
-    - include_tasks: tasks/post/ruby.yml
-    - include_tasks: tasks/post/snap.yml
-
+    - ansible.builtin.include_tasks: tasks/post/ai.yml
+    - ansible.builtin.include_tasks: tasks/post/alacritty.yml
+    - ansible.builtin.include_tasks: tasks/post/bazel.yml
+    - ansible.builtin.include_tasks: tasks/post/deskflow.yml
+    - ansible.builtin.include_tasks: tasks/post/discord.yml
+    - ansible.builtin.include_tasks: tasks/post/docker.yml
+    # - ansible.builtin.include_tasks: tasks/post/grub.yml # broken
+    - ansible.builtin.include_tasks: tasks/post/immersed.yml
+    - ansible.builtin.include_tasks: tasks/post/keyboard.yml
+    - ansible.builtin.include_tasks: tasks/post/pdf_reader.yml
+    - ansible.builtin.include_tasks: tasks/post/ranger.yml
+    - ansible.builtin.include_tasks: tasks/post/snap.yml
   post_tasks:
-    - include_tasks: tasks/theme/gnome.yml
-    - include_tasks: tasks/theme/gsettings.yml
-    - include_tasks: tasks/theme/gtk.yml
-    - include_tasks: tasks/theme/i3.yml
-    - include_tasks: tasks/theme/spicetify.yml
+    - ansible.builtin.include_tasks: tasks/theme/gnome.yml
+    - ansible.builtin.include_tasks: tasks/theme/gsettings.yml
+    - ansible.builtin.include_tasks: tasks/theme/gtk.yml
+    - ansible.builtin.include_tasks: tasks/theme/i3.yml

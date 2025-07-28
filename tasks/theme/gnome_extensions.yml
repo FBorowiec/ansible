@@ -24,8 +24,7 @@
 
     - name: Install extension
       become_user: "{{ main_user }}"
-      ansible.builtin.shell: "gnome-extensions install /tmp/{{ extension_id }}.zip -f"
-
+      ansible.builtin.command: "gnome-extensions install /tmp/{{ extension_id }}.zip -f"
     - name: Remove extension archive
       become_user: "{{ main_user }}"
       ansible.builtin.file:
@@ -34,10 +33,10 @@
 
     - name: Enable extension # Needs to be performed after reload of shell
       become_user: "{{ main_user }}"
-      ansible.builtin.shell: "gnome-extensions enable {{ ext_uuid }}"
+      ansible.builtin.command: "gnome-extensions enable {{ ext_uuid }}"
       ignore_errors: true
 
   rescue:
     - name: Report error for extension {{ extension_id }}
-      debug:
+      ansible.builtin.debug:
         msg: "Failed to fetch or install extension with ID {{ extension_id }}"

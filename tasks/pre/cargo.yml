@@ -1,6 +1,6 @@
 ---
 - name: Check if cargo is installed
-  ansible.builtin.shell: command -v cargo
+  ansible.builtin.command: command -v cargo
   register: cargo_exists
   ignore_errors: true
 
@@ -38,12 +38,11 @@
   become: true
   become_user: "{{ main_user }}"
   when: cargo_exists is failed
-  ansible.builtin.shell: /tmp/sh.rustup.rs -y
-
+  ansible.builtin.command: /tmp/sh.rustup.rs -y
 - name: Set default Rust toolchain to stable
   become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.shell: rustup default stable
+  ansible.builtin.command: rustup default stable
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
   when: cargo_exists is failed

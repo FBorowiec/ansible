@@ -22,7 +22,7 @@
   become_user: "{{ main_user }}"
 
 - name: Install GNOME extensions
-  include_tasks: tasks/theme/gnome_extensions.yml
+  ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml
   loop: "{{ gnome_extensions }}"
   loop_control:
     label: "{{ item }}"

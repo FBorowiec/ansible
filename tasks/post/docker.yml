@@ -27,7 +27,6 @@
   when: docker_command_result.rc == 1
 
 - name: Add user to docker group
-  shell: "usermod -aG docker {{ main_user }}"
-
+  ansible.builtin.command: "usermod -aG docker {{ main_user }}"
 - name: Reset connection so docker group is picked up.
   ansible.builtin.meta: reset_connection

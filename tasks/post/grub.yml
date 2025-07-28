@@ -5,8 +5,7 @@
     state: present
 
 - name: Add grub-customizer apt repo
-  ansible.builtin.shell: "add-apt-repository ppa:danielrichter2007/grub-customizer"
-
+  ansible.builtin.command: "add-apt-repository ppa:danielrichter2007/grub-customizer"
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: true

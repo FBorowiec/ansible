@@ -10,8 +10,7 @@
     global: true
 
 - name: Install latest n
-  ansible.builtin.shell: n latest
-
+  ansible.builtin.command: n latest
 - name: Install npm packages
   community.general.npm:
     name: "{{ item }}"

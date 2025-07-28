@@ -35,7 +35,7 @@
 
 - name: Build neovim
   become_user: "{{ main_user }}"
-  ansible.builtin.shell: "make CMAKE_BUILD_TYPE=RelWithDebInfo"
+  ansible.builtin.command: "make CMAKE_BUILD_TYPE=RelWithDebInfo"
   register: build_neovim
   changed_when: build_neovim.rc != 0
   failed_when: build_neovim.rc != 0
@@ -43,7 +43,7 @@
     chdir: "{{ home_dir }}/neovim"
 
 - name: Install neovim
-  ansible.builtin.shell: "make install"
+  ansible.builtin.command: "make install"
   register: install_neovim
   changed_when: install_neovim.rc != 0
   failed_when: install_neovim.rc != 0
