@@ -1,11 +1,12 @@
 ---
 - name: Install i3 and required packages
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - i3
-    - feh
-    - rofi
-    - picom
-    - gtk2-engines-murrine
-    - gtk2-engines-pixbuf
+    name:
+      - i3
+      - feh
+      - rofi
+      - picom
+      - gtk2-engines-murrine
+      - gtk2-engines-pixbuf
+    state: present
+    update_cache: true
