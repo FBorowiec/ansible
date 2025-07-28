@@ -1,19 +1,20 @@
 ---
 - name: Install cpp packages
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - autoconf
-    - automake
-    - clang
-    - clang-format
-    - clang-tidy
-    - clangd
-    - clazy
-    - cmake
-    - cppcheck
-    - meson
-    - gcc
-    - gdb
-    - g++
-    - libboost-all-dev
+    name:
+      - autoconf
+      - automake
+      - clang
+      - clang-format
+      - clang-tidy
+      - clangd
+      - clazy
+      - cmake
+      - cppcheck
+      - meson
+      - gcc
+      - gdb
+      - g++
+      - libboost-all-dev
+    state: present
+    update_cache: true

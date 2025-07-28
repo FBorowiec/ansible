@@ -3,6 +3,8 @@
   ansible.builtin.apt:
     name:
       - stow
+    state: present
+    update_cache: true
 
 - name: "Check dotfiles dir exists"
   ansible.builtin.stat:
@@ -10,6 +12,7 @@
   register: dotfiles
 
 - name: Clone the dotfiles repo
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "git@github.com:FBorowiec/dotfiles.git"
@@ -18,6 +21,7 @@
   when: not dotfiles.stat.exists
 
 - name: Stow dotfiles
+  become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "./install"
   register: dotfiles_install
