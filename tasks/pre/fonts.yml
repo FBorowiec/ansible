@@ -1,46 +1,5 @@
 ---
-- name: X/fonts - Copy fonts directory
-  become_user: "{{ main_user }}"
-  ansible.builtin.copy:
-    src: files/fonts
-    dest: "{{ home_dir }}/.local/share/fonts"
-    mode: "0755"
-
-- name: Fetch all releases for Nerd Fonts
-  ansible.builtin.uri:
-    url: "https://api.github.com/repos/ryanoasis/nerd-fonts/releases"
-    return_content: true
-    method: GET
-    headers:
-      Accept: "application/vnd.github.v3+json"
-  register: nerd_fonts_releases
-
-- name: Extract the most recent release tag for Nerd Fonts
-  ansible.builtin.set_fact:
-    nerd_fonts_latest_version: "{{ (nerd_fonts_releases.json | sort(attribute='published_at') | last).tag_name }}"
-
-- name: Download fonts zip file
-  become_user: "{{ main_user }}"
-  ansible.builtin.get_url:
-    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_latest_version }}/3270.zip"
-    dest: "{{ home_dir }}/3270.zip"
-    mode: "0664"
-
-- name: Unzip fonts
-  become_user: "{{ main_user }}"
-  ansible.builtin.unarchive:
-    src: "{{ home_dir }}/3270.zip"
-    dest: "{{ home_dir }}/.local/share/fonts"
-    remote_src: true
-
-- name: Remove zip file
-  become_user: "{{ main_user }}"
-  ansible.builtin.file:
-    path:
-      dest: "{{ home_dir }}/3270.zip"
-    state: absent
-
-- name: Install additional fonts
+- name: Install system font packages
   ansible.builtin.apt:
     name:
       - fonts-powerline
@@ -48,9 +7,97 @@
       - fonts-firacode
       - fonts-hack-ttf
       - fonts-ubuntu
+    state: present
+    update_cache: true
 
-- name: X/fonts - Refresh font cache
+- name: Ensure fonts directory exists
+  become: true
+  become_user: "{{ main_user }}"
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.local/share/fonts"
+    state: directory
+    mode: "0755"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+
+- name: Copy local fonts directory
+  become: true
+  become_user: "{{ main_user }}"
+  ansible.builtin.copy:
+    src: files/fonts/
+    dest: "{{ home_dir }}/.local/share/fonts/"
+    mode: "0644"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+  register: local_fonts_copied
+
+- name: Check if Nerd Font 3270 is already installed
+  ansible.builtin.find:
+    paths: "{{ home_dir }}/.local/share/fonts"
+    patterns: "*3270*"
+    file_type: file
+  become: true
+  become_user: "{{ main_user }}"
+  register: nerd_font_check
+
+- name: Install Nerd Font 3270
+  when: nerd_font_check.matched == 0
+  block:
+    - name: Fetch latest Nerd Fonts release
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest"
+        return_content: true
+        method: GET
+        headers:
+          Accept: "application/vnd.github.v3+json"
+        timeout: 30
+      register: nerd_fonts_release
+      failed_when: false
+
+    - name: Fail if GitHub API is unreachable
+      ansible.builtin.fail:
+        msg: "Cannot reach GitHub API to get Nerd Fonts version"
+      when: nerd_fonts_release.status != 200
+
+    - name: Set Nerd Fonts version
+      ansible.builtin.set_fact:
+        nerd_fonts_version: "{{ nerd_fonts_release.json.tag_name }}"
+
+    - name: Download 3270 Nerd Font
+      become: true
+      become_user: "{{ main_user }}"
+      ansible.builtin.get_url:
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/\
+          {{ nerd_fonts_version }}/3270.zip"
+        dest: "{{ home_dir }}/3270.zip"
+        mode: "0644"
+        timeout: 120
+      register: font_download
+
+    - name: Extract 3270 Nerd Font
+      become: true
+      become_user: "{{ main_user }}"
+      ansible.builtin.unarchive:
+        src: "{{ home_dir }}/3270.zip"
+        dest: "{{ home_dir }}/.local/share/fonts"
+        remote_src: true
+        creates: "{{ home_dir }}/.local/share/fonts/3270NerdFont-Regular.ttf"
+      register: font_extracted
+
+    - name: Clean up zip file
+      become: true
+      become_user: "{{ main_user }}"
+      ansible.builtin.file:
+        path: "{{ home_dir }}/3270.zip"
+        state: absent
+
+- name: Refresh user font cache
+  become: true
+  become_user: "{{ main_user }}"
   ansible.builtin.command: fc-cache -fv
-  register: refreshed_font_cache
-  changed_when: refreshed_font_cache.rc != 0
-  failed_when: refreshed_font_cache.rc != 0
+  register: font_cache_result
+  changed_when: "'caching' in font_cache_result.stdout"
+  when: >
+    local_fonts_copied.changed or
+    nerd_font_check.matched == 0 or
+    font_extracted.changed | default(false)
