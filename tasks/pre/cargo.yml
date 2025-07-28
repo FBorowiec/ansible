@@ -36,13 +36,6 @@
       register: rustup_default
       changed_when: "'unchanged' not in rustup_default.stderr"
 
-    - name: Verify Rust installation
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.command: "{{ home }}/.cargo/bin/cargo --version"
-      register: cargo_version
-      changed_when: false
-
 - name: Check which cargo packages are installed
   become: true
   become_user: "{{ user }}"
