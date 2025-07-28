@@ -1,12 +1,47 @@
 ---
-- name: Install Bazel
-  community.general.npm:
-    name: "@bazel/bazelisk"
-    global: true
+- name: Remove existing bazel binary
+  ansible.builtin.file:
+    path: /usr/local/bin/bazel
+    state: absent
+
+- name: Get latest Bazelisk release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/bazelbuild/bazelisk/releases/latest
+    method: GET
+    return_content: true
+  register: bazelisk_release
+
+- name: Set Bazelisk download URL for Linux
+  ansible.builtin.set_fact:
+    bazelisk_url: >-
+      {{ bazelisk_release.json.assets
+         | selectattr('name', 'match', 'bazelisk-linux-amd64')
+         | map(attribute='browser_download_url')
+         | first }}
+  when: ansible_system == "Linux" and ansible_architecture == "x86_64"
+
+- name: Download Bazelisk binary
+  ansible.builtin.get_url:
+    url: "{{ bazelisk_url }}"
+    dest: /usr/local/bin/bazelisk
+    mode: "0755"
+    owner: root
+    group: root
+  become: true
+
+- name: Create bazel symlink
+  ansible.builtin.file:
+    src: /usr/local/bin/bazelisk
+    dest: /usr/local/bin/bazel
+    state: link
+  become: true
 
 - name: Install buildtools
+  become: true
   become_user: "{{ main_user }}"
-  ansible.builtin.command: "go install github.com/bazelbuild/buildtools/{{ item }}@latest"
+  ansible.builtin.command:
+    cmd: go install github.com/bazelbuild/buildtools/{{ item }}@latest
+    creates: "{{ home_dir }}/go/bin/{{ item }}"
   environment:
     GOPATH: "{{ home_dir }}/go"
     GOBIN: "{{ home_dir }}/go/bin"
