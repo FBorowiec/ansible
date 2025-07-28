@@ -1,39 +1,66 @@
 ---
-- name: Install System Packages and tools
+- name: Install system packages and tools
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - apt-transport-https
-    - bat
-    - build-essential
-    - curl
-    - gettext
-    - fzf
-    - git
-    - git-lfs
-    - git-review
-    - gitlint
-    - ripgrep
-    - neofetch
-    - net-tools
-    - nvidia-settings
-    - software-properties-common
-    - stow
-    - unzip
-    - vlc
-    - wget
-    - xclip
+    name:
+      - apt-transport-https
+      - bat
+      - build-essential
+      - curl
+      - gettext
+      - fzf
+      - git
+      - git-lfs
+      - git-review
+      - gitlint
+      - ripgrep
+      - neofetch
+      - net-tools
+      - nvidia-settings
+      - software-properties-common
+      - stow
+      - unzip
+      - vlc
+      - wget
+      - xclip
+    state: present
+    update_cache: true
 
-- name: Ensure local bin directory exists
+- name: Ensure .local/bin directory exists
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.file:
-    path: "{{ home_dir }}/local/bin"
+    path: "{{ home_dir }}/.local/bin"
     state: directory
     mode: "0755"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
 
-- name: Symbolic link for batcat
+- name: Check if batcat is installed
+  ansible.builtin.stat:
+    path: "/usr/bin/batcat"
+  register: batcat_check
+
+- name: Create symbolic link for batcat to bat
+  become: true
+  become_user: "{{ main_user }}"
   ansible.builtin.file:
     src: "/usr/bin/batcat"
     dest: "{{ home_dir }}/.local/bin/bat"
     state: link
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    force: true
+  when: batcat_check.stat.exists
+
+- name: Ensure .local/bin is in PATH
+  ansible.builtin.lineinfile:
+    path: "{{ home_dir }}/.profile"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    regexp: '^export PATH=.*\.local/bin'
+    state: present
+    create: true
+    mode: "0644"
+    owner: "{{ main_user }}"
+    group: "{{ main_user }}"
+    backup: true
+  become: true
