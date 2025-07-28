@@ -1,33 +1,38 @@
 ---
 - name: Install dependencies
+  become: true
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - wget
-    - curl
-    - jq
-    - sed
-    - gnome-shell
-    - gnome-shell-extension-prefs
-    - gnome-shell-extensions
-    - gnome-shell-extension-manager
-    - gnome-tweaks
-    - gnome-browser-connector
-    - gtk2-engines-murrine
+    name:
+      - wget
+      - curl
+      - jq
+      - sed
+      - gnome-shell
+      - gnome-shell-extension-prefs
+      - gnome-shell-extensions
+      - gnome-shell-extension-manager
+      - gnome-tweaks
+      - gnome-browser-connector
+      - gtk2-engines-murrine
+    state: present
+    update_cache: true
 
 - name: Get GNOME Shell version
-  ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.shell: |
+    set -o pipefail
+    gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2
   register: gnome_shell_version
   changed_when: false
-  become_user: "{{ user }}"
 
 - name: Install GNOME extensions
   ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml
   loop: "{{ gnome_extensions }}"
   loop_control:
-    label: "{{ item }}"
+    label: "Extension {{ item }}"
   vars:
     extension_id: "{{ item }}"
     shell_version: "{{ gnome_shell_version.stdout }}"
-    display: "{{ display }}"
-    dbus_address: "{{ dbus_address }}"
+    display: "{{ display | default(':0') }}"
+    dbus_address: "{{ dbus_address | default('') }}"
