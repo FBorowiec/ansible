@@ -1,106 +1,103 @@
 ---
-- name: Install zsh with deps
+- name: Install zsh and dependencies
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - zsh
-    - jq
-    - bc
-    - poppler-utils
+    name:
+      - zsh
+      - jq
+      - bc
+      - poppler-utils
+    state: present
+    update_cache: true
 
-- name: Remove existing configuration
-  ansible.builtin.file:
+- name: Check current user shell
+  ansible.builtin.command: getent passwd {{ user }}
+  register: current_shell
+  changed_when: false
+
+- name: Check if oh-my-zsh exists
+  ansible.builtin.stat:
     path: "{{ home }}/.oh-my-zsh"
-    state: absent
+  register: ohmyzsh_exists
 
-- name: Install ohmyzsh
+- name: Install oh-my-zsh
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/robbyrussell/oh-my-zsh
     dest: "{{ home }}/.oh-my-zsh"
     version: master
     depth: 1
+  when: not ohmyzsh_exists.stat.exists
 
-- name: Install powelevel10k
+- name: Install zsh plugins and themes
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.git:
-    repo: https://github.com/romkatv/powerlevel10k.git
-    dest: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
-    version: master
+    repo: "{{ item.repo }}"
+    dest: "{{ home }}/.oh-my-zsh/custom/{{ item.type }}/{{ item.name }}"
+    version: "{{ item.version }}"
     depth: 1
+  loop:
+    - {
+        repo: "https://github.com/romkatv/powerlevel10k.git",
+        type: "themes",
+        name: "powerlevel10k",
+        version: "master",
+      }
+    - {
+        repo: "https://github.com/marlonrichert/zsh-autocomplete",
+        type: "plugins",
+        name: "zsh-autocomplete",
+        version: "main",
+      }
+    - {
+        repo: "https://github.com/zsh-users/zsh-autosuggestions",
+        type: "plugins",
+        name: "zsh-autosuggestions",
+        version: "master",
+      }
+    - {
+        repo: "https://github.com/supercrabtree/k",
+        type: "plugins",
+        name: "k",
+        version: "master",
+      }
+    - {
+        repo: "https://github.com/zsh-users/zsh-syntax-highlighting",
+        type: "plugins",
+        name: "zsh-syntax-highlighting",
+        version: "master",
+      }
+    - {
+        repo: "https://github.com/Aloxaf/fzf-tab",
+        type: "plugins",
+        name: "fzf-tab",
+        version: "master",
+      }
+    - {
+        repo: "https://github.com/jeffreytse/zsh-vi-mode",
+        type: "plugins",
+        name: "zsh-vi-mode",
+        version: "master",
+      }
+  register: plugin_installs
+  when: not ohmyzsh_exists.stat.exists
 
-- name: Install autocomplete
+- name: Change default shell to zsh
+  ansible.builtin.user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+  become: true
+  when: "'/usr/bin/zsh' not in current_shell.stdout"
+
+- name: Ensure zsh is launched from bashrc
+  become: true
   become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/marlonrichert/zsh-autocomplete
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
-    version: main
-    depth: 1
-
-- name: Install autosuggestions
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-autosuggestions
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-    version: master
-    depth: 1
-
-- name: Install k
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/supercrabtree/k
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/k"
-    version: master
-    depth: 1
-
-- name: Install syntax highlight
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/zsh-users/zsh-syntax-highlighting
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-    version: master
-    depth: 1
-
-- name: Install fzf tab
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/Aloxaf/fzf-tab
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/fzf-tab"
-    version: master
-    depth: 1
-
-- name: Install zsh vi mode
-  become_user: "{{ user }}"
-  ansible.builtin.git:
-    repo: https://github.com/jeffreytse/zsh-vi-mode
-    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
-    version: master
-    depth: 1
-
-- name: Change shell
-  ansible.builtin.command: chsh -s /usr/bin/zsh
-  changed_when: false
-
-- name: Check whether .bashrc has a reference to zsh
-  ansible.builtin.lineinfile:
-    name: "{{ home }}/.bashrc"
-    regexp: "zsh.*"
-    state: absent
-  check_mode: true
-  changed_when: false
-  register: bashrc
-
-- name: Launch zsh from bash (replace line)
-  become_user: "{{ user }}"
-  when: bashrc.found
-  ansible.builtin.replace:
-    dest: "{{ home }}/.bashrc"
-    regexp: "zsh.*"
-    replace: "zsh && exit"
-
-- name: Launch zsh from bash (add missing line)
-  become_user: "{{ user }}"
-  when: not bashrc.found
   ansible.builtin.lineinfile:
     path: "{{ home }}/.bashrc"
-    line: "zsh; exit"
+    line: "exec zsh && exit"
+    regexp: "^(exec )?zsh.*"
+    state: present
+    create: true
+    mode: "0644"
+    backup: true
