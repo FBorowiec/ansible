@@ -1,12 +1,28 @@
 ---
-- name: Install tmux deps
+- name: Install tmux
   ansible.builtin.apt:
-    name: "tmux"
+    name: tmux
+    state: present
 
-- name: Clone tpm plugins
+- name: Ensure tmux plugins directory exists
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.file:
+    path: "{{ home }}/.tmux/plugins"
+    state: directory
+    mode: "0755"
+
+- name: Check if TPM exists
+  ansible.builtin.stat:
+    path: "{{ home }}/.tmux/plugins/tpm"
+  register: tpm_exists
+
+- name: Clone tpm
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.git:
     repo: "https://github.com/tmux-plugins/tpm.git"
     dest: "{{ home }}/.tmux/plugins/tpm"
     version: master
     depth: 1
+  when: not tpm_exists.stat.exists
