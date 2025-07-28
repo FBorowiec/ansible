@@ -1,32 +1,31 @@
 ---
-- name: Install Stow
+- name: Install stow
   ansible.builtin.apt:
-    name:
-      - stow
+    name: stow
     state: present
     update_cache: true
 
-- name: "Check dotfiles dir exists"
+- name: Check if dotfiles directory exists
   ansible.builtin.stat:
     path: "{{ home_dir }}/dotfiles"
-  register: dotfiles
+  register: dotfiles_dir
 
-- name: Clone the dotfiles repo
+- name: Clone dotfiles repository
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.git:
     repo: "git@github.com:FBorowiec/dotfiles.git"
     dest: "{{ home_dir }}/dotfiles"
     version: main
-  when: not dotfiles.stat.exists
+    force: false
+  when: not dotfiles_dir.stat.exists
 
-- name: Stow dotfiles
+- name: dotfiles install
   become: true
   become_user: "{{ main_user }}"
   ansible.builtin.command: "./install"
-  register: dotfiles_install
-  changed_when: dotfiles_install.rc != 0
-  failed_when: dotfiles_install.rc != 0
-  when: not dotfiles.stat.exists
   args:
     chdir: "{{ home_dir }}/dotfiles"
+  register: dotfiles_install
+  changed_when: dotfiles_install.rc == 0
+  failed_when: dotfiles_install.rc != 0
