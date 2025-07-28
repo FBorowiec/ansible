@@ -1,0 +1,5 @@
+---
+skip_list:
+  - name[casing] # All names should start with an uppercase letter
+  - name[missing] # All tasks should be named
+  - name[play] # All plays should be named
