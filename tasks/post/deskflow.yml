@@ -5,10 +5,6 @@
     return_content: true
   register: release_info
 
-- name: Debug release assets
-  ansible.builtin.debug:
-    var: release_info.json.assets | map(attribute='name')
-
 - name: Set download URL for latest deskflow Debian package (Ubuntu x86_64)
   ansible.builtin.set_fact:
     deskflow_download_url: >-
@@ -19,11 +15,6 @@
         | first
         | default('')
       }}
-
-- name: Fail if no matching Debian package was found
-  ansible.builtin.fail:
-    msg: "No Ubuntu x86_64 Debian package found for deskflow."
-  when: deskflow_download_url == ""
 
 - name: Download deskflow Debian package
   ansible.builtin.get_url:
