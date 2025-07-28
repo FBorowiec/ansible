@@ -1,23 +1,62 @@
 ---
-- name: Install npm
-  community.general.npm:
-    name: "npm"
-    global: true
+- name: Install Node.js and npm via apt
+  ansible.builtin.apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+    update_cache: true
 
-- name: Install n
-  community.general.npm:
-    name: "n"
-    global: true
+- name: Check current Node.js version
+  ansible.builtin.command: node --version
+  register: node_current
+  changed_when: false
+  failed_when: false
 
-- name: Install latest n
-  ansible.builtin.command: n latest
-- name: Install npm packages
+- name: Check if n (Node version manager) is installed
+  ansible.builtin.command: n --version
+  register: n_check
+  changed_when: false
+  failed_when: false
+
+- name: Install n (Node version manager)
   community.general.npm:
-    name: "{{ item }}"
+    name: n
     global: true
-  loop:
-    - "yarn"
-    - "typescript"
-    - "ts-node"
-    - "emojione"
-    - "live-server"
+  become: true
+  when: n_check.rc != 0
+
+- name: Check latest Node.js version available
+  ansible.builtin.uri:
+    url: https://nodejs.org/dist/index.json
+    method: GET
+    return_content: true
+  register: node_versions
+  when: n_check.rc == 0 or n_check.rc != 0
+
+- name: Set latest Node.js version
+  ansible.builtin.set_fact:
+    node_latest: >-
+      {{ (node_versions.json | selectattr('lts') | first).version }}
+  when: node_versions.json is defined
+
+- name: Update to latest LTS Node.js version
+  become: true
+  ansible.builtin.command: n lts
+  register: node_update
+  changed_when: "'installing' in node_update.stdout.lower()"
+  when:
+    - node_latest is defined
+    - node_latest not in node_current.stdout
+
+- name: Install npm packages globally
+  become: true
+  community.general.npm:
+    name:
+      - yarn
+      - typescript
+      - ts-node
+      - emojione
+      - live-server
+    global: true
+    state: present

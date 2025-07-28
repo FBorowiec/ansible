@@ -25,11 +25,11 @@
   become: true
   become_user: "{{ user }}"
   ansible.builtin.lineinfile:
-    path: "{{ home_dir }}/.profile"
+    path: "{{ home }}/.profile"
     line: 'export PATH="/usr/local/bin:$PATH"'
     regexp: "^export PATH=.*usr/local/bin"
     state: present
     create: true
     mode: "0644"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
