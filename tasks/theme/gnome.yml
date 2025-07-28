@@ -19,7 +19,7 @@
   ansible.builtin.shell: "gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2"
   register: gnome_shell_version
   changed_when: false
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
 
 - name: Install GNOME extensions
   ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml

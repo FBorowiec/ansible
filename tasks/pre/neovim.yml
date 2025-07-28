@@ -11,12 +11,12 @@
 
 - name: Clone Neovim
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   retries: 3
   delay: 10
   ansible.builtin.git:
     repo: "https://github.com/neovim/neovim.git"
-    dest: "{{ home_dir }}/neovim"
+    dest: "{{ home }}/neovim"
     version: master
     depth: 1
 
@@ -34,13 +34,13 @@
     - luarocks
 
 - name: Build neovim
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "make CMAKE_BUILD_TYPE=RelWithDebInfo"
   register: build_neovim
   changed_when: build_neovim.rc != 0
   failed_when: build_neovim.rc != 0
   args:
-    chdir: "{{ home_dir }}/neovim"
+    chdir: "{{ home }}/neovim"
 
 - name: Install neovim
   ansible.builtin.command: "make install"
@@ -48,7 +48,7 @@
   changed_when: install_neovim.rc != 0
   failed_when: install_neovim.rc != 0
   args:
-    chdir: "{{ home_dir }}/neovim"
+    chdir: "{{ home }}/neovim"
 
 - name: Install Telescope deps
   ansible.builtin.apt:

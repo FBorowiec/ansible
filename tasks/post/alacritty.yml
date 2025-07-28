@@ -13,23 +13,23 @@
 
 - name: Check if Alacritty is already installed
   ansible.builtin.stat:
-    path: "{{ home_dir }}/.cargo/bin/alacritty"
+    path: "{{ home }}/.cargo/bin/alacritty"
   register: alacritty_binary
 
 - name: Install Alacritty via Cargo
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   community.general.cargo:
     name: "alacritty"
     state: present
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.cargo/bin"
   when: not alacritty_binary.stat.exists
   register: alacritty_install
 
 - name: Create symbolic link for Alacritty
   ansible.builtin.file:
-    src: "{{ home_dir }}/.cargo/bin/alacritty"
+    src: "{{ home }}/.cargo/bin/alacritty"
     dest: "/usr/local/bin/alacritty"
     state: link
     force: true

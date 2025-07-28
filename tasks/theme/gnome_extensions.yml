@@ -2,7 +2,7 @@
 - name: Install GNOME extension {{ extension_id }}
   block:
     - name: Fetch extension info
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.uri:
         url: "https://extensions.gnome.org/extension-info/?pk={{ extension_id }}&shell_version={{ shell_version }}"
         return_content: true
@@ -10,29 +10,29 @@
       failed_when: ext_info.status == 404
 
     - name: Parse extension info
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.set_fact:
         extension_name: "{{ (ext_info.content | from_json).name }}"
         download_url: "https://extensions.gnome.org{{ (ext_info.content | from_json).download_url }}"
         ext_uuid: "{{ (ext_info.content | from_json).uuid }}"
 
     - name: Download extension
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.get_url:
         url: "{{ download_url }}"
         dest: "/tmp/{{ extension_id }}.zip"
 
     - name: Install extension
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.command: "gnome-extensions install /tmp/{{ extension_id }}.zip -f"
     - name: Remove extension archive
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.file:
         path: "/tmp/{{ extension_id }}.zip"
         state: absent
 
     - name: Enable extension # Needs to be performed after reload of shell
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.command: "gnome-extensions enable {{ ext_uuid }}"
       ignore_errors: true
 

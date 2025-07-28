@@ -10,70 +10,70 @@
 
 - name: Remove existing configuration
   ansible.builtin.file:
-    path: "{{ home_dir }}/.oh-my-zsh"
+    path: "{{ home }}/.oh-my-zsh"
     state: absent
 
 - name: Install ohmyzsh
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/robbyrussell/oh-my-zsh
-    dest: "{{ home_dir }}/.oh-my-zsh"
+    dest: "{{ home }}/.oh-my-zsh"
     version: master
     depth: 1
 
 - name: Install powelevel10k
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/romkatv/powerlevel10k.git
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    dest: "{{ home }}/.oh-my-zsh/custom/themes/powerlevel10k"
     version: master
     depth: 1
 
 - name: Install autocomplete
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/marlonrichert/zsh-autocomplete
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
     version: main
     depth: 1
 
 - name: Install autosuggestions
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-autosuggestions
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     version: master
     depth: 1
 
 - name: Install k
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/supercrabtree/k
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/k"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/k"
     version: master
     depth: 1
 
 - name: Install syntax highlight
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
     version: master
     depth: 1
 
 - name: Install fzf tab
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/Aloxaf/fzf-tab
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/fzf-tab"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/fzf-tab"
     version: master
     depth: 1
 
 - name: Install zsh vi mode
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/jeffreytse/zsh-vi-mode
-    dest: "{{ home_dir }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
+    dest: "{{ home }}/.oh-my-zsh/custom/plugins/zsh-vi-mode"
     version: master
     depth: 1
 
@@ -83,7 +83,7 @@
 
 - name: Check whether .bashrc has a reference to zsh
   ansible.builtin.lineinfile:
-    name: "{{ home_dir }}/.bashrc"
+    name: "{{ home }}/.bashrc"
     regexp: "zsh.*"
     state: absent
   check_mode: true
@@ -91,16 +91,16 @@
   register: bashrc
 
 - name: Launch zsh from bash (replace line)
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   when: bashrc.found
   ansible.builtin.replace:
-    dest: "{{ home_dir }}/.bashrc"
+    dest: "{{ home }}/.bashrc"
     regexp: "zsh.*"
     replace: "zsh && exit"
 
 - name: Launch zsh from bash (add missing line)
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   when: not bashrc.found
   ansible.builtin.lineinfile:
-    path: "{{ home_dir }}/.bashrc"
+    path: "{{ home }}/.bashrc"
     line: "zsh; exit"

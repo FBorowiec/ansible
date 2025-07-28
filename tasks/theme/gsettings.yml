@@ -1,71 +1,71 @@
 ---
 - name: Unset extended height
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false"
 
 - name: Set launcher on the bottom
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM" # LEFT, RIGHT, BOTTOM, TOP
 
 - name: Resize dash icons
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 40" # icons size
 
 - name: Launcher transparency mode
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED"
 
 - name: Launcher background opacity
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 1.0"
 
 - name: Launcher backlit items
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock unity-backlit-items false"
 
 - name: Set close button to the left
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.wm.preferences button-layout close,minimize,maximize:"
 
 - name: Copy wallpaper
   ansible.builtin.command: cp files/wallpapers/star_wars_last_supper.jpg /usr/share/backgrounds/star_wars_last_supper.jpg
 
 - name: Set wallpaper
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: 'gsettings set org.gnome.desktop.background picture-uri "file:///usr/share/backgrounds/star_wars_last_supper.jpg"'
 
 - name: Disable fixed dock
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false" # enable dock overlay
 
 - name: Autohide launcher
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock autohide true" # autohide
 
 - name: Autohide launcher
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0" # 0-1
 
 - name: Hide trash icon
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false"
 
 - name: Disable home
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.ding show-home false"
 
 - name: Show seconds in clock
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.interface clock-show-seconds true"
 
 - name: Show calendar week in cal
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.desktop.calendar show-weekdate true"
 
 - name: Hide mounted disks
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false"
 
 - name: Hide notification badges
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "gsettings set org.gnome.shell.extensions.dash-to-dock show-icons-notifications-counter false"

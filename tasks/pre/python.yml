@@ -13,11 +13,11 @@
     state: present
 
 - name: Ensure pipx is in PATH
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "pipx ensurepath"
 
 - name: Install some pipx tools
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   community.general.pipx:
     name: "{{ item }}"
   loop:
@@ -25,11 +25,11 @@
     - sqlfluff
     - git-filter-repo
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.local/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"
 
 - name: Install zsh deps
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   community.general.pipx:
     name: thefuck
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.local/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"

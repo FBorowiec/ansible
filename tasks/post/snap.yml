@@ -12,7 +12,7 @@
   failed_when: snap_install.rc != 0
 
 - name: Run Brave
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.shell:
     cmd: "brave &"
 
@@ -21,8 +21,8 @@
     seconds: 5
 
 - name: Paste Brave bookmarks
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.copy:
     src: "files/brave/Bookmarks"
-    dest: "{{ home_dir }}/snap/brave/current/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"
+    dest: "{{ home }}/snap/brave/current/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"
     mode: "0644"

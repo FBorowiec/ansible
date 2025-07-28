@@ -1,7 +1,7 @@
 ---
 - name: Download latest Go version
   become: true
-  become_user: "{{ ansible_env.USER }}"
+  become_user: "{{ user }}"
   ansible.builtin.get_url:
     url: "https://go.dev/dl/go{{ tools_versions.go }}.linux-amd64.tar.gz"
     dest: "/tmp/go{{ tools_versions.go }}.linux-amd64.tar.gz"

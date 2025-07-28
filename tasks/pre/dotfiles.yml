@@ -7,25 +7,25 @@
 
 - name: Check if dotfiles directory exists
   ansible.builtin.stat:
-    path: "{{ home_dir }}/dotfiles"
+    path: "{{ home }}/dotfiles"
   register: dotfiles_dir
 
 - name: Clone dotfiles repository
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: "git@github.com:FBorowiec/dotfiles.git"
-    dest: "{{ home_dir }}/dotfiles"
+    dest: "{{ home }}/dotfiles"
     version: main
     force: false
   when: not dotfiles_dir.stat.exists
 
 - name: dotfiles install
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "./install"
   args:
-    chdir: "{{ home_dir }}/dotfiles"
+    chdir: "{{ home }}/dotfiles"
   register: dotfiles_install
   changed_when: dotfiles_install.rc == 0
   failed_when: dotfiles_install.rc != 0

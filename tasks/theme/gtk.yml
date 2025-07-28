@@ -1,76 +1,76 @@
 ---
 - name: Ensure the ~/dev directory exists
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.file:
-    path: "{{ home_dir }}/dev"
+    path: "{{ home }}/dev"
     state: directory
     mode: "0755"
 
 - name: Clone the Tokyonight-GTK-Theme repository
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme.git
-    dest: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
+    dest: "{{ home }}/dev/Tokyonight-GTK-Theme"
     update: true
     depth: 1
 
 - name: Copy gtk-4.0 css configs
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.copy:
-    src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0/"
-    dest: "{{ home_dir }}/.config/gtk-4.0"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    src: "{{ home }}/dev/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0/"
+    dest: "{{ home }}/.config/gtk-4.0"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: "0755"
 
 - name: Copy gtk-4.0 assets
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.copy:
-    src: "{{ home_dir }}/dev/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets/"
-    dest: "{{ home_dir }}/.config/gtk-4.0/assets"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    src: "{{ home }}/dev/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets/"
+    dest: "{{ home }}/.config/gtk-4.0/assets"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: "0755"
 
 - name: Ensure the ~/.icons directory exists
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.file:
-    path: "{{ home_dir }}/.icons"
+    path: "{{ home }}/.icons"
     state: directory
     mode: "0755"
 
 - name: Copy Tokyonight-Dark icons to ~/.icons (using shell due to size)
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: "cp -r {{ home_dir }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home_dir }}/.icons/"
+  become_user: "{{ user }}"
+  ansible.builtin.command: "cp -r {{ home }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home }}/.icons/"
   changed_when: false
 
 - name: Run the installer script
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: "./themes/install.sh"
   args:
-    chdir: "{{ home_dir }}/dev/Tokyonight-GTK-Theme"
+    chdir: "{{ home }}/dev/Tokyonight-GTK-Theme"
 
 - name: Copy settings
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.copy:
     src: files/gtk/settings.ini
-    dest: "{{ home_dir }}/.config/gtk-4.0/settings.ini"
+    dest: "{{ home }}/.config/gtk-4.0/settings.ini"
     mode: "0644"
 
 - name: Set user theme
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: 'gsettings set org.gnome.shell.extensions.user-theme name "Tokyonight-Dark"'
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
 - name: Set icons theme
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: 'gsettings set org.gnome.desktop.interface icon-theme "Tokyonight-Dark"'
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"
 
 - name: Set gtk theme
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: 'gsettings set org.gnome.desktop.interface gtk-theme "Tokyonight-Dark"'
   environment:
     DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_user_id }}/bus"

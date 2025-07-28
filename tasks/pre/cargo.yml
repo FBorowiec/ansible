@@ -6,7 +6,7 @@
 
 - name: Check if cargo is already installed
   ansible.builtin.stat:
-    path: "{{ home_dir }}/.cargo/bin/cargo"
+    path: "{{ home }}/.cargo/bin/cargo"
   register: cargo_stat
 
 - name: Install Rust and Cargo using rustup
@@ -14,50 +14,50 @@
   block:
     - name: Download and install Rust via rustup
       become: true
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.shell: |
         set -o pipefail
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
           | sh -s -- -y --no-modify-path --profile minimal
       environment:
-        RUSTUP_HOME: "{{ home_dir }}/.rustup"
-        CARGO_HOME: "{{ home_dir }}/.cargo"
+        RUSTUP_HOME: "{{ home }}/.rustup"
+        CARGO_HOME: "{{ home }}/.cargo"
       args:
-        creates: "{{ home_dir }}/.cargo/bin/cargo"
+        creates: "{{ home }}/.cargo/bin/cargo"
 
     - name: Set default Rust toolchain to stable
       become: true
-      become_user: "{{ main_user }}"
-      ansible.builtin.command: "{{ home_dir }}/.cargo/bin/rustup default stable"
+      become_user: "{{ user }}"
+      ansible.builtin.command: "{{ home }}/.cargo/bin/rustup default stable"
       environment:
-        RUSTUP_HOME: "{{ home_dir }}/.rustup"
-        CARGO_HOME: "{{ home_dir }}/.cargo"
+        RUSTUP_HOME: "{{ home }}/.rustup"
+        CARGO_HOME: "{{ home }}/.cargo"
       register: rustup_default
       changed_when: "'unchanged' not in rustup_default.stderr"
 
     - name: Verify Rust installation
       become: true
-      become_user: "{{ main_user }}"
-      ansible.builtin.command: "{{ home_dir }}/.cargo/bin/cargo --version"
+      become_user: "{{ user }}"
+      ansible.builtin.command: "{{ home }}/.cargo/bin/cargo --version"
       register: cargo_version
       changed_when: false
 
 - name: Check which cargo packages are installed
   become: true
-  become_user: "{{ main_user }}"
-  ansible.builtin.command: "{{ home_dir }}/.cargo/bin/cargo install --list"
+  become_user: "{{ user }}"
+  ansible.builtin.command: "{{ home }}/.cargo/bin/cargo install --list"
   register: installed_packages
   changed_when: false
   failed_when: false
 
 - name: Install missing Cargo packages
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   community.general.cargo:
     name: "{{ item }}"
     state: present
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.cargo/bin"
   when: "item not in installed_packages.stdout"
   loop:
     - git-delta
@@ -65,13 +65,13 @@
 
 - name: Check if cargo bin is in PATH
   ansible.builtin.lineinfile:
-    path: "{{ home_dir }}/.profile"
+    path: "{{ home }}/.profile"
     line: 'export PATH="$HOME/.cargo/bin:$PATH"'
     state: present
     create: true
     mode: "0644"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     backup: true
   become: true
   check_mode: true
@@ -79,11 +79,11 @@
 
 - name: Add cargo bin to PATH in profile
   ansible.builtin.lineinfile:
-    path: "{{ home_dir }}/.profile"
+    path: "{{ home }}/.profile"
     line: 'export PATH="$HOME/.cargo/bin:$PATH"'
     create: true
     mode: "0644"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
   become: true
   when: path_check.changed

@@ -4,9 +4,9 @@
     name: "tmux"
 
 - name: Clone tpm plugins
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.git:
     repo: "https://github.com/tmux-plugins/tpm.git"
-    dest: "{{ home_dir }}/.tmux/plugins/tpm"
+    dest: "{{ home }}/.tmux/plugins/tpm"
     version: master
     depth: 1

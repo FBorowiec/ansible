@@ -2,8 +2,8 @@
 - hosts: localhost
   become: true
   vars:
-    main_user: "{{ lookup('env', 'USER') }}"
-    home_dir: "{{ lookup('env', 'HOME') }}"
+    user: "{{ lookup('env', 'USER') }}"
+    home: "{{ lookup('env', 'HOME') }}"
   vars_files:
     - vars/vars.yml
 

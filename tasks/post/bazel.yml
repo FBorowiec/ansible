@@ -50,14 +50,14 @@
 
 - name: Install buildtools
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command:
     cmd: go install github.com/bazelbuild/buildtools/{{ item }}@latest
-    creates: "{{ home_dir }}/go/bin/{{ item }}"
+    creates: "{{ home }}/go/bin/{{ item }}"
   environment:
-    GOPATH: "{{ home_dir }}/go"
-    GOBIN: "{{ home_dir }}/go/bin"
-    PATH: "/usr/local/go/bin:{{ home_dir }}/go/bin:{{ ansible_env.PATH }}"
+    GOPATH: "{{ home }}/go"
+    GOBIN: "{{ home }}/go/bin"
+    PATH: "/usr/local/go/bin:{{ home }}/go/bin:{{ ansible_env.PATH }}"
   loop:
     - buildifier
     - buildozer

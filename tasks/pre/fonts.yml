@@ -12,32 +12,32 @@
 
 - name: Ensure fonts directory exists
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.file:
-    path: "{{ home_dir }}/.local/share/fonts"
+    path: "{{ home }}/.local/share/fonts"
     state: directory
     mode: "0755"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
 - name: Copy local fonts directory
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.copy:
     src: files/fonts/
-    dest: "{{ home_dir }}/.local/share/fonts/"
+    dest: "{{ home }}/.local/share/fonts/"
     mode: "0644"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
   register: local_fonts_copied
 
 - name: Check if Nerd Font 3270 is already installed
   ansible.builtin.find:
-    paths: "{{ home_dir }}/.local/share/fonts"
+    paths: "{{ home }}/.local/share/fonts"
     patterns: "*3270*"
     file_type: file
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   register: nerd_font_check
 
 - name: Install Nerd Font 3270
@@ -65,35 +65,35 @@
 
     - name: Download 3270 Nerd Font
       become: true
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.get_url:
         url: "https://github.com/ryanoasis/nerd-fonts/releases/download/\
           {{ nerd_fonts_version }}/3270.zip"
-        dest: "{{ home_dir }}/3270.zip"
+        dest: "{{ home }}/3270.zip"
         mode: "0644"
         timeout: 120
       register: font_download
 
     - name: Extract 3270 Nerd Font
       become: true
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.unarchive:
-        src: "{{ home_dir }}/3270.zip"
-        dest: "{{ home_dir }}/.local/share/fonts"
+        src: "{{ home }}/3270.zip"
+        dest: "{{ home }}/.local/share/fonts"
         remote_src: true
-        creates: "{{ home_dir }}/.local/share/fonts/3270NerdFont-Regular.ttf"
+        creates: "{{ home }}/.local/share/fonts/3270NerdFont-Regular.ttf"
       register: font_extracted
 
     - name: Clean up zip file
       become: true
-      become_user: "{{ main_user }}"
+      become_user: "{{ user }}"
       ansible.builtin.file:
-        path: "{{ home_dir }}/3270.zip"
+        path: "{{ home }}/3270.zip"
         state: absent
 
 - name: Refresh user font cache
   become: true
-  become_user: "{{ main_user }}"
+  become_user: "{{ user }}"
   ansible.builtin.command: fc-cache -fv
   register: font_cache_result
   changed_when: "'caching' in font_cache_result.stdout"
