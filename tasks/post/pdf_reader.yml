@@ -1,4 +1,7 @@
 ---
 - name: Pdf reader
+  become: true
   ansible.builtin.apt:
     name: zathura
+    state: present
+    update_cache: true

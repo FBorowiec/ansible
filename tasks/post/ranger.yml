@@ -1,16 +1,18 @@
 ---
 - name: Install Ranger with deps
+  become: true
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - ranger
-    - caca-utils
-    - highlight
-    - atool
-    - w3m
-    - mediainfo
-    - lynx
-    - ffmpegthumbnailer
-    - fzf
-    - findutils
-    - unzip
+    name:
+      - ranger
+      - caca-utils
+      - highlight
+      - atool
+      - w3m
+      - mediainfo
+      - lynx
+      - ffmpegthumbnailer
+      - fzf
+      - findutils
+      - unzip
+    state: present
+    update_cache: true
