@@ -1,35 +1,62 @@
 ---
-- name: Install additional python packages
+- name: Install Python development packages
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - python3-dev
-    - python3-pip
-
-- name: Ensure pipx is installed
-  ansible.builtin.apt:
-    name: pipx
-    update_cache: true
+    name:
+      - python3-dev
+      - python3-pip
+      - pipx
     state: present
+    update_cache: true
 
-- name: Ensure pipx is in PATH
+- name: Check if pipx is properly configured
+  become: true
   become_user: "{{ user }}"
-  ansible.builtin.command: "pipx ensurepath"
+  ansible.builtin.stat:
+    path: "{{ home }}/.local/bin/pipx"
+  register: pipx_check
 
-- name: Install some pipx tools
+- name: Ensure pipx is configured and in PATH
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.command: pipx ensurepath
+  register: pipx_ensurepath
+  changed_when: "'been added to PATH' in pipx_ensurepath.stdout"
+  when: not pipx_check.stat.exists
+
+- name: Check which pipx tools are already installed
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.command: pipx list --short
+  register: pipx_installed
+  changed_when: false
+  failed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"
+
+- name: Install pipx development tools
+  become: true
   become_user: "{{ user }}"
   community.general.pipx:
     name: "{{ item }}"
+    state: present
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"
+  when: "item not in pipx_installed.stdout"
   loop:
     - yamllint
     - sqlfluff
     - git-filter-repo
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"
+    - thefuck
+  register: pipx_installs
 
-- name: Install zsh deps
-  become_user: "{{ user }}"
-  community.general.pipx:
-    name: thefuck
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ home }}/.local/bin"
+- name: Ensure pipx bin directory is in user PATH
+  become: true
+  ansible.builtin.lineinfile:
+    path: "{{ home }}/.profile"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    regexp: '^export PATH=.*\.local/bin'
+    state: present
+    create: true
+    mode: "0644"
+    owner: "{{ user }}"
+    group: "{{ user }}"
