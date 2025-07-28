@@ -31,8 +31,9 @@
     - name: Set Neovim download URL
       ansible.builtin.set_fact:
         nvim_version: "{{ nvim_release.json.tag_name }}"
-        nvim_url: "https://github.com/neovim/neovim/releases/download/\
-          {{ nvim_release.json.tag_name }}/nvim-linux-x86_64.tar.gz"
+        nvim_url: >
+          https://github.com/neovim/neovim/releases/download/
+          {{ nvim_release.json.tag_name }}/nvim-linux-x86_64.tar.gz
 
     - name: Download Neovim pre-built binary
       ansible.builtin.get_url:
@@ -58,7 +59,6 @@
       become: true
       loop:
         - nvim
-        - nvim-wrapper
 
     - name: Clean up downloaded archive
       ansible.builtin.file:
