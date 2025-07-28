@@ -1,21 +1,34 @@
 ---
 - name: Ensure software-properties-common is installed
+  become: true
   ansible.builtin.apt:
     name: software-properties-common
     state: present
-
-- name: Add grub-customizer apt repo
-  ansible.builtin.command: "add-apt-repository ppa:danielrichter2007/grub-customizer"
-- name: Update apt cache
-  ansible.builtin.apt:
     update_cache: true
 
-- name: Install grub customizer
-  ansible.builtin.apt:
-    name: "grub-customizer"
+- name: Check if grub-customizer is already installed
+  ansible.builtin.command: dpkg -l grub-customizer
+  register: grub_customizer_check
+  changed_when: false
+  failed_when: false
 
-- name: Add grub-customizer apt repo
-  ansible.builtin.apt_repository:
-    repo: "ppa:danielrichter2007/grub-customizer"
-    state: absent
-    codename: "{{ ansible_distribution_release | lower }}"
+- name: Install grub-customizer from PPA
+  become: true
+  when: grub_customizer_check.rc != 0
+  block:
+    - name: Add grub-customizer PPA
+      ansible.builtin.apt_repository:
+        repo: "ppa:danielrichter2007/grub-customizer"
+        state: present
+        update_cache: true
+
+    - name: Install grub-customizer
+      ansible.builtin.apt:
+        name: grub-customizer
+        state: present
+
+    - name: Remove grub-customizer PPA
+      ansible.builtin.apt_repository:
+        repo: "ppa:danielrichter2007/grub-customizer"
+        state: absent
+        update_cache: false
