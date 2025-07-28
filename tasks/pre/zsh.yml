@@ -38,48 +38,34 @@
     version: "{{ item.version }}"
     depth: 1
   loop:
-    - {
-        repo: "https://github.com/romkatv/powerlevel10k.git",
-        type: "themes",
-        name: "powerlevel10k",
-        version: "master",
-      }
-    - {
-        repo: "https://github.com/marlonrichert/zsh-autocomplete",
-        type: "plugins",
-        name: "zsh-autocomplete",
-        version: "main",
-      }
-    - {
-        repo: "https://github.com/zsh-users/zsh-autosuggestions",
-        type: "plugins",
-        name: "zsh-autosuggestions",
-        version: "master",
-      }
-    - {
-        repo: "https://github.com/supercrabtree/k",
-        type: "plugins",
-        name: "k",
-        version: "master",
-      }
-    - {
-        repo: "https://github.com/zsh-users/zsh-syntax-highlighting",
-        type: "plugins",
-        name: "zsh-syntax-highlighting",
-        version: "master",
-      }
-    - {
-        repo: "https://github.com/Aloxaf/fzf-tab",
-        type: "plugins",
-        name: "fzf-tab",
-        version: "master",
-      }
-    - {
-        repo: "https://github.com/jeffreytse/zsh-vi-mode",
-        type: "plugins",
-        name: "zsh-vi-mode",
-        version: "master",
-      }
+    - repo: "https://github.com/romkatv/powerlevel10k.git"
+      type: "themes"
+      name: "powerlevel10k"
+      version: "master"
+    - repo: "https://github.com/marlonrichert/zsh-autocomplete"
+      type: "plugins"
+      name: "zsh-autocomplete"
+      version: "main"
+    - repo: "https://github.com/zsh-users/zsh-autosuggestions"
+      type: "plugins"
+      name: "zsh-autosuggestions"
+      version: "master"
+    - repo: "https://github.com/supercrabtree/k"
+      type: "plugins"
+      name: "k"
+      version: "master"
+    - repo: "https://github.com/zsh-users/zsh-syntax-highlighting"
+      type: "plugins"
+      name: "zsh-syntax-highlighting"
+      version: "master"
+    - repo: "https://github.com/Aloxaf/fzf-tab"
+      type: "plugins"
+      name: "fzf-tab"
+      version: "master"
+    - repo: "https://github.com/jeffreytse/zsh-vi-mode"
+      type: "plugins"
+      name: "zsh-vi-mode"
+      version: "master"
   register: plugin_installs
   when: not ohmyzsh_exists.stat.exists
 
