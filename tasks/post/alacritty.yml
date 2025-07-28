@@ -1,45 +1,68 @@
 ---
-- name: Install deps
+- name: Install Alacritty dependencies
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - cmake
-    - pkg-config
-    - libfreetype6-dev
-    - libfontconfig1-dev
-    - libxcb-xfixes0-dev
-    - libxkbcommon-dev
+    name:
+      - cmake
+      - pkg-config
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libxcb-xfixes0-dev
+      - libxkbcommon-dev
+    state: present
+    update_cache: true
 
-- name: Install Alacritty
+- name: Check if Alacritty is already installed
+  ansible.builtin.stat:
+    path: "{{ home_dir }}/.cargo/bin/alacritty"
+  register: alacritty_binary
+
+- name: Install Alacritty via Cargo
   become: true
   become_user: "{{ main_user }}"
   community.general.cargo:
     name: "alacritty"
+    state: present
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ home_dir }}/.cargo/bin"
+  when: not alacritty_binary.stat.exists
+  register: alacritty_install
 
-- name: Symbolic link for Alacritty
+- name: Create symbolic link for Alacritty
   ansible.builtin.file:
     src: "{{ home_dir }}/.cargo/bin/alacritty"
-    dest: "/usr/bin/alacritty"
+    dest: "/usr/local/bin/alacritty"
     state: link
+    force: true
 
-- name: Set Alacritty as the default terminal
-  ansible.builtin.command: >-
-    update-alternatives --install /usr/bin/x-terminal-emulator |
-    x-terminal-emulator /usr/bin/alacritty 60
-  args:
-    creates: /usr/bin/x-terminal-emulator
+- name: Check current terminal alternative
+  ansible.builtin.command:
+    cmd: update-alternatives --query x-terminal-emulator
+  register: terminal_alternatives
+  changed_when: false
+  failed_when: false
+
+- name: Set Alacritty as terminal alternative
+  ansible.builtin.command:
+    cmd: >
+      update-alternatives --install /usr/bin/x-terminal-emulator
+      x-terminal-emulator /usr/local/bin/alacritty 60
+  register: alternatives_result
+  changed_when: "'already exists' not in alternatives_result.stderr"
+  when: "'/usr/local/bin/alacritty' not in terminal_alternatives.stdout"
 
 - name: Copy Alacritty icon
   ansible.builtin.copy:
     src: "files/icons/alacritty-simple.svg"
     dest: /usr/share/pixmaps/Alacritty.svg
     mode: "0644"
+    owner: root
+    group: root
 
 - name: Install Alacritty desktop file
   ansible.builtin.copy:
     src: files/icons/Alacritty.desktop
     dest: /usr/share/applications/Alacritty.desktop
     mode: "0644"
+    owner: root
+    group: root
   notify: update desktop database
