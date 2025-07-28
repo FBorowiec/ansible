@@ -1,42 +1,26 @@
 ---
-- name: Ensure .ssh directory exists.
+- name: Ensure .ssh directory exists
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.file:
-    dest: "{{ home }}/.ssh"
-    mode: "0700"
+    path: "{{ home }}/.ssh"
     state: directory
+    mode: "0700"
+    owner: "{{ user }}"
+    group: "{{ user }}"
 
-- name: Install ssh key ed25519
+- name: Copy keys
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.copy:
-    src: "files/ssh/id_ed25519"
-    dest: "{{ home }}/.ssh/id_ed25519"
-    mode: "0600"
-
-- name: Install ssh key rsa
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    src: "files/ssh/id_rsa"
-    dest: "{{ home }}/.ssh/id_rsa"
-    mode: "0600"
-
-- name: Install ssh key public ed25519
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    src: "files/ssh/id_ed25519.pub"
-    dest: "{{ home }}/.ssh/id_ed25519.pub"
-    mode: "0644"
-
-- name: Install ssh key public rsa
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    src: "files/ssh/id_rsa.pub"
-    dest: "{{ home }}/.ssh/id_rsa.pub"
-    mode: "0644"
-
-- name: Add known hosts
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    src: "files/ssh/known_hosts"
-    dest: "{{ home }}/.ssh/known_hosts"
-    mode: "0644"
+    src: "{{ item.src }}"
+    dest: "{{ home }}/.ssh/{{ item.dest }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    backup: true
+  loop:
+    - { src: "files/ssh/id_ed25519", dest: "id_ed25519", mode: "0600" }
+    - { src: "files/ssh/id_ed25519.pub", dest: "id_ed25519.pub", mode: "0644" }
+    - { src: "files/ssh/known_hosts", dest: "known_hosts", mode: "0644" }
+  when: false
