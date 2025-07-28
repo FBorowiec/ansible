@@ -13,6 +13,10 @@
       ansible.builtin.apt:
         update_cache: true
         upgrade: true
+    - name: Check if running in container
+      ansible.builtin.stat:
+        path: /.dockerenv
+      register: container_check
     - ansible.builtin.include_tasks: tasks/pre/core.yml
     - ansible.builtin.include_tasks: tasks/pre/cargo.yml
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml
