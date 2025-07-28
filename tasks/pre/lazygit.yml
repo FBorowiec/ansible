@@ -25,11 +25,12 @@
   block:
     - name: Set download URL and filename
       ansible.builtin.set_fact:
-        lazygit_filename: >
+        lazygit_filename: |
           lazygit_{{ lazygit_latest_version }}_Linux_x86_64.tar.gz
-        lazygit_url: "https://github.com/jesseduffield/lazygit/releases/\
+        lazygit_url: >-
+          https://github.com/jesseduffield/lazygit/releases/\
           download/v{{ lazygit_latest_version }}/lazygit_\
-          {{ lazygit_latest_version }}_Linux_x86_64.tar.gz"
+          {{ lazygit_latest_version }}_Linux_x86_64.tar.gz
 
     - name: Download Lazygit archive
       ansible.builtin.get_url:
