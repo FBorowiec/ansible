@@ -1,5 +1,6 @@
 ---
 - name: Ensure .keys directory exists.
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.file:
     dest: "{{ home }}/.keys"
@@ -7,6 +8,7 @@
     state: directory
 
 - name: Install anthropic key
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.copy:
     src: "files/ai/anthropic_key"
@@ -17,3 +19,4 @@
   community.general.npm:
     name: "@anthropic-ai/claude-code"
     global: true
+    state: present
