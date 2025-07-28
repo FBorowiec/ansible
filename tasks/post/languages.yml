@@ -1,9 +1,11 @@
 ---
 - name: Install additional languages
+  become: true
   ansible.builtin.apt:
-    name: "{{ item }}"
-  loop:
-    - ruby-full # ruby
-    - opam # ocaml
-    - latexmk # latex
-    - biber # latex
+    name:
+      - ruby-full # ruby
+      - opam # ocaml
+      - latexmk # latex
+      - biber # latex
+    state: present
+    update_cache: true
