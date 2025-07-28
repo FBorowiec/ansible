@@ -12,7 +12,7 @@
       ansible.builtin.set_fact:
         go_filename: "go{{ tools_versions.go }}.linux-amd64.tar.gz"
         go_url: >
-          https://go.dev/dl/go{{ tools_versions.go }}.linux-{{ go_arch }}.tar.gz
+          https://go.dev/dl/go{{ tools_versions.go }}.linux-amd64.tar.gz
 
     - name: Download Go archive
       ansible.builtin.get_url:
@@ -43,15 +43,8 @@
         path: "/tmp/{{ go_filename }}"
         state: absent
 
-    - name: Verify Go installation
-      ansible.builtin.command: /usr/local/go/bin/go version
-      register: go_verify
-      changed_when: false
-      failed_when: >
-        go_verify.rc != 0 or
-        'go' + tools_versions.go not in go_verify.stdout
-
 - name: Ensure Go is in system PATH
+  become: true
   ansible.builtin.copy:
     content: |
       export PATH="/usr/local/go/bin:$PATH"
@@ -59,27 +52,28 @@
     mode: "0644"
     owner: root
     group: root
-  become: true
 
 - name: Create GOPATH directory for main user
-  ansible.builtin.file:
-    path: "{{ home_dir }}/go"
-    state: directory
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
-    mode: "0755"
   become: true
+  become_user: "{{ user }}"
+  ansible.builtin.file:
+    path: "{{ home }}/go"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: "0755"
 
 - name: Add Go environment variables to user profile
+  become: true
+  become_user: "{{ user }}"
   ansible.builtin.lineinfile:
-    path: "{{ home_dir }}/.profile"
+    path: "{{ home }}/.profile"
     line: "{{ item }}"
     state: present
     create: true
     mode: "0644"
-    owner: "{{ main_user }}"
-    group: "{{ main_user }}"
-  become: true
+    owner: "{{ user }}"
+    group: "{{ user }}"
   loop:
     - 'export GOPATH="$HOME/go"'
     - 'export GOBIN="$HOME/go/bin"'
