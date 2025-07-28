@@ -1,32 +1,46 @@
 ---
-- name: Ensure dependencies are installed
-  ansible.builtin.apt:
-    name:
-      - ca-certificates
-      - curl
-    state: present
-
-- name: Check if Docker is already present.
-  ansible.builtin.command: which docker
-  failed_when: false
+- name: Check if Docker is installed
+  ansible.builtin.command: docker --version
+  register: docker_check
   changed_when: false
-  check_mode: false
-  register: docker_command_result
+  failed_when: false
 
-- name: Download Docker install convenience script.
+- name: Download Docker installation script
   ansible.builtin.get_url:
-    url: https://get.docker.com/
+    url: https://get.docker.com
     dest: /tmp/get-docker.sh
-    mode: "0775"
-  when: docker_command_result.rc == 1
+    mode: "0755"
+    timeout: 30
+  become: true
+  when: docker_check.rc != 0
 
-- name: Run Docker install convenience script.
-  ansible.builtin.command: /tmp/get-docker.sh
-  environment:
-    CHANNEL: stable
-  when: docker_command_result.rc == 1
+- name: Install Docker using convenience script
+  become: true
+  ansible.builtin.shell: |
+    /tmp/get-docker.sh
+    rm /tmp/get-docker.sh
+  changed_when: true
+  when: docker_check.rc != 0
+
+- name: Check if user is in docker group
+  ansible.builtin.shell: |
+    set -o pipefail
+    groups {{ user }} | grep -q docker
+  register: user_in_docker_group
+  changed_when: false
+  failed_when: false
 
 - name: Add user to docker group
-  ansible.builtin.command: "usermod -aG docker {{ user }}"
-- name: Reset connection so docker group is picked up.
-  ansible.builtin.meta: reset_connection
+  become: true
+  ansible.builtin.user:
+    name: "{{ user }}"
+    groups: docker
+    append: true
+  when: user_in_docker_group.rc != 0
+
+- name: Start and enable Docker
+  become: true
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
