@@ -1,12 +1,8 @@
 ---
 - name: Download wally
+  become: true
   become_user: "{{ user }}"
   ansible.builtin.get_url:
     url: https://configure.ergodox-ez.com/wally/linux
-    dest: "{{ home }}"
-    mode: "0644"
-
-- name: Make wally executable
-  ansible.builtin.file:
     dest: "{{ home }}/wally"
-    mode: a+x
+    mode: "0755"
