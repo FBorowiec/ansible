@@ -12,6 +12,7 @@
       - git-lfs
       - git-review
       - gitlint
+      - lsd
       - ripgrep
       - neofetch
       - net-tools

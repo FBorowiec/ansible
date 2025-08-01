@@ -44,7 +44,7 @@
   changed_when: false
   failed_when: false
 
-- name: Install missing Cargo packages
+- name: Install Cargo packages
   become: true
   become_user: "{{ user }}"
   community.general.cargo:
@@ -56,6 +56,7 @@
   loop:
     - git-delta
     - tealdeer
+    - zoxide
 
 - name: Check if cargo bin is in PATH
   ansible.builtin.lineinfile:
