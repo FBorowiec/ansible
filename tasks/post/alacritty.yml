@@ -65,4 +65,9 @@
     mode: "0644"
     owner: root
     group: root
-  notify: update desktop database
+
+- name: Update desktop database
+  ansible.builtin.command:
+    cmd: update-desktop-database
+  changed_when: false
+  when: not container_check.stat.exists

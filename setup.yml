@@ -6,11 +6,6 @@
     home: "{{ lookup('env', 'HOME') }}"
   vars_files:
     - vars/vars.yml
-  handlers:
-    - name: update desktop database
-      ansible.builtin.command:
-        cmd: update-desktop-database
-      changed_when: false
 
   pre_tasks:
     - ansible.builtin.include_tasks: tasks/pre/ssh.yml
