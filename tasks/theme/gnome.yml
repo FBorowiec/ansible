@@ -38,3 +38,4 @@
     shell_version: "{{ gnome_shell_version.stdout }}"
     display: "{{ display | default(':0') }}"
     dbus_address: "{{ dbus_address | default('') }}"
+  when: not container_check.stat.exists
