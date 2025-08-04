@@ -58,21 +58,18 @@
     - tealdeer
     - zoxide
 
-- name: Check if cargo bin is in PATH
+- name: Check if cargo bin is already in PATH
   ansible.builtin.lineinfile:
     path: "{{ home }}/.profile"
     line: 'export PATH="$HOME/.cargo/bin:$PATH"'
     state: present
-    create: true
-    mode: "0644"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    backup: true
-  become: true
   check_mode: true
   register: path_check
+  failed_when: false
 
 - name: Add cargo bin to PATH in profile
+  become: true
+  become_user: "{{ user }}"
   ansible.builtin.lineinfile:
     path: "{{ home }}/.profile"
     line: 'export PATH="$HOME/.cargo/bin:$PATH"'
@@ -80,5 +77,4 @@
     mode: "0644"
     owner: "{{ user }}"
     group: "{{ user }}"
-  become: true
-  when: path_check.changed
+  when: path_check is changed
