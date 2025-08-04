@@ -5,24 +5,24 @@
   changed_when: false
   failed_when: false
 
-- name: Get latest Lazygit release info
-  ansible.builtin.uri:
-    url: https://api.github.com/repos/jesseduffield/lazygit/releases/latest
-    method: GET
-    return_content: true
-    timeout: 30
-  register: lazygit_release
-  failed_when: false
-
-- name: Extract version from API response
-  ansible.builtin.set_fact:
-    lazygit_latest_version: >
-      {{ lazygit_release.json.tag_name | regex_replace('^v', '') }}
-  when: lazygit_release.status == 200
-
 - name: Install or update Lazygit
-  when: lazygit_release.status == 200
+  when: lazygit_current.rc != 0
   block:
+    - name: Get latest Lazygit release info
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/jesseduffield/lazygit/releases/latest
+        method: GET
+        return_content: true
+        timeout: 30
+      register: lazygit_release
+      failed_when: false
+
+    - name: Extract version from API response
+      ansible.builtin.set_fact:
+        lazygit_latest_version: >
+          {{ lazygit_release.json.tag_name | regex_replace('^v', '') }}
+      when: lazygit_release.status == 200
+
     - name: Set download URL and filename
       ansible.builtin.set_fact:
         lazygit_latest_version: "{{ lazygit_release.json.tag_name | regex_replace('^v', '') | trim }}"
@@ -64,7 +64,6 @@
         owner: root
         group: root
         remote_src: true
-      become: true
 
     - name: Clean up temporary files
       ansible.builtin.file:

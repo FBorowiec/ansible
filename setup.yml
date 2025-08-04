@@ -38,7 +38,7 @@
     - ansible.builtin.include_tasks: tasks/post/bazel.yml
     - ansible.builtin.include_tasks: tasks/post/discord.yml
     - ansible.builtin.include_tasks: tasks/post/docker.yml
-    # - ansible.builtin.include_tasks: tasks/post/grub.yml # broken
+    - ansible.builtin.include_tasks: tasks/post/grub.yml
     # - ansible.builtin.include_tasks: tasks/post/immersed.yml
     - ansible.builtin.include_tasks: tasks/post/keyboard.yml
     - ansible.builtin.include_tasks: tasks/post/pdf_reader.yml
