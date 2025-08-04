@@ -36,6 +36,6 @@
   vars:
     extension_id: "{{ item }}"
     shell_version: "{{ gnome_shell_version.stdout }}"
-    display: "{{ display | default(':0') }}"
-    dbus_address: "{{ dbus_address | default('') }}"
+    display: ":0"
+    dbus_address: "{{ dbus_session_bus_address | default('') }}"
   when: not container_check.stat.exists
