@@ -24,7 +24,7 @@
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml
     - ansible.builtin.include_tasks: tasks/pre/fonts.yml
     - ansible.builtin.include_tasks: tasks/pre/go.yml
-    # - ansible.builtin.include_tasks: tasks/pre/lazygit.yml
+    - ansible.builtin.include_tasks: tasks/pre/lazygit.yml
     - ansible.builtin.include_tasks: tasks/pre/lua.yml
     - ansible.builtin.include_tasks: tasks/pre/neovim.yml
     - ansible.builtin.include_tasks: tasks/pre/npm_packages.yml
