@@ -62,19 +62,3 @@
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: "0755"
-
-- name: Add Go environment variables to user profile
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.lineinfile:
-    path: "{{ home }}/.profile"
-    line: "{{ item }}"
-    state: present
-    create: true
-    mode: "0644"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-  loop:
-    - 'export GOPATH="$HOME/go"'
-    - 'export GOBIN="$HOME/go/bin"'
-    - 'export PATH="/usr/local/go/bin:$GOPATH/bin:$PATH"'

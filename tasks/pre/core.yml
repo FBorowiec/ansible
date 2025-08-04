@@ -51,16 +51,3 @@
     group: "{{ user }}"
     force: true
   when: batcat_check.stat.exists
-
-- name: Ensure .local/bin is in PATH
-  become: true
-  ansible.builtin.lineinfile:
-    path: "{{ home }}/.profile"
-    line: 'export PATH="$HOME/.local/bin:$PATH"'
-    regexp: '^export PATH=.*\.local/bin'
-    state: present
-    create: true
-    mode: "0644"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-    backup: true

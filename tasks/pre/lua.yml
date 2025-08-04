@@ -20,16 +20,3 @@
   failed_when: luacheck_install.rc != 0
   when: "'luacheck' not in luacheck_check.stdout"
   become: true
-
-- name: Ensure luarocks bin is in PATH
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.lineinfile:
-    path: "{{ home }}/.profile"
-    line: 'export PATH="/usr/local/bin:$PATH"'
-    regexp: "^export PATH=.*usr/local/bin"
-    state: present
-    create: true
-    mode: "0644"
-    owner: "{{ user }}"
-    group: "{{ user }}"

@@ -15,14 +15,6 @@
     path: "{{ home }}/.local/bin/pipx"
   register: pipx_check
 
-- name: Ensure pipx is configured and in PATH
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: pipx ensurepath
-  register: pipx_ensurepath
-  changed_when: "'been added to PATH' in pipx_ensurepath.stdout"
-  when: not pipx_check.stat.exists
-
 - name: Check which pipx tools are already installed
   become: true
   become_user: "{{ user }}"
@@ -48,15 +40,3 @@
     - git-filter-repo
     - thefuck
   register: pipx_installs
-
-- name: Ensure pipx bin directory is in user PATH
-  become: true
-  ansible.builtin.lineinfile:
-    path: "{{ home }}/.profile"
-    line: 'export PATH="$HOME/.local/bin:$PATH"'
-    regexp: '^export PATH=.*\.local/bin'
-    state: present
-    create: true
-    mode: "0644"
-    owner: "{{ user }}"
-    group: "{{ user }}"
