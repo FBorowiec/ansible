@@ -36,7 +36,6 @@
     - ansible.builtin.include_tasks: tasks/post/ai.yml
     - ansible.builtin.include_tasks: tasks/post/alacritty.yml
     - ansible.builtin.include_tasks: tasks/post/bazel.yml
-    # - ansible.builtin.include_tasks: tasks/post/deskflow.yml
     - ansible.builtin.include_tasks: tasks/post/discord.yml
     - ansible.builtin.include_tasks: tasks/post/docker.yml
     # - ansible.builtin.include_tasks: tasks/post/grub.yml # broken
