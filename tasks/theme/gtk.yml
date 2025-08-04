@@ -1,18 +1,10 @@
 ---
-- name: Ensure the ~/dev directory exists
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.file:
-    path: "{{ home }}/dev"
-    state: directory
-    mode: "0755"
-
 - name: Clone the Tokyonight-GTK-Theme repository
   become: true
   become_user: "{{ user }}"
   ansible.builtin.git:
     repo: https://github.com/Fausto-Korpsvart/Tokyonight-GTK-Theme.git
-    dest: "{{ home }}/dev/Tokyonight-GTK-Theme"
+    dest: "/tmp/Tokyonight-GTK-Theme"
     update: true
     depth: 1
     force: true
@@ -37,7 +29,7 @@
   become: true
   become_user: "{{ user }}"
   ansible.builtin.shell: |
-    cp -r {{ home }}/dev/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0/* \
+    cp -r /tmp/Tokyonight-GTK-Theme/themes/src/main/gtk-4.0/* \
     {{ home }}/.config/gtk-4.0/
   args:
     creates: "{{ home }}/.config/gtk-4.0/gtk.css"
@@ -45,7 +37,7 @@
 - name: Copy gtk-4.0 assets
   become: true
   become_user: "{{ user }}"
-  ansible.builtin.shell: "cp -r {{ home }}/dev/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets/* {{ home }}/.config/gtk-4.0/assets/"
+  ansible.builtin.shell: "cp -r /tmp/Tokyonight-GTK-Theme/themes/src/assets/gtk/assets/* {{ home }}/.config/gtk-4.0/assets/"
   args:
     creates: "{{ home }}/.config/gtk-4.0/assets"
 
@@ -60,7 +52,7 @@
 - name: Copy Tokyonight-Dark icons to ~/.icons
   become: true
   become_user: "{{ user }}"
-  ansible.builtin.shell: "cp -r {{ home }}/dev/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home }}/.icons/"
+  ansible.builtin.command: "cp -r /tmp/Tokyonight-GTK-Theme/icons/Tokyonight-Dark {{ home }}/.icons/"
   args:
     creates: "{{ home }}/.icons/Tokyonight-Dark"
 
@@ -78,6 +70,7 @@
   args:
     chdir: "{{ home }}/dev/Tokyonight-GTK-Theme"
   when: not theme_installed.stat.exists
+  changed_when: false
 
 - name: Copy custom settings
   become: true
