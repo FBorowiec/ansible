@@ -62,7 +62,8 @@
   ansible.builtin.command: |
     gsettings set org.gnome.desktop.interface {{ item.key }} {{ item.value }}
   loop:
-    - { key: "clock-show-seconds", value: "true" }
+    - key: "clock-show-seconds"
+      value: "true"
   environment:
     DISPLAY: "{{ display | default(':0') }}"
     DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
