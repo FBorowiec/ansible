@@ -7,7 +7,10 @@
   vars_files:
     - vars/vars.yml
   handlers:
-    - ansible.builtin.include_tasks: handlers/main.yml
+    - name: update desktop database
+      ansible.builtin.command:
+        cmd: update-desktop-database
+      changed_when: false
 
   pre_tasks:
     - ansible.builtin.include_tasks: tasks/pre/ssh.yml
@@ -39,7 +42,7 @@
     - ansible.builtin.include_tasks: tasks/post/discord.yml
     - ansible.builtin.include_tasks: tasks/post/docker.yml
     - ansible.builtin.include_tasks: tasks/post/grub.yml
-    # - ansible.builtin.include_tasks: tasks/post/immersed.yml
+    - ansible.builtin.include_tasks: tasks/post/immersed.yml
     - ansible.builtin.include_tasks: tasks/post/keyboard.yml
     - ansible.builtin.include_tasks: tasks/post/pdf_reader.yml
     - ansible.builtin.include_tasks: tasks/post/ranger.yml

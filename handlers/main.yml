@@ -1,5 +1,0 @@
----
-- name: update desktop database # noqa: name[casing]
-  ansible.builtin.command:
-    cmd: update-desktop-database
-  changed_when: false
