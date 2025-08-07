@@ -1,0 +1,18 @@
+---
+- name: Install Deskflow via Flathub
+  block:
+    - name: Ensure Flatpak is installed
+      ansible.builtin.package:
+        name: flatpak
+        state: present
+    - name: Add Flathub repository
+      community.general.flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    - name: Install Deskflow from Flathub
+      community.general.flatpak:
+        name: org.deskflow.deskflow
+        state: present
+        remote: flathub
+        method: system
