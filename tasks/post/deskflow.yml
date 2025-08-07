@@ -5,14 +5,21 @@
       ansible.builtin.package:
         name: flatpak
         state: present
+
     - name: Add Flathub repository
       community.general.flatpak_remote:
         name: flathub
         state: present
         flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+
+    - name: Check if Deskflow is already installed
+      ansible.builtin.command: flatpak list --system --app --columns=application
+      register: installed_flatpaks
+      changed_when: false
+      failed_when: false
+
     - name: Install Deskflow from Flathub
-      community.general.flatpak:
-        name: org.deskflow.deskflow
-        state: present
-        remote: flathub
-        method: system
+      ansible.builtin.command:
+        cmd: flatpak install --system --noninteractive --assumeyes flathub org.deskflow.deskflow
+        creates: /var/lib/flatpak/apps/deskflow
+      when: "'org.deskflow.deskflow' not in installed_flatpaks.stdout"
