@@ -1,5 +1,5 @@
 ---
-- name: Install i3 and required packages
+- name: Install i3 and required packages (Ubuntu/Debian)
   ansible.builtin.apt:
     name:
       - i3
@@ -10,3 +10,16 @@
       - gtk2-engines-pixbuf
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install i3 and required packages (Arch Linux)
+  community.general.pacman:
+    name:
+      - i3-wm
+      - feh
+      - rofi
+      - picom
+      - gtk-engine-murrine
+    state: present
+    update_cache: true
+  when: ansible_os_family == "Archlinux"

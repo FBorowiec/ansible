@@ -1,5 +1,5 @@
 ---
-- name: Install dependencies
+- name: Install dependencies (Ubuntu/Debian)
   become: true
   ansible.builtin.apt:
     name:
@@ -16,6 +16,24 @@
       - gtk2-engines-murrine
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install dependencies (Arch Linux)
+  become: true
+  community.general.pacman:
+    name:
+      - wget
+      - curl
+      - jq
+      - sed
+      - gnome-shell
+      - gnome-shell-extensions
+      - gnome-tweaks
+      - gnome-browser-connector
+      - gtk-engine-murrine
+    state: present
+    update_cache: true
+  when: ansible_os_family == "Archlinux"
 
 - name: Get GNOME Shell version
   become: true
