@@ -14,6 +14,7 @@
       - dunst
       - redshift
       - autorandr
+      - polybar
       - playerctl
       - gtk2-engines-murrine
       - gtk2-engines-pixbuf
@@ -36,6 +37,7 @@
       - dunst
       - redshift
       - autorandr
+      - polybar
       - playerctl
       - gtk-engine-murrine
       - gtk-engines
