@@ -3,9 +3,18 @@
   ansible.builtin.apt:
     name:
       - i3
+      - i3status
       - feh
       - rofi
       - picom
+      - pulseaudio
+      - pavucontrol
+      - xbacklight
+      - flameshot
+      - dunst
+      - redshift
+      - autorandr
+      - playerctl
       - gtk2-engines-murrine
       - gtk2-engines-pixbuf
     state: present
@@ -16,9 +25,18 @@
   community.general.pacman:
     name:
       - i3-wm
+      - i3status
       - feh
       - rofi
       - picom
+      - pulseaudio
+      - pavucontrol
+      - xorg-xbacklight
+      - flameshot
+      - dunst
+      - redshift
+      - autorandr
+      - playerctl
       - gtk-engine-murrine
       - gtk-engines
     state: present
