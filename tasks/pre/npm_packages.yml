@@ -1,11 +1,20 @@
 ---
-- name: Install Node.js and npm via apt
+- name: Install Node.js and npm via apt (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - nodejs
       - npm
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Node.js and npm (Arch Linux)
+  community.general.pacman:
+    name:
+      - nodejs
+      - npm
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check current Node.js version
   ansible.builtin.command: node --version

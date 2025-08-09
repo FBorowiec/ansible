@@ -1,8 +1,15 @@
 ---
-- name: Install tmux
+- name: Install tmux (Debian/Ubuntu)
   ansible.builtin.apt:
     name: tmux
     state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install tmux (Arch Linux)
+  community.general.pacman:
+    name: tmux
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Ensure tmux plugins directory exists
   become: true

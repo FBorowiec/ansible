@@ -1,11 +1,20 @@
 ---
-- name: Install Lua and LuaRocks
+- name: Install Lua and LuaRocks (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - lua5.4
       - luarocks
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Lua and LuaRocks (Arch Linux)
+  community.general.pacman:
+    name:
+      - lua
+      - luarocks
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if luacheck is already installed
   ansible.builtin.command: luarocks list luacheck

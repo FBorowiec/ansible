@@ -1,5 +1,5 @@
 ---
-- name: Install system font packages
+- name: Install system font packages (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - fonts-powerline
@@ -9,6 +9,18 @@
       - fonts-ubuntu
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install system font packages (Arch Linux)
+  community.general.pacman:
+    name:
+      - powerline-fonts
+      - ttf-font-awesome
+      - ttf-fira-code
+      - ttf-hack
+      - ttf-ubuntu-font-family
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Ensure fonts directory exists
   become: true

@@ -1,8 +1,15 @@
 ---
-- name: Install curl dependency
+- name: Install curl dependency (Debian/Ubuntu)
   ansible.builtin.apt:
     name: curl
     state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install curl dependency (Arch Linux)
+  community.general.pacman:
+    name: curl
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if cargo is already installed
   ansible.builtin.stat:

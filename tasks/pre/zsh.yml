@@ -1,5 +1,5 @@
 ---
-- name: Install zsh and dependencies
+- name: Install zsh and dependencies (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - zsh
@@ -8,6 +8,17 @@
       - poppler-utils
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install zsh and dependencies (Arch Linux)
+  community.general.pacman:
+    name:
+      - zsh
+      - jq
+      - bc
+      - poppler
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check current user shell
   ansible.builtin.command: getent passwd {{ user }}

@@ -1,5 +1,5 @@
 ---
-- name: Install system packages and tools
+- name: Install system packages and tools (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - apt-transport-https
@@ -25,6 +25,30 @@
       - xclip
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install system packages and tools (Arch Linux)
+  community.general.pacman:
+    name:
+      - bat
+      - base-devel
+      - curl
+      - gettext
+      - fzf
+      - git
+      - git-lfs
+      - lsd
+      - ripgrep
+      - neofetch
+      - net-tools
+      - nvidia-settings
+      - stow
+      - unzip
+      - vlc
+      - wget
+      - xclip
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Ensure .local/bin directory exists
   become: true

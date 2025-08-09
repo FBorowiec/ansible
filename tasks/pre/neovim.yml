@@ -1,5 +1,5 @@
 ---
-- name: Install Neovim dependencies
+- name: Install Neovim dependencies (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - python3-neovim
@@ -10,6 +10,19 @@
       - chafa
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Neovim dependencies (Arch Linux)
+  community.general.pacman:
+    name:
+      - python-pynvim
+      - python-virtualenv
+      - fzf
+      - ripgrep
+      - fd
+      - chafa
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if Neovim is already installed
   ansible.builtin.command: nvim --version

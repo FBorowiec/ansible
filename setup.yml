@@ -13,6 +13,12 @@
       ansible.builtin.apt:
         update_cache: true
         upgrade: true
+      when: ansible_os_family == "Debian"
+    - name: Update and upgrade pacman packages
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+      when: ansible_os_family == "Archlinux"
     - name: Check if running in container
       ansible.builtin.stat:
         path: /.dockerenv

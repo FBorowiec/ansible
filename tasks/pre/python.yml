@@ -1,5 +1,5 @@
 ---
-- name: Install Python development packages
+- name: Install Python development packages (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - python3-dev
@@ -7,6 +7,16 @@
       - pipx
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Python development packages (Arch Linux)
+  community.general.pacman:
+    name:
+      - python
+      - python-pip
+      - python-pipx
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if pipx is properly configured
   become: true

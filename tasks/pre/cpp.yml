@@ -1,5 +1,5 @@
 ---
-- name: Install cpp packages
+- name: Install cpp packages (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - autoconf
@@ -18,3 +18,19 @@
       - libboost-all-dev
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install cpp packages (Arch Linux)
+  community.general.pacman:
+    name:
+      - autoconf
+      - automake
+      - clang
+      - cmake
+      - cppcheck
+      - meson
+      - gcc
+      - gdb
+      - boost
+    state: present
+  when: ansible_os_family == "Archlinux"

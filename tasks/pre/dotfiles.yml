@@ -1,9 +1,16 @@
 ---
-- name: Install stow
+- name: Install stow (Debian/Ubuntu)
   ansible.builtin.apt:
     name: stow
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install stow (Arch Linux)
+  community.general.pacman:
+    name: stow
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if dotfiles directory exists
   ansible.builtin.stat:
