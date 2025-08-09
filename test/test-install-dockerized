@@ -5,6 +5,13 @@ set -e
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 IMAGE_PREFIX="ansible-test"
 INTERACTIVE=false
+OS_CHOICE="both"
+
+usage() {
+	echo "Usage: $0 [-i|--interactive] [-o|--os ubuntu|arch|both]"
+	echo "  -i, --interactive    Start interactive container"
+	echo "  -o, --os OS         Choose OS to test (ubuntu, arch, or both) [default: both]"
+}
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
@@ -12,9 +19,22 @@ while [[ $# -gt 0 ]]; do
 		INTERACTIVE=true
 		shift
 		;;
+	-o | --os)
+		OS_CHOICE="$2"
+		if [[ "$OS_CHOICE" != "ubuntu" && "$OS_CHOICE" != "arch" && "$OS_CHOICE" != "both" ]]; then
+			echo "ERROR: OS choice must be 'ubuntu', 'arch', or 'both'"
+			usage
+			exit 1
+		fi
+		shift 2
+		;;
+	-h | --help)
+		usage
+		exit 0
+		;;
 	*)
 		echo "Unknown option $1"
-		echo "Usage: $0 [-i|--interactive]"
+		usage
 		exit 1
 		;;
 	esac
@@ -30,17 +50,49 @@ check_success() {
 }
 
 docker_cleanup() {
-	docker stop "$IMAGE_PREFIX" 2>/dev/null || true
-	docker rm "$IMAGE_PREFIX" 2>/dev/null || true
-	docker rmi -f "$IMAGE_PREFIX" 2>/dev/null || true
+	local image_name="$1"
+	docker stop "$image_name" 2>/dev/null || true
+	docker rm "$image_name" 2>/dev/null || true
+	docker rmi -f "$image_name" 2>/dev/null || true
 }
 
-docker_cleanup
-docker build "$REPO_ROOT" \
-	--network host \
-	--file "$REPO_ROOT"/test/test.Dockerfile \
-	--tag "$IMAGE_PREFIX"
-check_success "Building test docker image"
+build_and_test_os() {
+	local os="$1"
+	local dockerfile="$2"
+	local image_name="${IMAGE_PREFIX}-${os}"
+
+	echo "=== Testing $os ==="
+
+	docker_cleanup "$image_name"
+	docker build "$REPO_ROOT" \
+		--network host \
+		--file "$dockerfile" \
+		--tag "$image_name"
+	check_success "Building $os test docker image"
+
+	if [[ "$INTERACTIVE" == "true" ]]; then
+		echo "Starting interactive $os container..."
+		echo "Run the playbook with:"
+		echo "  ansible-playbook -i hosts setup.yml --ask-vault-pass"
+		docker run \
+			--network host --rm -it \
+			--name "$image_name" \
+			-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
+			-v /var/run/docker.sock:/var/run/docker.sock \
+			"$image_name":latest \
+			/bin/bash
+	else
+		docker run \
+			--network host --rm \
+			--name "$image_name" \
+			-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
+			-v /var/run/docker.sock:/var/run/docker.sock \
+			"$image_name":latest \
+			/bin/bash install
+		check_success "Test ansible setup on $os"
+		echo "$os test install passed successfully."
+	fi
+}
 
 if [[ "$INTERACTIVE" == "false" ]]; then
 	[[ -z "$ANSIBLE_VAULT_PASSWORD" ]] && {
@@ -50,27 +102,26 @@ if [[ "$INTERACTIVE" == "false" ]]; then
 	}
 fi
 
-if [[ "$INTERACTIVE" == "true" ]]; then
-	echo "Starting interactive container..."
-	echo "Run the playbook with:"
-	echo "  ansible-playbook -i hosts setup.yml --ask-vault-pass"
-	docker run \
-		--network host --rm -it \
-		--name "$IMAGE_PREFIX" \
-		-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		"$IMAGE_PREFIX":latest \
-		/bin/bash
-else
-	docker run \
-		--network host --rm \
-		--name "$IMAGE_PREFIX" \
-		-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		"$IMAGE_PREFIX":latest \
-		/bin/bash install
-	check_success "Test ansible setup"
-	echo "Test install passed successfully."
-fi
+case "$OS_CHOICE" in
+ubuntu)
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/test.Dockerfile"
+	;;
+arch)
+	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
+	;;
+both)
+	echo "=== Testing Ubuntu and Arch Linux installs ==="
+	if [[ "$INTERACTIVE" == "true" ]]; then
+		echo "Interactive mode only supports one OS at a time."
+		echo "Please choose either --os ubuntu or --os arch for interactive mode."
+		exit 1
+	fi
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/test.Dockerfile"
+	echo ""
+	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
+	echo ""
+	echo "All tests passed successfully!"
+	;;
+esac
 
 exit 0
