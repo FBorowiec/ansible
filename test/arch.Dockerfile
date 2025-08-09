@@ -1,0 +1,33 @@
+FROM archlinux:base-devel-20250803.0.394512
+
+ARG USER=arch_user
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN pacman -Syu --noconfirm && \
+  pacman -S --noconfirm \
+  base-devel \
+  curl \
+  git \
+  python \
+  python-pip \
+  sudo \
+  vim \
+  which && \
+  pacman -Scc --noconfirm
+
+RUN useradd --create-home -m -s /bin/bash $USER && \
+  touch /home/$USER/.bashrc && \
+  chown -R $USER:$USER /home/$USER && \
+  echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+RUN pip install --break-system-packages ansible && \
+  ansible-galaxy collection install community.general community.docker
+
+COPY --chown=$USER:$USER . /home/$USER/
+WORKDIR /home/$USER
+
+ENV USER=$USER
+USER $USER
+
+CMD ["/bin/bash"]

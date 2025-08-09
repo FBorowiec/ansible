@@ -1,7 +1,7 @@
 FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG USER=bazel_user
+ARG USER=debian_user
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
