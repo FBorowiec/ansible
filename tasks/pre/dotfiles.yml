@@ -8,7 +8,9 @@
 
 - name: Install stow (Arch Linux)
   community.general.pacman:
-    name: stow
+    name:
+      - stow
+      - openssh
     state: present
   when: ansible_os_family == "Archlinux"
 

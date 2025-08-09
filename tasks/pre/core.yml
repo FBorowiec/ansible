@@ -42,6 +42,7 @@
       - fastfetch
       - net-tools
       - nvidia-settings
+      - openssh
       - stow
       - unzip
       - vlc
