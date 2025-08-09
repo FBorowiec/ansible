@@ -11,16 +11,26 @@
     dest: /tmp/get-docker.sh
     mode: "0755"
     timeout: 30
-  become: true
   when: docker_check.rc != 0
 
 - name: Install Docker using convenience script
-  become: true
   ansible.builtin.shell: |
     /tmp/get-docker.sh
     rm /tmp/get-docker.sh
   changed_when: true
   when: docker_check.rc != 0
+
+- name: Start and enable Docker service
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true
+  when: not container_check.stat.exists
+
+- name: Ensure docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
 
 - name: Check if user is in docker group
   ansible.builtin.shell: |
@@ -33,16 +43,8 @@
     executable: /bin/bash
 
 - name: Add user to docker group
-  become: true
   ansible.builtin.user:
     name: "{{ user }}"
     groups: docker
     append: true
-  when: user_in_docker_group.rc != 0
-
-- name: Start and enable Docker
-  become: true
-  ansible.builtin.systemd:
-    name: docker
-    state: started
-    enabled: true
+  when: user_in_docker_group.rc != 0 and not container_check.stat.exists
