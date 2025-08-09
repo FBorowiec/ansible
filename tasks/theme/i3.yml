@@ -20,6 +20,7 @@
       - rofi
       - picom
       - gtk-engine-murrine
+      - gtk-engines
     state: present
     update_cache: true
   when: ansible_os_family == "Archlinux"

@@ -90,6 +90,12 @@
   changed_when: false
   failed_when: false
 
+- name: Ensure backgrounds directory
+  ansible.builtin.file:
+    path: "/usr/share/backgrounds"
+    state: directory
+    mode: "0755"
+
 - name: Copy wallpaper to system directory
   become: true
   ansible.builtin.copy:
