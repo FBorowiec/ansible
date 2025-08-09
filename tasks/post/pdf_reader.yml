@@ -13,3 +13,10 @@
     name: zathura
     state: present
   when: ansible_os_family == "Archlinux"
+
+- name: Libreoffice(Arch Linux)
+  become: true
+  community.general.pacman:
+    name: libreoffice-fresh
+    state: present
+  when: ansible_os_family == "Archlinux"
