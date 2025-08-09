@@ -62,7 +62,7 @@
       x-terminal-emulator /usr/local/bin/alacritty 60
   register: alternatives_result
   changed_when: "'already exists' not in alternatives_result.stderr"
-  when: 
+  when:
     - ansible_os_family == "Debian"
     - terminal_alternatives.stdout is defined
     - "'/usr/local/bin/alacritty' not in terminal_alternatives.stdout"

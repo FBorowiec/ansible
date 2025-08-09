@@ -1,6 +1,5 @@
 ---
 - name: Install Ranger with deps (Debian/Ubuntu)
-  become: true
   ansible.builtin.apt:
     name:
       - ranger
@@ -19,7 +18,6 @@
   when: ansible_os_family == "Debian"
 
 - name: Install Ranger with deps (Arch Linux)
-  become: true
   community.general.pacman:
     name:
       - ranger

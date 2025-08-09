@@ -68,6 +68,7 @@
 
 - name: Create symbolic link for batcat to bat
   become: true
+  become_user: "{{ user }}"
   ansible.builtin.file:
     src: "/usr/bin/batcat"
     dest: "{{ home }}/.local/bin/bat"

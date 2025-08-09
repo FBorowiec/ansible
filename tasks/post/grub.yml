@@ -1,6 +1,5 @@
 ---
 - name: Ensure software-properties-common is installed (Debian/Ubuntu)
-  become: true
   ansible.builtin.apt:
     name: software-properties-common
     state: present
@@ -22,8 +21,7 @@
   when: ansible_os_family == "Archlinux"
 
 - name: Install grub-customizer from PPA (Debian/Ubuntu)
-  become: true
-  when: 
+  when:
     - ansible_os_family == "Debian"
     - grub_customizer_check_deb.rc != 0
   block:
@@ -56,6 +54,8 @@
       makepkg -si --noconfirm
     fi
     yay -S --noconfirm grub-customizer
+  args:
+    creates: /usr/bin/grub-customizer
   when:
     - ansible_os_family == "Archlinux"
     - grub_customizer_check_arch.rc != 0
