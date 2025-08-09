@@ -39,7 +39,7 @@
       - git-lfs
       - lsd
       - ripgrep
-      - neofetch
+      - fastfetch
       - net-tools
       - nvidia-settings
       - stow

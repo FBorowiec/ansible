@@ -1,12 +1,31 @@
 ---
-- name: "Checking if Discord is installed"
+- name: "Checking if Discord is installed (Debian/Ubuntu)"
   ansible.builtin.command: "dpkg-query -W discord"
   register: discord_check_deb
   failed_when: discord_check_deb.rc > 1
   changed_when: discord_check_deb.rc == 1
+  when: ansible_os_family == "Debian"
 
-- name: Install Discord
+- name: "Checking if Discord is installed (Arch Linux)"
+  ansible.builtin.command: "pacman -Q discord"
+  register: discord_check_arch
+  failed_when: discord_check_arch.rc > 1
+  changed_when: discord_check_arch.rc == 1
+  when: ansible_os_family == "Archlinux"
+
+- name: Install Discord (Debian/Ubuntu)
   become: true
   ansible.builtin.apt:
     deb: https://discord.com/api/download?platform=linux&format=deb
-  when: discord_check_deb.rc == 1
+  when: 
+    - ansible_os_family == "Debian"
+    - discord_check_deb.rc == 1
+
+- name: Install Discord (Arch Linux)
+  become: true
+  community.general.pacman:
+    name: discord
+    state: present
+  when: 
+    - ansible_os_family == "Archlinux"
+    - discord_check_arch.rc == 1

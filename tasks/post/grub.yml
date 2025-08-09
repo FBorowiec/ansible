@@ -1,20 +1,31 @@
 ---
-- name: Ensure software-properties-common is installed
+- name: Ensure software-properties-common is installed (Debian/Ubuntu)
   become: true
   ansible.builtin.apt:
     name: software-properties-common
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
 
-- name: Check if grub-customizer is already installed
+- name: Check if grub-customizer is already installed (Debian/Ubuntu)
   ansible.builtin.command: dpkg -l grub-customizer
-  register: grub_customizer_check
+  register: grub_customizer_check_deb
   changed_when: false
   failed_when: false
+  when: ansible_os_family == "Debian"
 
-- name: Install grub-customizer from PPA
+- name: Check if grub-customizer is already installed (Arch Linux)
+  ansible.builtin.command: pacman -Q grub-customizer
+  register: grub_customizer_check_arch
+  changed_when: false
+  failed_when: false
+  when: ansible_os_family == "Archlinux"
+
+- name: Install grub-customizer from PPA (Debian/Ubuntu)
   become: true
-  when: grub_customizer_check.rc != 0
+  when: 
+    - ansible_os_family == "Debian"
+    - grub_customizer_check_deb.rc != 0
   block:
     - name: Add grub-customizer PPA
       ansible.builtin.apt_repository:
@@ -32,3 +43,19 @@
         repo: "ppa:danielrichter2007/grub-customizer"
         state: absent
         update_cache: false
+
+- name: Install grub-customizer from AUR (Arch Linux)
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.shell: |
+    if ! command -v yay &> /dev/null; then
+      # Install yay if not present
+      cd /tmp
+      git clone https://aur.archlinux.org/yay.git
+      cd yay
+      makepkg -si --noconfirm
+    fi
+    yay -S --noconfirm grub-customizer
+  when:
+    - ansible_os_family == "Archlinux"
+    - grub_customizer_check_arch.rc != 0

@@ -1,5 +1,5 @@
 ---
-- name: Install Ranger with deps
+- name: Install Ranger with deps (Debian/Ubuntu)
   become: true
   ansible.builtin.apt:
     name:
@@ -16,3 +16,22 @@
       - unzip
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Ranger with deps (Arch Linux)
+  become: true
+  community.general.pacman:
+    name:
+      - ranger
+      - libcaca
+      - highlight
+      - atool
+      - w3m
+      - mediainfo
+      - lynx
+      - ffmpegthumbnailer
+      - fzf
+      - findutils
+      - unzip
+    state: present
+  when: ansible_os_family == "Archlinux"

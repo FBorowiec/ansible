@@ -1,5 +1,5 @@
 ---
-- name: Install Alacritty dependencies
+- name: Install Alacritty dependencies (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
       - cmake
@@ -10,6 +10,19 @@
       - libxkbcommon-dev
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install Alacritty dependencies (Arch Linux)
+  community.general.pacman:
+    name:
+      - cmake
+      - pkgconf
+      - freetype2
+      - fontconfig
+      - libxcb
+      - libxkbcommon
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Check if Alacritty is already installed
   ansible.builtin.stat:
@@ -34,21 +47,25 @@
     state: link
     force: true
 
-- name: Check current terminal alternative
+- name: Check current terminal alternative (Debian/Ubuntu)
   ansible.builtin.command:
     cmd: update-alternatives --query x-terminal-emulator
   register: terminal_alternatives
   changed_when: false
   failed_when: false
+  when: ansible_os_family == "Debian"
 
-- name: Set Alacritty as terminal alternative
+- name: Set Alacritty as terminal alternative (Debian/Ubuntu)
   ansible.builtin.command:
     cmd: >
       update-alternatives --install /usr/bin/x-terminal-emulator
       x-terminal-emulator /usr/local/bin/alacritty 60
   register: alternatives_result
   changed_when: "'already exists' not in alternatives_result.stderr"
-  when: "'/usr/local/bin/alacritty' not in terminal_alternatives.stdout"
+  when: 
+    - ansible_os_family == "Debian"
+    - terminal_alternatives.stdout is defined
+    - "'/usr/local/bin/alacritty' not in terminal_alternatives.stdout"
 
 - name: Copy Alacritty icon
   ansible.builtin.copy:

@@ -1,9 +1,16 @@
 ---
-- name: Install libfuse2 dependency
+- name: Install libfuse2 dependency (Debian/Ubuntu)
   ansible.builtin.apt:
     name: libfuse2
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install fuse2 dependency (Arch Linux)
+  community.general.pacman:
+    name: fuse2
+    state: present
+  when: ansible_os_family == "Archlinux"
 
 - name: Ensure immersed directory exists
   become: true

@@ -1,5 +1,5 @@
 ---
-- name: Install additional languages
+- name: Install additional languages (Debian/Ubuntu)
   become: true
   ansible.builtin.apt:
     name:
@@ -9,3 +9,15 @@
       - biber # latex
     state: present
     update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install additional languages (Arch Linux)
+  become: true
+  community.general.pacman:
+    name:
+      - ruby # ruby
+      - opam # ocaml
+      - texlive-latexrecommended # latex
+      - biber # latex
+    state: present
+  when: ansible_os_family == "Archlinux"
