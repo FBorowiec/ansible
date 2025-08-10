@@ -23,11 +23,31 @@
     update_cache: true
   when: ansible_os_family == "Debian"
 
+- name: Install betterlockscreen
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Download betterlockscreen install script
+      get_url:
+        url: https://raw.githubusercontent.com/betterlockscreen/betterlockscreen/main/install.sh
+        dest: /tmp/betterlockscreen-install.sh
+        mode: "0755"
+
+    - name: Install betterlockscreen
+      command: /tmp/betterlockscreen-install.sh system
+      args:
+        creates: /usr/local/bin/betterlockscreen
+
+    - name: Clean up install script
+      file:
+        path: /tmp/betterlockscreen-install.sh
+        state: absent
+
 - name: Install i3 and required packages (Arch Linux)
   community.general.pacman:
     name:
       - i3-wm
       - i3status
+      - betterlockscreen
       - feh
       - rofi
       - picom
