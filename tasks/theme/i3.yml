@@ -49,7 +49,6 @@
       - i3-wm
       - i3status
       - i3blocks
-      - betterlockscreen
       - feh
       - rofi
       - picom

@@ -1,11 +1,12 @@
 ---
 - name: Install snapd
   when: ansible_os_family == "Archlinux"
+  become: true
+  become_user: "{{ user }}"
   command: yay -S --noconfirm snapd
   changed_when: false
 
 - name: Install snap packages
-  become: true
   community.general.snap:
     name:
       - spotify

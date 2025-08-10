@@ -9,9 +9,12 @@
   when: ansible_os_family == "Debian" and nordvpn_check.rc != 0
   block:
     - name: Install NordVPN using official installation script
-      shell: |
+      ansible.builtin.shell: |
+        set -o pipefail
         sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh)
-      changed_when: false
+      args:
+        executable: /bin/bash
+        creates: /usr/bin/nordvpn
 
 - name: Install NordVPN on Arch Linux
   when: ansible_os_family == "Archlinux" and nordvpn_check.rc != 0
