@@ -8,13 +8,26 @@
 - name: Install NordVPN on Debian/Ubuntu
   when: ansible_os_family == "Debian" and nordvpn_check.rc != 0
   block:
-    - name: Install NordVPN using official installation script
-      ansible.builtin.shell: |
-        set -o pipefail
-        sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh)
-      args:
-        executable: /bin/bash
-        creates: /usr/bin/nordvpn
+    - name: Add NordVPN GPG key
+      ansible.builtin.get_url:
+        url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
+        dest: /usr/share/keyrings/nordvpn.asc
+        mode: "0644"
+
+    - name: Add NordVPN repository
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/nordvpn.list
+        content: |
+          deb [signed-by=/usr/share/keyrings/nordvpn.asc] https://repo.nordvpn.com/deb/nordvpn/debian stable main
+        mode: "0644"
+
+    - name: Install NordVPN
+      ansible.builtin.apt:
+        name: nordvpn
+        update_cache: true
+        state: present
+      environment:
+        DEBIAN_FRONTEND: noninteractive
 
 - name: Install NordVPN on Arch Linux
   when: ansible_os_family == "Archlinux" and nordvpn_check.rc != 0

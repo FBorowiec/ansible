@@ -1,5 +1,6 @@
 ---
 - name: Install i3 and required packages (Ubuntu/Debian)
+  when: ansible_os_family == "Debian"
   ansible.builtin.apt:
     name:
       - i3
@@ -22,7 +23,6 @@
       - xsettingsd
     state: present
     update_cache: true
-  when: ansible_os_family == "Debian"
 
 - name: Install betterlockscreen
   when: ansible_os_family == "Debian"
@@ -44,6 +44,7 @@
         state: absent
 
 - name: Install i3 and required packages (Arch Linux)
+  when: ansible_os_family == "Archlinux"
   community.general.pacman:
     name:
       - i3-wm
@@ -66,4 +67,3 @@
       - xsettingsd
     state: present
     update_cache: true
-  when: ansible_os_family == "Archlinux"
