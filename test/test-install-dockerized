@@ -104,7 +104,7 @@ fi
 
 case "$OS_CHOICE" in
 ubuntu)
-	build_and_test_os "ubuntu" "$REPO_ROOT/test/test.Dockerfile"
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/ubuntu.Dockerfile"
 	;;
 arch)
 	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
@@ -116,7 +116,7 @@ both)
 		echo "Please choose either --os ubuntu or --os arch for interactive mode."
 		exit 1
 	fi
-	build_and_test_os "ubuntu" "$REPO_ROOT/test/test.Dockerfile"
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/ubuntu.Dockerfile"
 	echo ""
 	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
 	echo ""
