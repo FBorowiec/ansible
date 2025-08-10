@@ -52,6 +52,7 @@
     state: present
 
 - name: Install yay (Arch Linux)
+  when: ansible_os_family == "Archlinux"
   block:
     - name: Check if yay is already installed
       ansible.builtin.command: which yay
