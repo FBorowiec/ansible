@@ -1,4 +1,10 @@
 ---
+- name: Check if Neovim is already installed
+  ansible.builtin.command: nvim --version
+  register: nvim_current
+  changed_when: false
+  failed_when: false
+
 - name: Install Neovim dependencies (Debian/Ubuntu)
   ansible.builtin.apt:
     name:
@@ -24,12 +30,6 @@
     state: present
   when: ansible_os_family == "Archlinux"
 
-- name: Check if Neovim is already installed
-  ansible.builtin.command: nvim --version
-  register: nvim_current
-  changed_when: false
-  failed_when: false
-
 - name: Get latest Neovim release info
   ansible.builtin.uri:
     url: https://api.github.com/repos/neovim/neovim/releases/latest
@@ -44,27 +44,27 @@
     - name: Set Neovim download URL
       ansible.builtin.set_fact:
         nvim_version: "{{ nvim_release.json.tag_name }}"
-        nvim_url: >
-          https://github.com/neovim/neovim/releases/download/{{ nvim_release.json.tag_name }}/nvim-linux64.tar.gz
+        nvim_url: >-
+          https://github.com/neovim/neovim/releases/download/{{ nvim_release.json.tag_name }}/nvim-linux-x86_64.tar.gz
 
     - name: Download Neovim pre-built binary
       ansible.builtin.get_url:
         url: "{{ nvim_url }}"
-        dest: "/tmp/nvim-linux64.tar.gz"
+        dest: "/tmp/nvim-linux-x86_64.tar.gz"
         mode: "0644"
         timeout: 300
 
     - name: Extract Neovim binary
       ansible.builtin.unarchive:
-        src: "/tmp/nvim-linux64.tar.gz"
+        src: "/tmp/nvim-linux-x86_64.tar.gz"
         dest: "/opt"
         remote_src: true
-        creates: "/opt/nvim-linux64/bin/nvim"
+        creates: "/opt/nvim-linux-x86_64/bin/nvim"
       become: true
 
     - name: Create Neovim symlinks
       ansible.builtin.file:
-        src: "/opt/nvim-linux64/bin/{{ item }}"
+        src: "/opt/nvim-linux-x86_64/bin/{{ item }}"
         dest: "/usr/local/bin/{{ item }}"
         state: link
         force: true
@@ -74,5 +74,5 @@
 
     - name: Clean up downloaded archive
       ansible.builtin.file:
-        path: "/tmp/nvim-linux64.tar.gz"
+        path: "/tmp/nvim-linux-86_64.tar.gz"
         state: absent
