@@ -9,7 +9,7 @@
       - feh
       - rofi
       - picom
-      - pulseaudio
+      - pipewire-pulse
       - pavucontrol
       - xbacklight
       - flameshot
