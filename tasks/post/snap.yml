@@ -1,10 +1,8 @@
 ---
-- name: Install snap deamon(Arch Linux)
-  become: true
-  community.general.pacman:
-    name: snapd
-    state: present
+- name: Install snapd
   when: ansible_os_family == "Archlinux"
+  command: yay -S --noconfirm snapd
+  changed_when: false
 
 - name: Install snap packages
   become: true

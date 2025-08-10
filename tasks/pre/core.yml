@@ -1,5 +1,6 @@
 ---
 - name: Install system packages and tools (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
   ansible.builtin.apt:
     name:
       - apt-transport-https
@@ -25,9 +26,9 @@
       - xclip
     state: present
     update_cache: true
-  when: ansible_os_family == "Debian"
 
 - name: Install system packages and tools (Arch Linux)
+  when: ansible_os_family == "Archlinux"
   community.general.pacman:
     name:
       - bat
@@ -49,7 +50,42 @@
       - wget
       - xclip
     state: present
-  when: ansible_os_family == "Archlinux"
+
+- name: Install yay (Arch Linux)
+  block:
+    - name: Check if yay is already installed
+      ansible.builtin.command: which yay
+      register: yay_check
+      failed_when: false
+      changed_when: false
+
+    - name: Install yay from AUR
+      when: yay_check.rc != 0
+      block:
+        - name: Install base-devel and git (required for building AUR packages)
+          ansible.builtin.pacman:
+            name:
+              - base-devel
+              - git
+            state: present
+
+        - name: Clone yay repository
+          ansible.builtin.git:
+            repo: https://aur.archlinux.org/yay.git
+            dest: /tmp/yay
+            force: true
+          changed_when: false
+
+        - name: Build and install yay
+          ansible.builtin.shell: |
+            cd /tmp/yay
+            makepkg -si --noconfirm
+          changed_when: false
+
+        - name: Clean up yay build directory
+          ansible.builtin.file:
+            path: /tmp/yay
+            state: absent
 
 - name: Ensure .local/bin directory exists
   become: true
@@ -67,8 +103,6 @@
   register: batcat_check
 
 - name: Create symbolic link for batcat to bat
-  become: true
-  become_user: "{{ user }}"
   ansible.builtin.file:
     src: "/usr/bin/batcat"
     dest: "{{ home }}/.local/bin/bat"
