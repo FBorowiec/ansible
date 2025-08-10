@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - i3
+      - i3blocks
       - i3status
       - feh
       - rofi
@@ -47,6 +48,7 @@
     name:
       - i3-wm
       - i3status
+      - i3blocks
       - betterlockscreen
       - feh
       - rofi
