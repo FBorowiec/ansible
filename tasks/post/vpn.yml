@@ -1,0 +1,44 @@
+---
+- name: Check if NordVPN is already installed
+  command: which nordvpn
+  register: nordvpn_check
+  failed_when: false
+  changed_when: false
+
+- name: Install NordVPN on Debian/Ubuntu
+  when: ansible_os_family == "Debian" and nordvpn_check.rc != 0
+  block:
+    - name: Install NordVPN using official installation script
+      shell: |
+        sh <(wget -qO - https://downloads.nordcdn.com/apps/linux/install.sh)
+      changed_when: false
+
+- name: Install NordVPN on Arch Linux
+  when: ansible_os_family == "Archlinux" and nordvpn_check.rc != 0
+  block:
+    - name: Install wireguard-tools (required for NordLynx)
+      pacman:
+        name: wireguard-tools
+        state: present
+
+    - name: Install nordvpn-bin from AUR using yay
+      become: true
+      become_user: "{{ user }}"
+      command: yay -S --noconfirm nordvpn-bin
+      args:
+        creates: /usr/bin/nordvpn
+
+- name: Common NordVPN configuration
+  when: nordvpn_check.rc != 0
+  block:
+    - name: Enable and start nordvpnd service
+      systemd:
+        name: nordvpnd
+        enabled: true
+        state: started
+
+    - name: Add user to nordvpn group
+      user:
+        name: "{{ ansible_user_id }}"
+        groups: nordvpn
+        append: true

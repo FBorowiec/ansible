@@ -49,6 +49,7 @@
     - ansible.builtin.include_tasks: tasks/post/pdf_reader.yml
     - ansible.builtin.include_tasks: tasks/post/ranger.yml
     - ansible.builtin.include_tasks: tasks/post/snap.yml
+    - ansible.builtin.include_tasks: tasks/post/vpn.yml
   post_tasks:
     - ansible.builtin.include_tasks: tasks/theme/gnome.yml
     - ansible.builtin.include_tasks: tasks/theme/gsettings.yml
