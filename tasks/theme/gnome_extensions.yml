@@ -1,6 +1,15 @@
 ---
 - name: Install GNOME extension {{ extension_id }}
   block:
+    - name: Get DBUS session address
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.shell: |
+        set -o pipefail
+        pgrep -u "{{ user }}" gnome-session | head -1 | xargs -I {} cat /proc/{}/environ | tr '\0' '\n' | grep ^DBUS_SESSION_BUS_ADDRESS= | cut -d= -f2-
+      register: dbus_result
+      changed_when: false
+
     - name: Check if extension is already installed
       become: true
       become_user: "{{ user }}"
@@ -9,7 +18,7 @@
       changed_when: false
       environment:
         DISPLAY: "{{ display | default(':0') }}"
-        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_result.stdout }}"
 
     - name: Process extension if not installed
       when: ext_uuid is not defined or ext_uuid not in installed_exts.stdout
