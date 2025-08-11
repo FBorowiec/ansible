@@ -57,7 +57,7 @@
   become: true
   become_user: "{{ user }}"
   kewlfft.aur.aur:
-    name: yay
+    name: yay-bin
     use: makepkg
 
 - name: Ensure .local/bin directory exists
