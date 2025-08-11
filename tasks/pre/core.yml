@@ -65,7 +65,7 @@
       when: yay_check.rc != 0
       block:
         - name: Install base-devel and git (required for building AUR packages)
-          ansible.builtin.pacman:
+          community.general.pacman:
             name:
               - base-devel
               - git

@@ -20,6 +20,11 @@
   changed_when: true
   when: docker_check.rc != 0
 
+- name: Wait for Docker service to be available (Arch Linux) # needed for enabling service
+  ansible.builtin.wait_for:
+    timeout: 10
+  when: ansible_os_family == "Archlinux"
+
 - name: Start and enable Docker service
   ansible.builtin.systemd:
     name: docker

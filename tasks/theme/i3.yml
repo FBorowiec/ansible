@@ -28,18 +28,18 @@
   when: ansible_os_family == "Debian"
   block:
     - name: Download betterlockscreen install script
-      get_url:
+      ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/betterlockscreen/betterlockscreen/main/install.sh
         dest: /tmp/betterlockscreen-install.sh
         mode: "0755"
 
     - name: Install betterlockscreen
-      command: /tmp/betterlockscreen-install.sh system
+      ansible.builtin.command: /tmp/betterlockscreen-install.sh system
       args:
         creates: /usr/local/bin/betterlockscreen
 
     - name: Clean up install script
-      file:
+      ansible.builtin.file:
         path: /tmp/betterlockscreen-install.sh
         state: absent
 

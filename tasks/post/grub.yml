@@ -45,9 +45,12 @@
 - name: Install grub-customizer from AUR (Arch Linux)
   become: true
   become_user: "{{ user }}"
-  ansible.builtin.shell: yay -S --noconfirm grub-customizer
+  ansible.builtin.shell: |
+    export GNUPGHOME="$HOME/.gnupg"
+    yay -S --noconfirm --needed --norebuild grub-customizer
   args:
     creates: /usr/bin/grub-customizer
+    executable: /bin/bash
   when:
     - ansible_os_family == "Archlinux"
     - grub_customizer_check_arch.rc != 0

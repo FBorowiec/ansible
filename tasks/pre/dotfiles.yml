@@ -42,7 +42,7 @@
 - name: Enable auto-display.service for user
   become: true
   become_user: "{{ user }}"
-  systemd:
+  ansible.builtin.systemd:
     name: auto-display.service
     enabled: true
     scope: user
