@@ -42,7 +42,7 @@
         state: absent
         update_cache: false
 
-- name: Install system packages and tools (Arch Linux)
+- name: Install required deps (Arch Linux)
   when: ansible_os_family == "Archlinux"
   community.general.pacman:
     name:
