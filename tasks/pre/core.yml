@@ -54,11 +54,25 @@
 
 - name: Install yay (Arch Linux)
   when: ansible_os_family == "Archlinux"
-  become: true
-  become_user: "{{ user }}"
-  kewlfft.aur.aur:
-    name: yay-bin
-    use: makepkg
+  block:
+    - name: Clone yay repository
+      when: ansible_os_family == "Archlinux"
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay-bin.git
+        dest: /tmp/yay-bin
+        version: master
+
+    - name: Build and install yay
+      when: ansible_os_family == "Archlinux"
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.shell: |
+        cd /tmp/yay-bin
+        makepkg -si --noconfirm
+      environment:
+        PATH: "{{ ansible_env.PATH }}"
 
 - name: Ensure .local/bin directory exists
   become: true
