@@ -49,6 +49,7 @@
       - atkmm
       - cairomm
       - glibmm
+      - grub
       - gtkmm3
       - libsigc++
       - pangomm
@@ -60,7 +61,7 @@
     - grub_customizer_check_arch.rc != 0
   block:
     - name: Install base-devel group (required for AUR builds)
-      ansible.builtin.pacman:
+      community.general.pacman:
         name: base-devel
         state: present
       become: true
