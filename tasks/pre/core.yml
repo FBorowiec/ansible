@@ -52,14 +52,6 @@
       - xclip
     state: present
 
-- name: Install yay (Arch Linux)
-  when: ansible_os_family == "Archlinux"
-  become: true
-  become_user: "{{ user }}"
-  kewlfft.aur.aur:
-    name: yay-bin
-    use: makepkg
-
 - name: Ensure .local/bin directory exists
   become: true
   become_user: "{{ user }}"
