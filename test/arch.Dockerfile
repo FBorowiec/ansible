@@ -24,6 +24,12 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
 RUN pip install --break-system-packages ansible && \
   ansible-galaxy collection install community.general community.docker
 
+USER $USER
+WORKDIR /tmp
+RUN git clone https://aur.archlinux.org/yay.git && \
+  cd yay && makepkg -si --noconfirm && \
+  cd / && rm -rf /tmp/yay
+
 COPY --chown=$USER:$USER . /home/$USER/
 WORKDIR /home/$USER
 

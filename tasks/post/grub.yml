@@ -56,6 +56,8 @@
     state: present
 
 - name: Install grub-customizer from AUR (Arch Linux) - Manual build
+  become: true
+  become_user: "{{ user }}"
   kewlfft.aur.aur:
     name: grub-customizer
     use: makepkg
