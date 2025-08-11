@@ -2,17 +2,64 @@
 
 set -e
 
-if ! [ -x "$(command -v ansible)" ]; then
-	echo "Installing Ansible..."
+detect_distro() {
+	if [ -f /etc/os-release ]; then
+		. /etc/os-release
+		echo "$ID"
+	elif [ -f /etc/arch-release ]; then
+		echo "arch"
+	elif [ -f /etc/debian_version ]; then
+		echo "debian"
+	else
+		echo "unknown"
+	fi
+}
+
+install_ansible_debian() {
+	echo "Installing Ansible on Debian/Ubuntu..."
 	sudo apt-add-repository -y ppa:ansible/ansible
 	sudo apt-get update -y
 	sudo apt-get install -y curl git software-properties-common ansible
+}
+
+install_ansible_arch() {
+	echo "Installing Ansible on Arch Linux..."
+	sudo pacman -Sy --noconfirm curl git ansible
+}
+
+DISTRO=$(detect_distro)
+echo "Detected distribution: $DISTRO"
+
+if ! [ -x "$(command -v ansible)" ]; then
+	case "$DISTRO" in
+	ubuntu | debian)
+		install_ansible_debian
+		;;
+	arch | manjaro)
+		install_ansible_arch
+		;;
+	*)
+		echo "Error: Unsupported distribution: $DISTRO"
+		echo "Please install Ansible manually and run this script again."
+		exit 1
+		;;
+	esac
 fi
 
-if ! ansible-galaxy collection list | grep -q 'community.general'; then
-	echo "Installing community.general collection..."
-	ansible-galaxy collection install -r collections/requirements-debian.yml
-fi
+case "$DISTRO" in
+ubuntu | debian)
+	REQUIREMENTS_FILE="collections/requirements-debian.yml"
+	;;
+arch | manjaro)
+	REQUIREMENTS_FILE="collections/requirements-arch.yml"
+	;;
+*)
+	echo "Error: Unsupported distribution for requirements: $DISTRO"
+	exit 1
+	;;
+esac
+
+ansible-galaxy collection install -r "$REQUIREMENTS_FILE"
 
 ROOTDIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 HOSTS="$ROOTDIR/hosts"
