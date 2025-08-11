@@ -5,7 +5,6 @@
       become: true
       become_user: "{{ user }}"
       ansible.builtin.shell: |
-        set -o pipefail
         pgrep -u "{{ user }}" gnome-session | head -1 | xargs -I {} cat /proc/{}/environ | tr '\0' '\n' | grep ^DBUS_SESSION_BUS_ADDRESS= | cut -d= -f2-
       register: dbus_result
       changed_when: false
