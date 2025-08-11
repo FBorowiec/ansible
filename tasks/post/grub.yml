@@ -56,52 +56,9 @@
     state: present
 
 - name: Install grub-customizer from AUR (Arch Linux) - Manual build
+  kewlfft.aur.aur:
+    name: grub-customizer
+    use: makepkg
   when:
     - ansible_os_family == "Archlinux"
     - grub_customizer_check_arch.rc != 0
-  block:
-    - name: Install base-devel group (required for AUR builds)
-      community.general.pacman:
-        name: base-devel
-        state: present
-      become: true
-
-    - name: Create temporary build directory
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.tempfile:
-        state: directory
-        suffix: _grub_customizer
-      register: build_dir
-
-    - name: Clone grub-customizer AUR package
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.git:
-        repo: https://aur.archlinux.org/grub-customizer.git
-        dest: "{{ build_dir.path }}"
-        force: true
-        version: master
-
-    - name: Build grub-customizer package only
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.shell: |
-        cd "{{ build_dir.path }}"
-        makepkg --noconfirm --needed --skippgpcheck
-      args:
-        executable: /bin/bash
-      environment:
-        HOME: "/home/{{ user }}"
-
-    - name: Install built package with pacman
-      ansible.builtin.shell: |
-        cd "{{ build_dir.path }}"
-        pacman -U --noconfirm *.pkg.tar.*
-      args:
-        executable: /bin/bash
-
-    - name: Clean up build directory
-      ansible.builtin.file:
-        path: "{{ build_dir.path }}"
-        state: absent
