@@ -54,55 +54,11 @@
 
 - name: Install yay (Arch Linux)
   when: ansible_os_family == "Archlinux"
-  block:
-    - name: Check if yay is already installed
-      ansible.builtin.command: yay --version
-      register: yay_check
-      failed_when: false
-      changed_when: false
-
-    - name: Install yay from AUR
-      when: yay_check.rc != 0
-      block:
-        - name: Install base-devel and git (required for building AUR packages)
-          community.general.pacman:
-            name:
-              - base-devel
-              - git
-            state: present
-
-        - name: Remove old yay build directory
-          ansible.builtin.file:
-            path: /tmp/yay
-            state: absent
-
-        - name: Clone yay repository
-          become: true
-          become_user: "{{ user }}"
-          ansible.builtin.git:
-            repo: https://aur.archlinux.org/yay.git
-            dest: /tmp/yay
-            update: true
-            version: master
-
-        - name: Build yay package
-          become: true
-          become_user: "{{ user }}"
-          ansible.builtin.command: makepkg -sf --noconfirm --needed
-          args:
-            chdir: /tmp/yay
-          register: yay_build
-          changed_when: yay_build.rc == 0
-
-        - name: Install yay package
-          ansible.builtin.command: pacman -U --noconfirm /tmp/yay/*.pkg.tar.zst
-          args:
-            creates: /usr/sbin/yay
-
-        - name: Clean up yay build directory
-          ansible.builtin.file:
-            path: /tmp/yay
-            state: absent
+  become: true
+  become_user: "{{ user }}"
+  kewlfft.aur.aur:
+    name: yay
+    use: makepkg
 
 - name: Ensure .local/bin directory exists
   become: true

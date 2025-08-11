@@ -3,8 +3,9 @@
   when: ansible_os_family == "Archlinux"
   become: true
   become_user: "{{ user }}"
-  ansible.builtin.command: yay -S --noconfirm snapd
-  changed_when: false
+  kewlfft.aur.aur:
+    name: snapd
+    state: present
 
 - name: Install snap packages
   community.general.snap:

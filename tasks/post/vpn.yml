@@ -37,12 +37,12 @@
         name: wireguard-tools
         state: present
 
-    - name: Install nordvpn-bin from AUR using yay
+    - name: Install nordvpn-bin from AUR
       become: true
       become_user: "{{ user }}"
-      ansible.builtin.command: yay -S --noconfirm nordvpn-bin
-      args:
-        creates: /usr/bin/nordvpn
+      kewlfft.aur.aur:
+        name: nordvpn-bin
+        state: present
 
 - name: Common NordVPN configuration
   when: nordvpn_check.rc != 0
