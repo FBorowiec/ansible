@@ -9,11 +9,8 @@
 
   pre_tasks:
     - ansible.builtin.include_tasks: tasks/core.yml
+    - ansible.builtin.include_tasks: tasks/register.yml
     - ansible.builtin.include_tasks: tasks/ssh.yml
-    - name: Check if running in container
-      ansible.builtin.stat:
-        path: /.dockerenv
-      register: container_check
     - ansible.builtin.include_tasks: tasks/pre/aur.yml
     - ansible.builtin.include_tasks: tasks/pre/cargo.yml
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml

@@ -1,0 +1,5 @@
+---
+- name: Check if running in container
+  ansible.builtin.stat:
+    path: /.dockerenv
+  register: container_check
