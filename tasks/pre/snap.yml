@@ -1,6 +1,8 @@
 ---
 - name: Install snap packages
-  when: ansible_os_family == "Debian" and not container_check.stat.exists
+  when:
+    - ansible_os_family == "Debian"
+    - not container_check.stat.exists
   community.general.snap:
     name:
       - spotify

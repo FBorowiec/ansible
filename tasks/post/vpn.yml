@@ -6,7 +6,9 @@
   changed_when: false
 
 - name: Install NordVPN on Debian/Ubuntu
-  when: ansible_os_family == "Debian" and nordvpn_check.rc != 0
+  when:
+    - ansible_os_family == "Debian"
+    - nordvpn_check.rc != 0
   block:
     - name: Add NordVPN GPG key
       ansible.builtin.get_url:
@@ -30,7 +32,9 @@
         DEBIAN_FRONTEND: noninteractive
 
 - name: Install NordVPN on Arch Linux
-  when: ansible_os_family == "Archlinux" and nordvpn_check.rc != 0
+  when:
+    - ansible_os_family == "Archlinux"
+    - nordvpn_check.rc != 0
   block:
     - name: Install wireguard-tools (required for NordLynx)
       community.general.pacman:
