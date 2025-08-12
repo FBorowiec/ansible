@@ -1,115 +1,118 @@
 ---
-- name: Configure dash-to-dock settings
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.shell.extensions.dash-to-dock \
-    {{ item.key }} {{ item.value }}
-  loop:
-    - key: "extend-height"
-      value: "false"
-    - key: "dock-position"
-      value: "BOTTOM"
-    - key: "dash-max-icon-size"
-      value: "40"
-    - key: "transparency-mode"
-      value: "FIXED"
-    - key: "background-opacity"
-      value: "1.0"
-    - key: "unity-backlit-items"
-      value: "false"
-    - key: "dock-fixed"
-      value: "false"
-    - key: "autohide"
-      value: "true"
-    - key: "show-trash"
-      value: "false"
-    - key: "show-mounts"
-      value: "false"
-    - key: "show-icons-notifications-counter"
-      value: "false"
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
-  failed_when: false
+- name: Gnome settings (Debian)
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Configure dash-to-dock settings
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.shell.extensions.dash-to-dock \
+        {{ item.key }} {{ item.value }}
+      loop:
+        - key: "extend-height"
+          value: "false"
+        - key: "dock-position"
+          value: "BOTTOM"
+        - key: "dash-max-icon-size"
+          value: "40"
+        - key: "transparency-mode"
+          value: "FIXED"
+        - key: "background-opacity"
+          value: "1.0"
+        - key: "unity-backlit-items"
+          value: "false"
+        - key: "dock-fixed"
+          value: "false"
+        - key: "autohide"
+          value: "true"
+        - key: "show-trash"
+          value: "false"
+        - key: "show-mounts"
+          value: "false"
+        - key: "show-icons-notifications-counter"
+          value: "false"
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
+      failed_when: false
 
-- name: Set dash-to-dock background opacity to transparent
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
-  failed_when: false
+    - name: Set dash-to-dock background opacity to transparent
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
+      failed_when: false
 
-- name: Configure window manager settings
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.desktop.wm.preferences
-    button-layout close,minimize,maximize:
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
+    - name: Configure window manager settings
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.desktop.wm.preferences
+        button-layout close,minimize,maximize:
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
 
-- name: Configure desktop interface settings
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.desktop.interface {{ item.key }} {{ item.value }}
-  loop:
-    - key: "clock-show-seconds"
-      value: "true"
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
+    - name: Configure desktop interface settings
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.desktop.interface {{ item.key }} {{ item.value }}
+      loop:
+        - key: "clock-show-seconds"
+          value: "true"
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
 
-- name: Configure calendar settings
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.desktop.calendar show-weekdate true
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
+    - name: Configure calendar settings
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.desktop.calendar show-weekdate true
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
 
-- name: Configure desktop icons extension
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.shell.extensions.ding show-home false
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
-  failed_when: false
+    - name: Configure desktop icons extension
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.shell.extensions.ding show-home false
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
+      failed_when: false
 
-- name: Ensure backgrounds directory
-  ansible.builtin.file:
-    path: "/usr/share/backgrounds"
-    state: directory
-    mode: "0755"
+    - name: Ensure backgrounds directory
+      ansible.builtin.file:
+        path: "/usr/share/backgrounds"
+        state: directory
+        mode: "0755"
 
-- name: Copy wallpaper to system directory
-  become: true
-  ansible.builtin.copy:
-    src: "files/wallpapers/star_wars_last_supper.jpg"
-    dest: "/usr/share/backgrounds/star_wars_last_supper.jpg"
-    mode: "0644"
+    - name: Copy wallpaper to system directory
+      become: true
+      ansible.builtin.copy:
+        src: "files/wallpapers/star_wars_last_supper.jpg"
+        dest: "/usr/share/backgrounds/star_wars_last_supper.jpg"
+        mode: "0644"
 
-- name: Set desktop wallpaper
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.command: |
-    gsettings set org.gnome.desktop.background picture-uri
-    "file:///usr/share/backgrounds/star_wars_last_supper.jpg"
-  environment:
-    DISPLAY: "{{ display | default(':0') }}"
-    DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
-  changed_when: false
+    - name: Set desktop wallpaper
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: |
+        gsettings set org.gnome.desktop.background picture-uri
+        "file:///usr/share/backgrounds/star_wars_last_supper.jpg"
+      environment:
+        DISPLAY: "{{ display | default(':0') }}"
+        DBUS_SESSION_BUS_ADDRESS: "{{ dbus_address | default('') }}"
+      changed_when: false
