@@ -5,30 +5,43 @@
   changed_when: false
   failed_when: false
 
-- name: Download Docker installation script
+- name: Download Docker installation script (Debian/Ubuntu)
   ansible.builtin.get_url:
     url: https://get.docker.com
     dest: /tmp/get-docker.sh
     mode: "0755"
     timeout: 30
-  when: docker_check.rc != 0
+  when:
+    - docker_check.rc != 0
+    - ansible_os_family == "Debian"
 
-- name: Install Docker using convenience script
+- name: Install Docker using convenience script (Debian/Ubuntu)
   ansible.builtin.shell: |
     /tmp/get-docker.sh
     rm /tmp/get-docker.sh
   changed_when: true
+  when:
+    - docker_check.rc != 0
+    - ansible_os_family == "Debian"
+
+- name: Install Docker (Arch Linux)
+  community.general.pacman:
+    name: docker
+    state: present
+    update_cache: true
+  when:
+    - docker_check.rc != 0
+    - ansible_os_family == "Archlinux"
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
   when: docker_check.rc != 0
 
 - name: Wait for Docker service to be available (Arch Linux) # needed for enabling service
   ansible.builtin.wait_for:
     timeout: 10
   when: ansible_os_family == "Archlinux"
-
-- name: Reload systemd daemon
-  ansible.builtin.systemd:
-    daemon_reload: true
-  when: docker_check.rc != 0
 
 - name: Start and enable Docker service
   ansible.builtin.systemd:
@@ -57,4 +70,6 @@
     name: "{{ user }}"
     groups: docker
     append: true
-  when: user_in_docker_group.rc != 0 and not container_check.stat.exists
+  when:
+    - user_in_docker_group.rc != 0
+    - not container_check.stat.exists
