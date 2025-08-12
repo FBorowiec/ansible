@@ -8,22 +8,12 @@
     - vars/vars.yml
 
   pre_tasks:
-    - ansible.builtin.include_tasks: tasks/pre/ssh.yml
-    - name: Update and upgrade apt packages
-      ansible.builtin.apt:
-        update_cache: true
-        upgrade: true
-      when: ansible_os_family == "Debian"
-    - name: Update and upgrade pacman packages
-      community.general.pacman:
-        update_cache: true
-        upgrade: true
-      when: ansible_os_family == "Archlinux"
+    - ansible.builtin.include_tasks: tasks/core.yml
+    - ansible.builtin.include_tasks: tasks/ssh.yml
     - name: Check if running in container
       ansible.builtin.stat:
         path: /.dockerenv
       register: container_check
-    - ansible.builtin.include_tasks: tasks/pre/core.yml
     - ansible.builtin.include_tasks: tasks/pre/aur.yml
     - ansible.builtin.include_tasks: tasks/pre/cargo.yml
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml

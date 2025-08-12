@@ -1,4 +1,16 @@
 ---
+- name: Update and upgrade apt packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: true
+  when: ansible_os_family == "Debian"
+
+- name: Update and upgrade pacman packages
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+  when: ansible_os_family == "Archlinux"
+
 - name: Install system packages and tools (Debian/Ubuntu)
   when: ansible_os_family == "Debian"
   ansible.builtin.apt:
