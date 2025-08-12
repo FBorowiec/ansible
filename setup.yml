@@ -1,12 +1,8 @@
 ---
 - hosts: localhost
   become: true
-  vars:
-    user: "{{ lookup('env', 'USER') }}"
-    home: "{{ lookup('env', 'HOME') }}"
   vars_files:
     - vars/vars.yml
-
   pre_tasks:
     - ansible.builtin.include_tasks: tasks/core.yml
     - ansible.builtin.include_tasks: tasks/register.yml

@@ -1,4 +1,6 @@
 ---
+user: "{{ lookup('env', 'USER') }}"
+home: "{{ lookup('env', 'HOME') }}"
 tools_versions:
   go: "1.24.5"
 gnome_extensions:
