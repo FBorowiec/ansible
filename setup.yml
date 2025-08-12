@@ -54,4 +54,3 @@
     - ansible.builtin.include_tasks: tasks/theme/gnome.yml
     - ansible.builtin.include_tasks: tasks/theme/gsettings.yml
     - ansible.builtin.include_tasks: tasks/theme/gtk.yml
-    - ansible.builtin.include_tasks: tasks/theme/i3.yml
