@@ -24,10 +24,7 @@ install_ansible_debian() {
 
 install_ansible_arch() {
 	echo "Installing Ansible on Arch Linux..."
-	sudo pacman -Sy --noconfirm curl git ansible base-devel
-	git clone https://aur.archlinux.org/yay.git /tmp/yay
-	cd /tmp/yay && makepkg -si --noconfirm
-	cd - && rm -rf /tmp/yay
+	sudo pacman -Sy --noconfirm curl git ansible
 }
 
 DISTRO=$(detect_distro)

@@ -25,11 +25,6 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
 RUN ansible-galaxy collection install community.general community.docker kewlfft.aur
 
 USER $USER
-WORKDIR /tmp
-RUN git clone https://aur.archlinux.org/yay.git && \
-  cd yay && makepkg -si --noconfirm && \
-  cd / && rm -rf /tmp/yay
-
 COPY --chown=$USER:$USER . /home/$USER/
 WORKDIR /home/$USER
 

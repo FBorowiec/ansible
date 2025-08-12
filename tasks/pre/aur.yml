@@ -1,0 +1,31 @@
+---
+- name: Install official packages
+  when: ansible_os_family == "Archlinux"
+  community.general.pacman:
+    name:
+      - base-devel
+      - btop
+      - markdownlint
+      - spotify-launcher
+    state: present
+    update_cache: true
+
+- name: Install AUR packages with makepkg
+  become: true
+  become_user: "{{ user }}"
+  when: ansible_os_family == "Archlinux"
+  ansible.builtin.shell: |
+    cd /tmp
+    if [ ! -d "{{ item }}" ]; then
+      git clone https://aur.archlinux.org/{{ item }}.git
+    fi
+    cd {{ item }}
+    makepkg -si --noconfirm --needed
+    cd ..
+    rm -rf {{ item }}
+  loop:
+    - teams-for-linux
+    - brave-bin
+    - grub-customizer
+  args:
+    creates: /usr/sbin/{{ item }}
