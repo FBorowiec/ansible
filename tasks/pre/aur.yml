@@ -11,12 +11,23 @@
     update_cache: true
 
 - name: Build and install AUR packages
+  vars:
+    aur_packages:
+      - teams-for-linux
+      - brave-bin
+      - grub-customizer
   when: ansible_os_family == "Archlinux"
-  loop:
-    - teams-for-linux
-    - brave-bin
-    - grub-customizer
   block:
+    - name: Clone AUR package
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/{{ item }}.git"
+        dest: "/tmp/{{ item }}"
+        update: true
+        version: master
+      loop: "{{ aur_packages }}"
+
     - name: Build AUR package
       become: true
       become_user: "{{ user }}"
@@ -25,16 +36,17 @@
         chdir: "/tmp/{{ item }}"
       args:
         creates: "/tmp/{{ item }}/PKGBUILD"
+      loop: "{{ aur_packages }}"
 
     - name: Install built AUR package
-      become: true
       ansible.builtin.shell: |
         pacman -U --noconfirm /tmp/{{ item }}/*.pkg.tar.zst
       args:
         creates: "/usr/bin/{{ item }}"
+      loop: "{{ aur_packages }}"
 
     - name: Clean up AUR build directory
-      become: true
       ansible.builtin.file:
         path: "/tmp/{{ item }}"
         state: absent
+      loop: "{{ aur_packages }}"
