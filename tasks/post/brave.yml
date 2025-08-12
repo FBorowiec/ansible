@@ -1,23 +1,4 @@
 ---
-- name: Install snapd
-  when: ansible_os_family == "Archlinux"
-  become: true
-  become_user: "{{ user }}"
-  kewlfft.aur.aur:
-    name: snapd
-    state: present
-
-- name: Install snap packages
-  community.general.snap:
-    name:
-      - spotify
-      - btop
-      - mdl
-      - brave
-      - teams-for-linux
-    state: present
-  when: not container_check.stat.exists
-
 - name: Run Brave
   become: true
   become_user: "{{ user }}"
@@ -31,7 +12,7 @@
     seconds: 5
   when: not container_check.stat.exists
 
-- name: Copy Brave bookmarks
+- name: Copy Brave bookmarks (Debian)
   become: true
   become_user: "{{ user }}"
   ansible.builtin.copy:
@@ -39,4 +20,13 @@
     dest: "{{ home }}/snap/brave/current/.config/\
       BraveSoftware/Brave-Browser/Default/Bookmarks"
     mode: "0644"
-  when: not container_check.stat.exists
+  when: ansible_os_family == "Debian" and not container_check.stat.exists
+
+- name: Copy Brave bookmarks (Arch Linux)
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.copy:
+    src: "files/brave/Bookmarks"
+    dest: "{{ home }}/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"
+    mode: "0644"
+  when: ansible_os_family == "Archlinux" and not container_check.stat.exists

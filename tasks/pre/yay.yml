@@ -1,0 +1,20 @@
+---
+- name: Install official packages
+  when: ansible_os_family == "Archlinux"
+  community.general.pacman:
+    name:
+      - spotify-launcher
+      - markdownlint
+      - btop
+    state: present
+    update_cache: true
+
+- name: Install community maintained packages
+  when: ansible_os_family == "Archlinux"
+  become: false
+  kewlfft.aur.aur:
+    name:
+      - teams-for-linux
+      - brave-bin
+      - grub-customizer
+    state: present
