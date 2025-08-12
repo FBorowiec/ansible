@@ -67,6 +67,9 @@
       - xclip
     state: present
 
+- name: Update CA certificates trust store
+  ansible.builtin.command: update-ca-trust
+
 - name: Install i3 and required packages (Ubuntu/Debian)
   when: ansible_os_family == "Debian"
   ansible.builtin.apt:
