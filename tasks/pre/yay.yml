@@ -3,18 +3,35 @@
   when: ansible_os_family == "Archlinux"
   community.general.pacman:
     name:
-      - spotify-launcher
-      - markdownlint
+      - base-devel
       - btop
+      - markdownlint
+      - spotify-launcher
     state: present
     update_cache: true
 
-- name: Install community maintained packages
+- name: Install yay AUR helper
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.shell: |
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si --noconfirm
+    cd ..
+    rm -rf yay
   when: ansible_os_family == "Archlinux"
-  become: false
-  kewlfft.aur.aur:
-    name:
-      - teams-for-linux
-      - brave-bin
-      - grub-customizer
-    state: present
+  args:
+    creates: /usr/sbin/yay
+
+- name: Install community maintained packages
+  become: true
+  become_user: "{{ user }}"
+  ansible.builtin.shell: |
+    yay -S --noconfirm --needed {{ item }}
+  loop:
+    - teams-for-linux
+    - brave-bin
+    - grub-customizer
+  when: ansible_os_family == "Archlinux"
+  changed_when: false
