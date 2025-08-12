@@ -64,16 +64,16 @@
         daemon_reload: true
       when: docker_check.rc != 0
 
-    - name: Wait for Docker service to be available (Arch Linux) # needed for enabling service
+    - name: Wait for Docker service to be available
       ansible.builtin.wait_for:
         timeout: 10
-      when: ansible_os_family == "Archlinux"
 
     - name: Enable and start nordvpnd service
       ansible.builtin.systemd:
         name: nordvpnd
         enabled: true
         state: started
+      when: not container_check.stat.exists
 
     - name: Add user to nordvpn group
       ansible.builtin.user:
