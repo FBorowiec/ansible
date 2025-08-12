@@ -22,7 +22,7 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
   chown -R $USER:$USER /home/$USER && \
   echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN ansible-galaxy collection install community.general community.docker kewlfft.aur
+RUN ansible-galaxy collection install community.general
 
 USER $USER
 COPY --chown=$USER:$USER . /home/$USER/

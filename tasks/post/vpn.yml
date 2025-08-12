@@ -44,9 +44,17 @@
     - name: Install nordvpn-bin from AUR
       become: true
       become_user: "{{ user }}"
-      kewlfft.aur.aur:
-        name: nordvpn-bin
-        state: present
+      ansible.builtin.shell: |
+        cd /tmp
+        if [ ! -d nordvpn-bin ]; then
+          git clone https://aur.archlinux.org/nordvpn-bin.git
+        fi
+        cd nordvpn-bin
+        makepkg -si --noconfirm --needed
+        cd ..
+        rm -rf nordvpn-bin
+      args:
+        creates: /usr/sbin/nordvpn
 
 - name: Common NordVPN configuration
   when: nordvpn_check.rc != 0

@@ -29,7 +29,7 @@ RUN apt-add-repository -y ppa:ansible/ansible && \
   apt-get update && \
   apt-get install -y --no-install-recommends ansible && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN ansible-galaxy collection install community.general community.docker
+RUN ansible-galaxy collection install community.general
 
 COPY --chown=$USER:$USER . /home/$USER/
 WORKDIR /home/$USER
