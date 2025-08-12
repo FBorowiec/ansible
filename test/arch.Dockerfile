@@ -6,6 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN pacman -Syu --noconfirm && \
   pacman -S --noconfirm \
+  ansible \
   base-devel \
   curl \
   git \
@@ -21,8 +22,7 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
   chown -R $USER:$USER /home/$USER && \
   echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN pip install --break-system-packages ansible && \
-  ansible-galaxy collection install community.general community.docker
+RUN ansible-galaxy collection install community.general community.docker kewlfft.aur
 
 USER $USER
 WORKDIR /tmp
