@@ -85,7 +85,7 @@
     dest: "{{ home }}/.config/gtk-4.0/settings.ini"
     mode: "0644"
 
-- name: Configure GNOME themes
+- name: Configure gtk themes
   become: true
   become_user: "{{ user }}"
   ansible.builtin.command: |

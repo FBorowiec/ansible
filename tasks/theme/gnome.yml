@@ -1,59 +1,29 @@
 ---
-- name: Install dependencies (Ubuntu/Debian)
-  become: true
-  ansible.builtin.apt:
-    name:
-      - wget
-      - curl
-      - jq
-      - sed
-      - gnome-shell
-      - gnome-shell-extension-prefs
-      - gnome-shell-extensions
-      - gnome-shell-extension-manager
-      - gnome-tweaks
-      - gnome-browser-connector
-      - gtk2-engines-murrine
-    state: present
-    update_cache: true
+- name: Configure gnome for Debian
   when: ansible_os_family == "Debian"
+  block:
+    - name: Install dependencies (Ubuntu/Debian)
+      become: true
+      ansible.builtin.apt:
+        name:
+          - gnome-shell
+          - gnome-shell-extension-prefs
+          - gnome-shell-extensions
+          - gnome-shell-extension-manager
+          - gnome-tweaks
+          - gnome-browser-connector
+          - gtk2-engines-murrine
+        state: present
+        update_cache: true
 
-- name: Install dependencies (Arch Linux)
-  become: true
-  community.general.pacman:
-    name:
-      - wget
-      - curl
-      - jq
-      - sed
-      - gnome-shell
-      - gnome-shell-extensions
-      - gnome-tweaks
-      - gnome-browser-connector
-      - gtk-engine-murrine
-    state: present
-    update_cache: true
-  when: ansible_os_family == "Archlinux"
-
-- name: Get GNOME Shell version
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.shell: |
-    set -o pipefail
-    gnome-shell --version | awk '{print $3}' | cut -d '.' -f 1,2
-  register: gnome_shell_version
-  changed_when: false
-  args:
-    executable: /bin/bash
-
-- name: Install GNOME extensions
-  ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml
-  loop: "{{ gnome_extensions }}"
-  loop_control:
-    label: "Extension {{ item }}"
-  vars:
-    extension_id: "{{ item }}"
-    shell_version: "{{ gnome_shell_version.stdout }}"
-    display: ":0"
-    dbus_address: "{{ dbus_session_bus_address | default('') }}"
-  when: not container_check.stat.exists
+    - name: Install GNOME extensions
+      ansible.builtin.include_tasks: tasks/theme/gnome_extensions.yml
+      loop: "{{ gnome_extensions }}"
+      loop_control:
+        label: "Extension {{ item }}"
+      vars:
+        extension_id: "{{ item }}"
+        shell_version: "{{ gnome_shell_version.stdout }}"
+        display: ":0"
+        dbus_address: "{{ dbus_session_bus_address | default('') }}"
+      when: not container_check.stat.exists

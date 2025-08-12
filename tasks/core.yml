@@ -51,12 +51,14 @@
       - git
       - git-lfs
       - go
+      - jq
       - lsd
       - ripgrep
       - fastfetch
       - net-tools
       - nvidia-settings
       - openssh
+      - sed
       - stow
       - unzip
       - vlc
