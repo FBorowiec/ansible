@@ -1,4 +1,17 @@
 ---
+# - name: Install required deps (Arch Linux)
+#   when: ansible_os_family == "Archlinux"
+#   community.general.pacman:
+#     name:
+#       - atkmm
+#       - cairomm
+#       - glibmm
+#       - grub
+#       - gtkmm3
+#       - libsigc++
+#       - pangomm
+#     state: present
+#
 - name: Install official packages
   when: ansible_os_family == "Archlinux"
   community.general.pacman:

@@ -41,26 +41,3 @@
         repo: "ppa:danielrichter2007/grub-customizer"
         state: absent
         update_cache: false
-
-- name: Install required deps (Arch Linux)
-  when: ansible_os_family == "Archlinux"
-  community.general.pacman:
-    name:
-      - atkmm
-      - cairomm
-      - glibmm
-      - grub
-      - gtkmm3
-      - libsigc++
-      - pangomm
-    state: present
-
-- name: Install grub-customizer from AUR (Arch Linux) - Manual build
-  become: true
-  become_user: "{{ user }}"
-  kewlfft.aur.aur:
-    name: grub-customizer
-    use: makepkg
-  when:
-    - ansible_os_family == "Archlinux"
-    - grub_customizer_check_arch.rc != 0

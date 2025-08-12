@@ -33,7 +33,9 @@
     - ansible.builtin.include_tasks: tasks/pre/neovim.yml
     - ansible.builtin.include_tasks: tasks/pre/npm_packages.yml
     - ansible.builtin.include_tasks: tasks/pre/python.yml
+    - ansible.builtin.include_tasks: tasks/pre/snap.yml
     - ansible.builtin.include_tasks: tasks/pre/tmux.yml
+    - ansible.builtin.include_tasks: tasks/pre/yay.yml
     - ansible.builtin.include_tasks: tasks/pre/zsh.yml
     - ansible.builtin.include_tasks: tasks/pre/dotfiles.yml
   tasks:
@@ -43,15 +45,14 @@
     - ansible.builtin.include_tasks: tasks/post/discord.yml
     - ansible.builtin.include_tasks: tasks/post/docker.yml
     - ansible.builtin.include_tasks: tasks/post/grub.yml
-    - ansible.builtin.include_tasks: tasks/post/pdf_reader.yml
+    - ansible.builtin.include_tasks: tasks/post/office.yml
     - ansible.builtin.include_tasks: tasks/post/ranger.yml
-    - ansible.builtin.include_tasks: tasks/post/snap.yml
     - ansible.builtin.include_tasks: tasks/post/vpn.yml
-    - ansible.builtin.include_tasks: tasks/post/yay.yml
   post_tasks:
     - ansible.builtin.include_tasks: tasks/theme/gnome.yml
     - ansible.builtin.include_tasks: tasks/theme/gsettings.yml
     - ansible.builtin.include_tasks: tasks/theme/gtk.yml
+    - ansible.builtin.include_tasks: tasks/apps/brave.yml
     - ansible.builtin.include_tasks: tasks/apps/deskflow.yml
     - ansible.builtin.include_tasks: tasks/apps/immersed.yml
     - ansible.builtin.include_tasks: tasks/apps/keyboard.yml
