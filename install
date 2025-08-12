@@ -49,20 +49,7 @@ if ! [ -x "$(command -v ansible)" ]; then
 	esac
 fi
 
-case "$DISTRO" in
-ubuntu | debian)
-	REQUIREMENTS_FILE="collections/requirements-debian.yml"
-	;;
-arch | manjaro)
-	REQUIREMENTS_FILE="collections/requirements-arch.yml"
-	;;
-*)
-	echo "Error: Unsupported distribution for requirements: $DISTRO"
-	exit 1
-	;;
-esac
-
-ansible-galaxy collection install -r "$REQUIREMENTS_FILE"
+ansible-galaxy collection install -r collections/requirements-debian.yml
 
 ROOTDIR="$(git rev-parse --show-toplevel 2>/dev/null)"
 HOSTS="$ROOTDIR/hosts"
