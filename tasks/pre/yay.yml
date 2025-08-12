@@ -10,28 +10,43 @@
     state: present
     update_cache: true
 
-- name: Install yay AUR helper
+- name: Install paru AUR helper
   become: true
   become_user: "{{ user }}"
+  when: ansible_os_family == "Archlinux"
   ansible.builtin.shell: |
     cd /tmp
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
+    git clone https://aur.archlinux.org/paru.git
+    cd paru
     makepkg -si --noconfirm
     cd ..
-    rm -rf yay
-  when: ansible_os_family == "Archlinux"
-  args:
-    creates: /usr/sbin/yay
+    rm -rf paru
 
 - name: Install community maintained packages
   become: true
   become_user: "{{ user }}"
-  ansible.builtin.shell: |
-    yay -S --noconfirm --needed {{ item }}
+  when: ansible_os_family == "Archlinux"
+  ansible.builtin.command: paru -S --noconfirm --needed {{ item }}
   loop:
     - teams-for-linux
     - brave-bin
     - grub-customizer
-  when: ansible_os_family == "Archlinux"
-  changed_when: false
+# - name: Install AUR packages with makepkg
+#   ansible.builtin.shell: |
+#     cd /tmp
+#     if [ ! -d "{{ item }}" ]; then
+#       git clone https://aur.archlinux.org/{{ item }}.git
+#     fi
+#     cd {{ item }}
+#     makepkg -si --noconfirm --needed
+#     cd ..
+#     rm -rf {{ item }}
+#   become: true
+#   become_user: "{{ user }}"
+#   loop:
+#     - teams-for-linux
+#     - brave-bin
+#     - grub-customizer
+#   args:
+#     creates: /usr/sbin/{{ item }}
+#   when: ansible_os_family == "Archlinux"
