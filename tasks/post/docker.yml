@@ -25,6 +25,11 @@
     timeout: 10
   when: ansible_os_family == "Archlinux"
 
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: docker_check.rc != 0
+
 - name: Start and enable Docker service
   ansible.builtin.systemd:
     name: docker
