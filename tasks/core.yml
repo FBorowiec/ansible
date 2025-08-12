@@ -46,6 +46,7 @@
       - bat
       - base-devel
       - curl
+      - ca-certificates
       - gettext
       - fzf
       - git
