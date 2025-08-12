@@ -39,11 +39,14 @@
       loop: "{{ aur_packages }}"
 
     - name: Install built AUR package
-      ansible.builtin.shell: |
-        pacman -U --noconfirm /tmp/{{ item }}/*.pkg.tar.zst
+      become: true
+      ansible.builtin.command:
+        cmd: pacman -U --noconfirm "{{ pkg_file }}"
+      vars:
+        pkg_file: "{{ lookup('fileglob', '/tmp/' + item + '/*.pkg.tar.*') }}"
+      loop: "{{ aur_packages }}"
       args:
         creates: "/usr/bin/{{ item }}"
-      loop: "{{ aur_packages }}"
 
     - name: Clean up AUR build directory
       ansible.builtin.file:
