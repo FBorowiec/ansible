@@ -5,32 +5,6 @@
   failed_when: false
   changed_when: false
 
-- name: Install NordVPN on Debian/Ubuntu
-  when:
-    - ansible_os_family == "Debian"
-    - nordvpn_check.rc != 0
-  block:
-    - name: Add NordVPN GPG key
-      ansible.builtin.get_url:
-        url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
-        dest: /usr/share/keyrings/nordvpn.asc
-        mode: "0644"
-
-    - name: Add NordVPN repository
-      ansible.builtin.copy:
-        dest: /etc/apt/sources.list.d/nordvpn.list
-        content: |
-          deb [signed-by=/usr/share/keyrings/nordvpn.asc] https://repo.nordvpn.com/deb/nordvpn/debian stable main
-        mode: "0644"
-
-    - name: Install NordVPN
-      ansible.builtin.apt:
-        name: nordvpn
-        update_cache: true
-        state: present
-      environment:
-        DEBIAN_FRONTEND: noninteractive
-
 - name: Install NordVPN on Arch Linux
   when:
     - ansible_os_family == "Archlinux"
@@ -41,18 +15,26 @@
         name: wireguard-tools
         state: present
 
-    - name: Install nordvpn-bin from AUR
+    - name: Clone nordvpn-bin AUR repo
       become: true
       become_user: "{{ user }}"
-      ansible.builtin.shell: |
-        cd /tmp
-        if [ ! -d nordvpn-bin ]; then
-          git clone https://aur.archlinux.org/nordvpn-bin.git
-        fi
-        cd nordvpn-bin
-        makepkg -si --noconfirm --needed
-        cd ..
-        rm -rf nordvpn-bin
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/nordvpn-bin.git
+        dest: /tmp/nordvpn-bin
+        update: true
+        version: master
+
+    - name: Build nordvpn-bin
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: makepkg -sf --noconfirm
+      args:
+        chdir: /tmp/nordvpn-bin
+        creates: "/tmp/nordvpn-bin/PKGBUILD"
+
+    - name: Install nordvpn-bin package
+      become: true
+      ansible.builtin.shell: pacman -U --noconfirm /tmp/nordvpn-bin/*.pkg.tar.zst
       args:
         creates: /usr/sbin/nordvpn
 

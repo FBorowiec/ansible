@@ -10,22 +10,31 @@
     state: present
     update_cache: true
 
-- name: Install AUR packages with makepkg
-  become: true
-  become_user: "{{ user }}"
+- name: Build and install AUR packages
   when: ansible_os_family == "Archlinux"
-  ansible.builtin.shell: |
-    cd /tmp
-    if [ ! -d "{{ item }}" ]; then
-      git clone https://aur.archlinux.org/{{ item }}.git
-    fi
-    cd {{ item }}
-    makepkg -si --noconfirm --needed
-    cd ..
-    rm -rf {{ item }}
   loop:
     - teams-for-linux
     - brave-bin
     - grub-customizer
-  args:
-    creates: /usr/sbin/{{ item }}
+  block:
+    - name: Build AUR package
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command:
+        cmd: makepkg -sf --noconfirm --needed
+        chdir: "/tmp/{{ item }}"
+      args:
+        creates: "/tmp/{{ item }}/PKGBUILD"
+
+    - name: Install built AUR package
+      become: true
+      ansible.builtin.shell: |
+        pacman -U --noconfirm /tmp/{{ item }}/*.pkg.tar.zst
+      args:
+        creates: "/usr/bin/{{ item }}"
+
+    - name: Clean up AUR build directory
+      become: true
+      ansible.builtin.file:
+        path: "/tmp/{{ item }}"
+        state: absent
