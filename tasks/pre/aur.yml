@@ -13,7 +13,7 @@
 - name: Build and install AUR packages
   vars:
     aur_packages:
-      - teams-for-linux
+      # - teams-for-linux # unstable
       - brave-bin
       - grub-customizer
   when: ansible_os_family == "Archlinux"
