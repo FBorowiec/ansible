@@ -1,0 +1,88 @@
+---
+- name: Update and upgrade pacman packages
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+  when: ansible_os_family == "Archlinux"
+
+- name: Arch-specific core tasks
+  when: ansible_os_family == "Archlinux"
+  block:
+    - name: Install system packages and tools (Arch Linux)
+      community.general.pacman:
+        name:
+          - bat
+          - base-devel
+          - curl
+          - ca-certificates
+          - gettext
+          - fzf
+          - git
+          - git-lfs
+          - go
+          - jq
+          - lsd
+          - ripgrep
+          - fastfetch
+          - net-tools
+          - nvidia-settings
+          - openssh
+          - sed
+          - stow
+          - unzip
+          - vlc
+          - wget
+          - xclip
+        state: present
+
+    - name: Install i3 and required packages (Arch Linux)
+      community.general.pacman:
+        name:
+          - i3-wm
+          - i3status
+          - i3blocks
+          - feh
+          - rofi
+          - picom
+          - pipewire-pulse
+          - pavucontrol
+          - xorg-xbacklight
+          - flameshot
+          - dunst
+          - redshift
+          - autorandr
+          - polybar
+          - playerctl
+          - gtk-engine-murrine
+          - gtk-engines
+          - xsettingsd
+        state: present
+        update_cache: true
+
+    - name: Install additional tools (Arch Linux)
+      community.general.pacman:
+        name:
+          - btop
+          - markdownlint
+          - spotify-launcher
+        state: present
+        update_cache: true
+
+    - name: Clone yay repository
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.git:
+        repo: https://aur.archlinux.org/yay-bin.git
+        dest: /tmp/yay-bin
+        version: master
+        force: true
+
+    - name: Build and install yay
+      become: true
+      become_user: "{{ user }}"
+      ansible.builtin.command: makepkg -si --noconfirm
+      args:
+        chdir: /tmp/yay-bin
+        creates: /usr/bin/yay
+      environment:
+        PATH: "{{ ansible_env.PATH }}"
