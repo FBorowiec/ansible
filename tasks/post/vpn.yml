@@ -18,10 +18,11 @@
             mode: "0755"
 
         - name: Run NordVPN installer script (Ubuntu/Debian)
-          become: true
-          become_user: "{{ user }}"
           ansible.builtin.shell: |
             /tmp/nordvpn-install.sh
+          environment:
+            DEBIAN_FRONTEND: noninteractive
+            NEEDRESTART_MODE: a
           args:
             executable: /bin/bash
             creates: /usr/bin/nordvpn
@@ -35,7 +36,7 @@
             state: present
 
         - name: Install NordVPN via yay
-          become: false
+          become: true
           become_user: "{{ user }}"
           ansible.builtin.shell: |
             yay -S --noconfirm --needed nordvpn-bin
