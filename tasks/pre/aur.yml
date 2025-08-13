@@ -28,25 +28,39 @@
         version: master
       loop: "{{ aur_packages }}"
 
+    - name: Check if package is already installed
+      ansible.builtin.command:
+        cmd: pacman -Q {{ item }}
+      register: package_check
+      failed_when: false
+      changed_when: false
+      loop: "{{ aur_packages }}"
+
     - name: Build AUR package
       become: true
       become_user: "{{ user }}"
       ansible.builtin.command:
         cmd: makepkg -sf --noconfirm --needed
-        chdir: "/tmp/{{ item }}"
-      args:
-        creates: "/tmp/{{ item }}/PKGBUILD"
-      loop: "{{ aur_packages }}"
+        chdir: "/tmp/{{ item.item }}"
+      loop: "{{ package_check.results }}"
+      when: item.rc != 0 # Only build if package not installed
+
+    - name: Find built package files
+      ansible.builtin.find:
+        paths: "/tmp/{{ item.item }}"
+        patterns: "*.pkg.tar.*"
+      register: built_packages
+      loop: "{{ package_check.results }}"
+      when: item.rc != 0
 
     - name: Install built AUR package
       become: true
       ansible.builtin.command:
-        cmd: pacman -U --noconfirm "{{ pkg_file }}"
-      vars:
-        pkg_file: "{{ lookup('fileglob', '/tmp/' + item + '/*.pkg.tar.*') }}"
-      loop: "{{ aur_packages }}"
-      args:
-        creates: "/usr/bin/{{ item }}"
+        cmd: pacman -U --noconfirm {{ item.files[0].path }}
+      loop: "{{ built_packages.results }}"
+      when:
+        - item.files is defined
+        - item.files | length > 0
 
     - name: Clean up AUR build directory
       ansible.builtin.file:
