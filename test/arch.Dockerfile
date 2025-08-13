@@ -8,6 +8,7 @@ RUN pacman -Syu --noconfirm && \
   pacman -S --noconfirm \
   ansible \
   base-devel \
+  ca-certificates \
   curl \
   git \
   python \
@@ -15,6 +16,7 @@ RUN pacman -Syu --noconfirm && \
   sudo \
   vim \
   which && \
+  update-ca-trust && \
   pacman -Scc --noconfirm
 
 RUN useradd --create-home -m -s /bin/bash $USER && \

@@ -9,6 +9,7 @@
   when: nordvpn_check.rc != 0
   block:
     - name: Install wireguard-tools (required for NordLynx)
+      when: ansible_os_family == "Archlinux"
       community.general.pacman:
         name: wireguard-tools
         state: present
@@ -19,7 +20,6 @@
         sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
       args:
         creates: /usr/bin/nordvpn
-        warn: false
 
     - name: Reload systemd daemon
       ansible.builtin.systemd:
