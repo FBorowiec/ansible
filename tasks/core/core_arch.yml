@@ -68,21 +68,57 @@
         state: present
         update_cache: true
 
-    - name: Clone yay repository
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.git:
-        repo: https://aur.archlinux.org/yay-bin.git
-        dest: /tmp/yay-bin
-        version: master
-        force: true
+- name: Install yay AUR helper
+  when: ansible_os_family == "Archlinux"
+    - yay_check.rc != 0
+  block:
+    - name: Check if yay is already installed
+      ansible.builtin.command: which yay
+      register: yay_check
+      failed_when: false
+      changed_when: false
 
-    - name: Build and install yay
-      become: true
-      become_user: "{{ user }}"
-      ansible.builtin.command: makepkg -si --noconfirm
-      args:
-        chdir: /tmp/yay-bin
-        creates: /usr/bin/yay
-      environment:
-        PATH: "{{ ansible_env.PATH }}"
+    - name: Install yay if not present
+      when: yay_check.rc != 0
+      block:
+        - name: Install base-devel and git (required for yay)
+          community.general.pacman:
+            name:
+              - base-devel
+              - git
+            state: present
+          become: true
+
+        - name: Create temporary directory for yay installation
+          ansible.builtin.tempfile:
+            state: directory
+            suffix: yay_install
+          register: yay_temp_dir
+
+        - name: Clone yay repository
+          ansible.builtin.git:
+            repo: https://aur.archlinux.org/yay.git
+            dest: "{{ yay_temp_dir.path }}/yay"
+            depth: 1
+            version: master
+
+        - name: Build and install yay
+          ansible.builtin.command: makepkg -si --noconfirm
+          args:
+            chdir: "{{ yay_temp_dir.path }}/yay"
+          become: true
+          become_user: "{{ ansible_user }}"
+
+        - name: Clean up temporary directory
+          ansible.builtin.file:
+            path: "{{ yay_temp_dir.path }}"
+            state: absent
+
+    - name: Verify yay installation
+      command: yay --version
+      register: yay_version
+      changed_when: false
+
+    - name: Display yay version
+      debug:
+        msg: "Yay installed successfully: {{ yay_version.stdout }}"
