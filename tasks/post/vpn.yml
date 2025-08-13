@@ -20,9 +20,10 @@
         - name: Run NordVPN installer script (Ubuntu/Debian)
           become: true
           become_user: "{{ user }}"
-          ansible.builtin.command:
-            cmd: bash /tmp/nordvpn-install.sh
+          ansible.builtin.shell: |
+            /tmp/nordvpn-install.sh
           args:
+            executable: /bin/bash
             creates: /usr/bin/nordvpn
 
     - name: Install nordvpn (Arch Linux)
