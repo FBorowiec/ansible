@@ -8,6 +8,5 @@
       - spotify
       - btop
       - mdl
-      - brave
       - teams-for-linux
     state: present

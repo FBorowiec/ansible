@@ -13,13 +13,6 @@
   failed_when: false
   when: ansible_os_family == "Debian"
 
-- name: Check if grub-customizer is already installed (Arch Linux)
-  ansible.builtin.command: pacman -Q grub-customizer
-  register: grub_customizer_check_arch
-  changed_when: false
-  failed_when: false
-  when: ansible_os_family == "Archlinux"
-
 - name: Install grub-customizer from PPA (Debian/Ubuntu)
   when:
     - ansible_os_family == "Debian"
@@ -41,3 +34,32 @@
         repo: "ppa:danielrichter2007/grub-customizer"
         state: absent
         update_cache: false
+
+- name: Check if grub-customizer is already installed (Arch Linux)
+  ansible.builtin.command: pacman -Q grub-customizer
+  register: grub_customizer_check_arch
+  changed_when: false
+  failed_when: false
+  when: ansible_os_family == "Archlinux"
+
+- name: Install grub-customizer from source (Arch Linux)
+  when:
+    - ansible_os_family == "Archlinux"
+    - grub_customizer_check_arch.rc != 0
+  block:
+    - name: Install build dependencies for grub-customizer
+      become: true
+      community.general.pacman:
+        name: [git, cmake, make, gcc, gtkmm3, libarchive, openssl]
+        state: present
+
+    - name: Clone and build grub-customizer
+      become: true
+      ansible.builtin.shell: |
+        cd /tmp
+        git clone https://git.launchpad.net/grub-customizer
+        cd grub-customizer
+        cmake . && make && make install
+        cd .. && rm -rf grub-customizer
+      args:
+        creates: /usr/local/bin/grub-customizer
