@@ -55,6 +55,7 @@
         dest: /tmp/nordvpn-bin
         update: true
         version: master
+        force: true
       when: nordvpn_check.rc != 0
 
     - name: Build nordvpn-bin

@@ -72,8 +72,6 @@ build_and_test_os() {
 
 	if [[ "$INTERACTIVE" == "true" ]]; then
 		echo "Starting interactive $os container..."
-		echo "Run the playbook with:"
-		echo "  ansible-playbook -i hosts setup.yml --ask-vault-pass"
 		docker run \
 			--network host --rm -it \
 			--name "$image_name" \
