@@ -26,9 +26,15 @@ RUN ansible-galaxy collection install community.general
 
 USER $USER
 COPY --chown=$USER:$USER . /home/$USER/
-WORKDIR /home/$USER
-
 ENV USER=$USER
-USER $USER
+
+RUN cd /tmp && \
+  git clone https://aur.archlinux.org/yay.git && \
+  cd yay && \
+  makepkg -si --noconfirm && \
+  cd .. && \
+  rm -rf yay
+
+WORKDIR /home/$USER
 
 CMD ["/bin/bash"]
