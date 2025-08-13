@@ -35,10 +35,13 @@
             state: present
 
         - name: Install NordVPN via yay
-          become: true
+          become: false
           become_user: "{{ user }}"
-          ansible.builtin.command:
-            cmd: yay -S --noconfirm nordvpn-bin
+          ansible.builtin.shell: |
+            yay -S --noconfirm --needed nordvpn-bin
+          environment:
+            HOME: "/home/{{ user }}"
+            USER: "{{ user }}"
           args:
             creates: /usr/sbin/nordvpn
 
