@@ -26,6 +26,7 @@
         dest: "/tmp/{{ item }}"
         update: true
         version: master
+        force: true
       loop: "{{ aur_packages }}"
 
     - name: Check if package is already installed

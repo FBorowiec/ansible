@@ -5,15 +5,47 @@
   failed_when: false
   changed_when: false
 
-- name: Install NordVPN on Arch Linux
+- name: Install NordVPN on Debian/Ubuntu
   when:
-    - ansible_os_family == "Archlinux"
+    - ansible_os_family == "Debian"
     - nordvpn_check.rc != 0
   block:
+    - name: Add NordVPN GPG key
+      ansible.builtin.get_url:
+        url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
+        dest: /usr/share/keyrings/nordvpn.asc
+        mode: "0644"
+
+    - name: Add NordVPN repository
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/nordvpn.list
+        content: |
+          deb [signed-by=/usr/share/keyrings/nordvpn.asc] https://repo.nordvpn.com/deb/nordvpn/debian stable main
+        mode: "0644"
+
+    - name: Install NordVPN
+      ansible.builtin.apt:
+        name: nordvpn
+        update_cache: true
+        state: present
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+- name: Install NordVPN on Arch Linux
+  when: ansible_os_family == "Archlinux"
+  block:
+    - name: Check if NordVPN is already installed
+      ansible.builtin.command:
+        cmd: pacman -Q nordvpn-bin
+      register: nordvpn_check
+      failed_when: false
+      changed_when: false
+
     - name: Install wireguard-tools (required for NordLynx)
       community.general.pacman:
         name: wireguard-tools
         state: present
+      when: nordvpn_check.rc != 0
 
     - name: Clone nordvpn-bin AUR repo
       become: true
@@ -23,20 +55,37 @@
         dest: /tmp/nordvpn-bin
         update: true
         version: master
+      when: nordvpn_check.rc != 0
 
     - name: Build nordvpn-bin
       become: true
       become_user: "{{ user }}"
-      ansible.builtin.command: makepkg -sf --noconfirm
-      args:
+      ansible.builtin.command:
+        cmd: makepkg -sf --noconfirm --needed
         chdir: /tmp/nordvpn-bin
-        creates: "/tmp/nordvpn-bin/PKGBUILD"
+      when: nordvpn_check.rc != 0
+
+    - name: Find built NordVPN package
+      ansible.builtin.find:
+        paths: /tmp/nordvpn-bin
+        patterns: "*.pkg.tar.*"
+      register: nordvpn_package
+      when: nordvpn_check.rc != 0
 
     - name: Install nordvpn-bin package
       become: true
-      ansible.builtin.shell: pacman -U --noconfirm /tmp/nordvpn-bin/*.pkg.tar.zst
-      args:
-        creates: /usr/sbin/nordvpn
+      ansible.builtin.command:
+        cmd: pacman -U --noconfirm {{ nordvpn_package.files[0].path }}
+      when:
+        - nordvpn_check.rc != 0
+        - nordvpn_package.files is defined
+        - nordvpn_package.files | length > 0
+
+    - name: Clean up NordVPN build directory
+      ansible.builtin.file:
+        path: /tmp/nordvpn-bin
+        state: absent
+      when: nordvpn_check.rc != 0
 
 - name: Common NordVPN configuration
   when: nordvpn_check.rc != 0
