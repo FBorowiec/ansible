@@ -16,14 +16,16 @@ detect_distro() {
 }
 
 install_ansible_debian() {
-	echo "Installing Ansible on Debian/Ubuntu..."
-	sudo apt-add-repository -y ppa:ansible/ansible
-	sudo apt-get update -y
-	sudo apt-get install -y curl git software-properties-common ansible
+	if ! [ -x "$(command -v ansible)" ]; then
+		echo "Installing Ansible on Debian/Ubuntu..."
+		sudo apt-add-repository -y ppa:ansible/ansible
+		sudo apt-get update -y
+		sudo apt-get install -y curl git software-properties-common ansible
+	fi
 }
 
 install_yay_arch() {
-	sudo pacman -Sy --noconfirm curl git ansible base-devel
+	sudo pacman -Sy --noconfirm base-devel
 	TEMP_DIR=$(mktemp -d)
 	git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
 	cd "$TEMP_DIR/yay"
@@ -34,9 +36,12 @@ install_yay_arch() {
 }
 
 install_ansible_arch() {
-	echo "Installing Ansible on Arch Linux..."
-	sudo pacman -Sy --noconfirm curl git ansible
-	if ! command -v yay &>/dev/null; then
+	if ! [ -x "$(command -v ansible)" ]; then
+		echo "Installing Ansible on Arch Linux..."
+		sudo pacman -Sy --noconfirm curl git ansible
+	fi
+	if ! [ -x "$(command -v yay)" ]; then
+		echo "Installing Yay..."
 		install_yay_arch
 	fi
 }
@@ -44,21 +49,19 @@ install_ansible_arch() {
 DISTRO=$(detect_distro)
 echo "Detected distribution: $DISTRO"
 
-if ! [ -x "$(command -v ansible)" ]; then
-	case "$DISTRO" in
-	ubuntu | debian)
-		install_ansible_debian
-		;;
-	arch | manjaro)
-		install_ansible_arch
-		;;
-	*)
-		echo "Error: Unsupported distribution: $DISTRO"
-		echo "Please install Ansible manually and run this script again."
-		exit 1
-		;;
-	esac
-fi
+case "$DISTRO" in
+ubuntu | debian)
+	install_ansible_debian
+	;;
+arch | manjaro)
+	install_ansible_arch
+	;;
+*)
+	echo "Error: Unsupported distribution: $DISTRO"
+	echo "Please install Ansible manually and run this script again."
+	exit 1
+	;;
+esac
 
 ansible-galaxy collection install -r collections/requirements.yml
 
