@@ -70,7 +70,6 @@
 
 - name: Install yay AUR helper
   when: ansible_os_family == "Archlinux"
-    - yay_check.rc != 0
   block:
     - name: Check if yay is already installed
       ansible.builtin.command: which yay

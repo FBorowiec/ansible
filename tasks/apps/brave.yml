@@ -21,25 +21,11 @@
     seconds: 5
   when: not container_check.stat.exists
 
-- name: Copy Brave bookmarks (Debian)
-  become: true
-  become_user: "{{ user }}"
-  ansible.builtin.copy:
-    src: "files/brave/Bookmarks"
-    dest: "{{ home }}/snap/brave/current/.config/\
-      BraveSoftware/Brave-Browser/Default/Bookmarks"
-    mode: "0644"
-  when:
-    - ansible_os_family == "Debian"
-    - not container_check.stat.exists
-
-- name: Copy Brave bookmarks (Arch Linux)
+- name: Copy Brave bookmarks
   become: true
   become_user: "{{ user }}"
   ansible.builtin.copy:
     src: "files/brave/Bookmarks"
     dest: "{{ home }}/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"
     mode: "0644"
-  when:
-    - ansible_os_family == "Archlinux"
-    - not container_check.stat.exists
+  when: not container_check.stat.exists
