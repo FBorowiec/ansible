@@ -9,7 +9,6 @@
     - ansible.builtin.include_tasks: tasks/core/arch.yml
     - ansible.builtin.include_tasks: tasks/core/debian.yml
     - ansible.builtin.include_tasks: tasks/core/common.yml
-    - ansible.builtin.include_tasks: tasks/pre/aur.yml
     - ansible.builtin.include_tasks: tasks/pre/cargo.yml
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml
     - ansible.builtin.include_tasks: tasks/pre/fonts.yml
@@ -19,7 +18,6 @@
     - ansible.builtin.include_tasks: tasks/pre/neovim.yml
     - ansible.builtin.include_tasks: tasks/pre/npm_packages.yml
     - ansible.builtin.include_tasks: tasks/pre/python.yml
-    - ansible.builtin.include_tasks: tasks/pre/snap.yml
     - ansible.builtin.include_tasks: tasks/pre/tmux.yml
     - ansible.builtin.include_tasks: tasks/pre/zsh.yml
     - ansible.builtin.include_tasks: tasks/pre/dotfiles.yml
