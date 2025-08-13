@@ -8,18 +8,38 @@
 - name: Install nordvpn
   when: nordvpn_check.rc != 0
   block:
-    - name: Install wireguard-tools (required for NordLynx)
-      when: ansible_os_family == "Archlinux"
-      community.general.pacman:
-        name: wireguard-tools
-        state: present
+    - name: Install nordvpn (Ubuntu/Debian)
+      when: ansible_os_family == "Debian"
+      block:
+        - name: Download NordVPN installer script (Ubuntu/Debian)
+          ansible.builtin.get_url:
+            url: https://downloads.nordcdn.com/apps/linux/install.sh
+            dest: /tmp/nordvpn-install.sh
+            mode: "0755"
 
-    - name: Download and install NordVPN
-      become: true
-      ansible.builtin.shell: |
-        sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
-      args:
-        creates: /usr/bin/nordvpn
+        - name: Run NordVPN installer script (Ubuntu/Debian)
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.command:
+            cmd: bash /tmp/nordvpn-install.sh
+          args:
+            creates: /usr/bin/nordvpn
+
+    - name: Install nordvpn (Arch Linux)
+      when: ansible_os_family == "Archlinux"
+      block:
+        - name: Install wireguard-tools (required for NordLynx)
+          community.general.pacman:
+            name: wireguard-tools
+            state: present
+
+        - name: Install NordVPN via yay
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.command:
+            cmd: yay -S --noconfirm nordvpn-bin
+          args:
+            creates: /usr/sbin/nordvpn
 
     - name: Reload systemd daemon
       ansible.builtin.systemd:
