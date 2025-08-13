@@ -27,9 +27,6 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
 RUN ansible-galaxy collection install community.general
 
 USER $USER
-COPY --chown=$USER:$USER . /home/$USER/
-ENV USER=$USER
-
 RUN cd /tmp && \
   git clone --depth 1 https://aur.archlinux.org/yay.git && \
   cd yay && \
@@ -37,6 +34,8 @@ RUN cd /tmp && \
   cd .. && \
   rm -rf yay
 
+COPY --chown=$USER:$USER . /home/$USER/
+ENV USER=$USER
 WORKDIR /home/$USER
 
 CMD ["/bin/bash"]
