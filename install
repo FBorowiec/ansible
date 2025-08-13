@@ -53,7 +53,13 @@ HOSTS="$ROOTDIR/hosts"
 PLAYBOOK="$ROOTDIR/setup.yml"
 
 if [[ -n "$CONTAINER" || -f /.dockerenv ]]; then
-	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD")
+	if [[ -n "$ANSIBLE_VAULT_PASSWORD" ]]; then
+		echo "Using vault password from environment variable"
+		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD")
+	else
+		echo "ANSIBLE_VAULT_PASSWORD not set, prompting for vault password"
+		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --ask-vault-pass
+	fi
 else
 	echo "The BECOME password is your sudo password."
 	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
