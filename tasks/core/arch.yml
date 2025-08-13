@@ -35,6 +35,10 @@
           - xclip
         state: present
 
+    - name: Update CA certificates trust store
+      ansible.builtin.command: update-ca-trust
+      changed_when: false
+
     - name: Install i3 and required packages (Arch Linux)
       community.general.pacman:
         name:

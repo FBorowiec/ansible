@@ -1,8 +1,4 @@
 ---
-- name: Update CA certificates trust store
-  ansible.builtin.command: update-ca-trust
-  changed_when: false
-
 - name: Ensure .local/bin directory exists
   become: true
   become_user: "{{ user }}"
