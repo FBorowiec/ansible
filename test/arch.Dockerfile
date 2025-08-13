@@ -29,7 +29,7 @@ COPY --chown=$USER:$USER . /home/$USER/
 ENV USER=$USER
 
 RUN cd /tmp && \
-  git clone https://aur.archlinux.org/yay.git && \
+  git clone --depth 1 https://aur.archlinux.org/yay.git && \
   cd yay && \
   makepkg -si --noconfirm && \
   cd .. && \

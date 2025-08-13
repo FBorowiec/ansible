@@ -4,11 +4,11 @@
   vars_files:
     - vars/vars.yml
   pre_tasks:
+    - ansible.builtin.include_tasks: tasks/core/register.yml
+    - ansible.builtin.include_tasks: tasks/core/ssh.yml
     - ansible.builtin.include_tasks: tasks/core/arch.yml
     - ansible.builtin.include_tasks: tasks/core/debian.yml
     - ansible.builtin.include_tasks: tasks/core/common.yml
-    - ansible.builtin.include_tasks: tasks/core/register.yml
-    - ansible.builtin.include_tasks: tasks/core/ssh.yml
     - ansible.builtin.include_tasks: tasks/pre/aur.yml
     - ansible.builtin.include_tasks: tasks/pre/cargo.yml
     - ansible.builtin.include_tasks: tasks/pre/cpp.yml
