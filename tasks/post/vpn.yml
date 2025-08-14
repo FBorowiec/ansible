@@ -42,7 +42,7 @@
             state: present
 
         - name: Install build dependencies
-          pacman:
+          community.general.pacman:
             name:
               - libxml2-legacy
             state: present
