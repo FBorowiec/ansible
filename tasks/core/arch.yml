@@ -135,11 +135,19 @@
             state: started
           when: not container_check.stat.exists
 
-        - name: Add user to snapd group
-          ansible.builtin.user:
-            name: "{{ ansible_user_id }}"
-            groups: snapd
-            append: true
+        - name: Enable and start snapd.socket
+          ansible.builtin.systemd:
+            name: snapd.socket
+            enabled: true
+            state: started
+          when: not container_check.stat.exists
+
+        - name: Enable and start snapd.apparmor.service
+          ansible.builtin.systemd:
+            name: snapd.apparmor.service
+            enabled: true
+            state: started
+          when: not container_check.stat.exists
 
         - name: Create symbolic link for classic snaps
           ansible.builtin.file:
