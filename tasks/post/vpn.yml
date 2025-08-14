@@ -41,17 +41,54 @@
             name: wireguard-tools
             state: present
 
-        - name: Install NordVPN via yay
+        - name: Get nordvpn-bin PKGBUILD from AUR
+          ansible.builtin.uri:
+            url: "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=nordvpn-bin"
+            method: GET
+            return_content: true
+          register: pkgbuild
+
+        - name: Debug PKGBUILD content
+          debug:
+            msg: "PKGBUILD content retrieved: {{ pkgbuild.content[:200] }}..."
+          when: pkgbuild.content is defined
+
+        - name: Extract PGP keys using shell (alternative)
+          ansible.builtin.shell: |
+            echo "{{ pkgbuild.content }}" | grep -oP "validpgpkeys=\(\K[^)]+" | tr -d "'" | tr ' ' '\n' | grep -E '^[A-F0-9]{8,}$'
+          register: pgp_keys_output
+          failed_when: false
+          when: pkgbuild.content is defined
+
+        - name: Set PGP keys from shell output
+          set_fact:
+            nordvpn_pgp_keys: "{{ pgp_keys_output.stdout_lines }}"
+          when:
+            - pgp_keys_output is defined
+            - pgp_keys_output.stdout_lines is defined
+            - pgp_keys_output.stdout_lines | length > 0
+
+        - name: Set empty PGP keys list if extraction failed
+          set_fact:
+            nordvpn_pgp_keys: []
+          when: nordvpn_pgp_keys is not defined
+
+        - name: Import NordVPN PGP key(s)
           become: true
           become_user: "{{ user }}"
           ansible.builtin.shell: |
-            set -o pipefail |
-            printf '1\n' | yay --sudoloop --noconfirm --needed nordvpn-bin \
-                --mflags "--noconfirm" \
-                --answerdiff None \
-                --answerclean None \
-                --removemake \
-                --answeredit None
+            gpg --keyserver keyserver.ubuntu.com --recv-keys {{ item }}
+          environment:
+            HOME: "/home/{{ user }}"
+            USER: "{{ user }}"
+          loop: "{{ nordvpn_pgp_keys }}"
+          when: nordvpn_pgp_keys | length > 0
+
+        - name: Install NordVPN via yay (non-interactive)
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.shell: |
+            yay -S --sudoloop --noconfirm --needed nordvpn-bin
           environment:
             HOME: "/home/{{ user }}"
             USER: "{{ user }}"
