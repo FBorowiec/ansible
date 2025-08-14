@@ -13,20 +13,20 @@
         name:
           - bat
           - base-devel
-          - curl
           - ca-certificates
-          - gettext
+          - curl
+          - fastfetch
           - fzf
+          - gettext
           - git
           - git-lfs
           - go
           - jq
           - lsd
-          - ripgrep
-          - fastfetch
           - net-tools
           - nvidia-settings
           - openssh
+          - ripgrep
           - sed
           - stow
           - unzip
@@ -42,23 +42,23 @@
     - name: Install i3 and required packages (Arch Linux)
       community.general.pacman:
         name:
+          - autorandr
+          - dunst
+          - feh
+          - flameshot
+          - gtk-engine-murrine
+          - gtk-engines
           - i3-wm
           - i3status
           - i3blocks
-          - feh
-          - rofi
+          - pavucontrol
           - picom
           - pipewire-pulse
-          - pavucontrol
-          - xorg-xbacklight
-          - flameshot
-          - dunst
-          - redshift
-          - autorandr
-          - polybar
           - playerctl
-          - gtk-engine-murrine
-          - gtk-engines
+          - polybar
+          - redshift
+          - rofi
+          - xorg-xbacklight
           - xsettingsd
         state: present
         update_cache: true
@@ -77,12 +77,12 @@
         - name: Install build dependencies
           community.general.pacman:
             name:
-              - squashfs-tools
               - apparmor
-              - go-tools
-              - xfsprogs
-              - python-docutils
               - autoconf-archive
+              - go-tools
+              - python-docutils
+              - squashfs-tools
+              - xfsprogs
             state: present
 
         - name: Clone snapd from AUR

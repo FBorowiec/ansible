@@ -14,6 +14,7 @@
           - apt-transport-https
           - bat
           - build-essential
+          - ca-certificates
           - curl
           - gettext
           - fzf
@@ -22,10 +23,10 @@
           - git-review
           - gitlint
           - lsd
-          - ripgrep
           - neofetch
           - net-tools
           - nvidia-settings
+          - ripgrep
           - software-properties-common
           - stow
           - unzip
@@ -38,23 +39,23 @@
     - name: Install i3 and required packages (Ubuntu/Debian)
       ansible.builtin.apt:
         name:
+          - autorandr
+          - dunst
+          - feh
+          - flameshot
+          - gtk2-engines-murrine
+          - gtk2-engines-pixbuf
           - i3
           - i3blocks
           - i3status
-          - feh
-          - rofi
+          - pavucontrol
           - picom
           - pipewire-pulse
-          - pavucontrol
-          - xbacklight
-          - flameshot
-          - dunst
           - redshift
-          - autorandr
-          - polybar
+          - rofi
           - playerctl
-          - gtk2-engines-murrine
-          - gtk2-engines-pixbuf
+          - polybar
+          - xbacklight
           - xsettingsd
         state: present
         update_cache: true
@@ -65,8 +66,8 @@
         - not container_check.stat.exists
       community.general.snap:
         name:
-          - spotify
           - btop
           - mdl
+          - spotify
           - teams-for-linux
         state: present
