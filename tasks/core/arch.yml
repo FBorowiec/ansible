@@ -71,3 +71,86 @@
           - spotify-launcher
         state: present
         update_cache: true
+
+    - name: Install snap packages (Arch Linux)
+      block:
+        - name: Install build dependencies
+          community.general.pacman:
+            name:
+              - squashfs-tools
+              - apparmor
+              - go-tools
+              - xfsprogs
+              - python-docutils
+              - autoconf-archive
+            state: present
+
+        - name: Clone snapd from AUR
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.git:
+            repo: https://aur.archlinux.org/snapd.git
+            dest: /tmp/snapd
+            depth: 1
+            force: true
+            version: master
+
+        - name: Build snapd package
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.shell: |
+            cd /tmp/snapd
+            makepkg --noconfirm
+          register: build_result
+          args:
+            creates: /tmp/snapd/pkg/snapd
+
+        - name: Find built package file
+          ansible.builtin.find:
+            paths: /tmp/snapd
+            patterns: "*.pkg.tar.*"
+            excludes: "*debug*"
+          register: package_files
+
+        - name: Install snapd package with pacman
+          ansible.builtin.shell: |
+            pacman -U "{{ package_files.files[0].path }}" --noconfirm
+          register: install_result
+          failed_when: install_result.rc != 0
+          args:
+            creates: /usr/sbin/snapd
+
+        - name: Reload systemd daemon
+          ansible.builtin.systemd:
+            daemon_reload: true
+
+        - name: Wait for Docker service to be available
+          ansible.builtin.wait_for:
+            timeout: 10
+
+        - name: Enable and start snapd service
+          ansible.builtin.systemd:
+            name: snapd
+            enabled: true
+            state: started
+          when: not container_check.stat.exists
+
+        - name: Add user to snapd group
+          ansible.builtin.user:
+            name: "{{ ansible_user_id }}"
+            groups: snap
+            append: true
+
+        - name: Create symbolic link for classic snaps
+          ansible.builtin.file:
+            src: /var/lib/snapd/snap
+            dest: /snap
+            state: link
+          when: not container_check.stat.exists
+
+        - name: Install snap packages
+          when: not container_check.stat.exists
+          community.general.snap:
+            name:
+              - teams-for-linux
+            state: present
