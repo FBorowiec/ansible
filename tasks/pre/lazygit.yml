@@ -42,6 +42,8 @@
         mode: "0644"
         timeout: 120
       register: lazygit_download
+      retries: 3
+      delay: 5
 
     - name: Create temporary extraction directory
       ansible.builtin.tempfile:

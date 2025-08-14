@@ -118,7 +118,7 @@
           register: install_result
           failed_when: install_result.rc != 0
           args:
-            creates: /usr/sbin/snapd
+            creates: /usr/bin/snap
 
         - name: Reload systemd daemon
           ansible.builtin.systemd:
@@ -138,7 +138,7 @@
         - name: Add user to snapd group
           ansible.builtin.user:
             name: "{{ ansible_user_id }}"
-            groups: snap
+            groups: snapd
             append: true
 
         - name: Create symbolic link for classic snaps
