@@ -26,9 +26,10 @@ RUN useradd --create-home -m -s /bin/bash $USER && \
 
 RUN ansible-galaxy collection install community.general
 
-USER $USER
 COPY --chown=$USER:$USER . /home/$USER/
-ENV USER=$USER
 WORKDIR /home/$USER
+
+ENV USER=$USER
+USER $USER
 
 CMD ["/bin/bash"]

@@ -102,10 +102,10 @@ fi
 
 case "$OS_CHOICE" in
 ubuntu)
-	build_and_test_os "ubuntu" "$REPO_ROOT/test/ubuntu.Dockerfile"
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/dockerfiles/ubuntu.Dockerfile"
 	;;
 arch)
-	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
+	build_and_test_os "arch" "$REPO_ROOT/test/dockerfiles/arch.Dockerfile"
 	;;
 both)
 	echo "=== Testing Ubuntu and Arch Linux installs ==="
@@ -114,9 +114,9 @@ both)
 		echo "Please choose either --os ubuntu or --os arch for interactive mode."
 		exit 1
 	fi
-	build_and_test_os "ubuntu" "$REPO_ROOT/test/ubuntu.Dockerfile"
+	build_and_test_os "ubuntu" "$REPO_ROOT/test/dockerfiles/ubuntu.Dockerfile"
 	echo ""
-	build_and_test_os "arch" "$REPO_ROOT/test/arch.Dockerfile"
+	build_and_test_os "arch" "$REPO_ROOT/test/dockerfiles/arch.Dockerfile"
 	echo ""
 	echo "All tests passed successfully!"
 	;;

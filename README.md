@@ -11,9 +11,10 @@ Repo I use to set up my work environment from scratch.
 ## Testing
 
 ```bash
-./test/test-docker-build
-# or
-./test/test-docker-build --interactive
+❯ ./test/test-install-dockerized -h
+Usage: ./test/test-install-dockerized [-i|--interactive] [-o|--os ubuntu|arch|both]
+  -i, --interactive    Start interactive container
+  -o, --os OS         Choose OS to test (ubuntu, arch, or both) [default: both]
 ```
 
 ## Linting
