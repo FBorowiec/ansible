@@ -45,7 +45,13 @@
           become: true
           become_user: "{{ user }}"
           ansible.builtin.shell: |
-            yay --sudoloop -S --noconfirm --needed nordvpn-bin
+            set -o pipefail |
+            printf '1\n' | yay --sudoloop --noconfirm --needed nordvpn-bin \
+                --mflags "--noconfirm" \
+                --answerdiff None \
+                --answerclean None \
+                --removemake \
+                --answeredit None
           environment:
             HOME: "/home/{{ user }}"
             USER: "{{ user }}"
