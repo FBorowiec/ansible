@@ -83,6 +83,9 @@
           args:
             creates: /usr/sbin/nordvpn
 
+- name: Enable nordvpn
+  when: nordvpn_check.rc != 0
+  block:
     - name: Reload systemd daemon
       ansible.builtin.systemd:
         daemon_reload: true
