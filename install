@@ -24,25 +24,10 @@ install_ansible_debian() {
 	fi
 }
 
-install_yay_arch() {
-	sudo pacman -Sy --noconfirm base-devel
-	TEMP_DIR=$(mktemp -d)
-	git clone https://aur.archlinux.org/yay.git "$TEMP_DIR/yay"
-	cd "$TEMP_DIR/yay"
-	makepkg -si --noconfirm
-	cd -
-	rm -rf "$TEMP_DIR"
-	echo "Yay installed successfully!"
-}
-
 install_ansible_arch() {
 	if ! [ -x "$(command -v ansible)" ]; then
 		echo "Installing Ansible on Arch Linux..."
 		sudo pacman -Sy --noconfirm curl git ansible
-	fi
-	if ! [ -x "$(command -v yay)" ]; then
-		echo "Installing Yay..."
-		install_yay_arch
 	fi
 }
 
