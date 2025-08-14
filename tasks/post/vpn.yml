@@ -71,15 +71,14 @@
           ansible.builtin.find:
             paths: /tmp/nordvpn-bin
             patterns: "*.pkg.tar.*"
+            excludes: "*debug*"
           register: package_files
-
-        - name: Debug package file
-          ansible.builtin.debug:
-            msg: "{{ package_files.files[0].path }}"
 
         - name: Install nordvpn-bin package with pacman
           ansible.builtin.shell: |
             pacman -U "{{ package_files.files[0].path }}" --noconfirm
+          register: install_result
+          failed_when: install_result.rc != 0
           args:
             creates: /usr/sbin/nordvpn
 
