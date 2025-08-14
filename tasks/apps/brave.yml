@@ -1,12 +1,10 @@
 ---
 - name: Install Brave Browser
-  become: true
-  ansible.builtin.shell: |
-    set -o pipefail
-    curl -fsS https://dl.brave.com/install.sh | sh
-  args:
-    creates: /usr/bin/brave-browser
-    executable: /bin/bash
+  when: not container_check.stat.exists
+  community.general.snap:
+    name:
+      - brave
+    state: present
 
 - name: Run Brave
   become: true
