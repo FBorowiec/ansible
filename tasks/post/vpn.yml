@@ -41,57 +41,45 @@
             name: wireguard-tools
             state: present
 
-        - name: Get nordvpn-bin PKGBUILD from AUR
-          ansible.builtin.uri:
-            url: "https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=nordvpn-bin"
-            method: GET
-            return_content: true
-          register: pkgbuild
+        - name: Install build dependencies
+          pacman:
+            name:
+              - libxml2-legacy
+            state: present
 
-        - name: Debug PKGBUILD content
-          debug:
-            msg: "PKGBUILD content retrieved: {{ pkgbuild.content[:200] }}..."
-          when: pkgbuild.content is defined
+        - name: Clone nordvpn-bin from AUR
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.git:
+            repo: https://aur.archlinux.org/nordvpn-bin.git
+            dest: /tmp/nordvpn-bin
+            depth: 1
+            force: true
+            version: master
 
-        - name: Extract PGP keys using shell (alternative)
-          ansible.builtin.shell: |
-            echo "{{ pkgbuild.content }}" | grep -oP "validpgpkeys=\(\K[^)]+" | tr -d "'" | tr ' ' '\n' | grep -E '^[A-F0-9]{8,}$'
-          register: pgp_keys_output
-          failed_when: false
-          when: pkgbuild.content is defined
-
-        - name: Set PGP keys from shell output
-          set_fact:
-            nordvpn_pgp_keys: "{{ pgp_keys_output.stdout_lines }}"
-          when:
-            - pgp_keys_output is defined
-            - pgp_keys_output.stdout_lines is defined
-            - pgp_keys_output.stdout_lines | length > 0
-
-        - name: Set empty PGP keys list if extraction failed
-          set_fact:
-            nordvpn_pgp_keys: []
-          when: nordvpn_pgp_keys is not defined
-
-        - name: Import NordVPN PGP key(s)
+        - name: Build nordvpn-bin package
           become: true
           become_user: "{{ user }}"
           ansible.builtin.shell: |
-            gpg --keyserver keyserver.ubuntu.com --recv-keys {{ item }}
-          environment:
-            HOME: "/home/{{ user }}"
-            USER: "{{ user }}"
-          loop: "{{ nordvpn_pgp_keys }}"
-          when: nordvpn_pgp_keys | length > 0
+            cd /tmp/nordvpn-bin
+            makepkg --noconfirm
+          register: build_result
+          args:
+            creates: /tmp/nordvpn-bin/pkg/nordvpn-bin
 
-        - name: Install NordVPN via yay (non-interactive)
-          become: true
-          become_user: "{{ user }}"
+        - name: Find built package file
+          ansible.builtin.find:
+            paths: /tmp/nordvpn-bin
+            patterns: "*.pkg.tar.*"
+          register: package_files
+
+        - name: Debug package file
+          ansible.builtin.debug:
+            msg: "{{ package_files.files[0].path }}"
+
+        - name: Install nordvpn-bin package with pacman
           ansible.builtin.shell: |
-            yay -S --sudoloop --noconfirm --needed nordvpn-bin
-          environment:
-            HOME: "/home/{{ user }}"
-            USER: "{{ user }}"
+            pacman -U "{{ package_files.files[0].path }}" --noconfirm
           args:
             creates: /usr/sbin/nordvpn
 
