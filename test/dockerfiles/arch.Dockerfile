@@ -1,6 +1,7 @@
 FROM archlinux:base-devel-20250803.0.394512
 
 ARG USER=arch_user
+ARG PASS=ansible
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -21,7 +22,7 @@ RUN pacman -Syu --noconfirm && \
   pacman -Scc --noconfirm
 
 RUN useradd --create-home -m -s /bin/bash $USER && \
-  echo "$USER:ansible" | chpasswd && \
+  echo "$USER:$PASS" | chpasswd && \
   touch /home/$USER/.bashrc && \
   chown -R $USER:$USER /home/$USER && \
   echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -34,4 +35,6 @@ WORKDIR /home/$USER
 ENV USER=$USER
 USER $USER
 
-CMD ["/bin/bash"]
+STOPSIGNAL SIGRTMIN+3
+VOLUME [ "/sys/fs/cgroup" ]
+CMD ["/sbin/init"]

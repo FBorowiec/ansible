@@ -70,31 +70,25 @@ build_and_test_os() {
 		--tag "$image_name"
 	check_success "Building $os test docker image"
 
+	local common_flags=(
+		--privileged
+		--network host
+		--rm
+		--name "$image_name"
+		--cgroupns=host
+		-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}"
+		-e ANSIBLE_BECOME_PASS="${ANSIBLE_BECOME_PASS:-}"
+		-v /var/run/docker.sock:/var/run/docker.sock
+		-v /sys/fs/cgroup:/sys/fs/cgroup:rw
+		--tmpfs /tmp
+		--tmpfs /run
+		"$image_name":latest
+	)
 	if [[ "$INTERACTIVE" == "true" ]]; then
 		echo "Starting interactive $os container..."
-		docker run \
-			--privileged \
-			--network host --rm -it \
-			--name "$image_name" \
-			--cgroupns=host \
-			-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
-			-e ANSIBLE_BECOME_PASS="${ANSIBLE_BECOME_PASS:-}" \
-			-v /var/run/docker.sock:/var/run/docker.sock \
-			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-			"$image_name":latest \
-			/bin/bash
+		docker run "${common_flags[@]}" -it /bin/bash
 	else
-		docker run \
-			--privileged \
-			--network host --rm \
-			--name "$image_name" \
-			--cgroupns=host \
-			-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
-			-e ANSIBLE_BECOME_PASS="$ANSIBLE_BECOME_PASS" \
-			-v /var/run/docker.sock:/var/run/docker.sock \
-			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-			"$image_name":latest \
-			/bin/bash install
+		docker run "${common_flags[@]}" /bin/bash install
 		check_success "Test ansible setup on $os"
 		echo "$os test install passed successfully."
 	fi
