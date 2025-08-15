@@ -60,6 +60,13 @@
         state: present
         update_cache: true
 
+    - name: Enable snapd
+      become: true
+      ansible.builtin.systemd:
+        name: snapd
+        enabled: true
+        state: started
+
     - name: Install snap packages (Debian)
       when: ansible_os_family == "Debian"
       community.general.snap:
