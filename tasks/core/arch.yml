@@ -133,31 +133,26 @@
             name: snapd
             enabled: true
             state: started
-          when: not container_check.stat.exists
 
         - name: Enable and start snapd.socket
           ansible.builtin.systemd:
             name: snapd.socket
             enabled: true
             state: started
-          when: not container_check.stat.exists
 
         - name: Enable and start snapd.apparmor.service
           ansible.builtin.systemd:
             name: snapd.apparmor.service
             enabled: true
             state: started
-          when: not container_check.stat.exists
 
         - name: Create symbolic link for classic snaps
           ansible.builtin.file:
             src: /var/lib/snapd/snap
             dest: /snap
             state: link
-          when: not container_check.stat.exists
 
         - name: Install snap packages
-          when: not container_check.stat.exists
           community.general.snap:
             name:
               - teams-for-linux

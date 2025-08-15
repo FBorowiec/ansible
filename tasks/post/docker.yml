@@ -48,7 +48,6 @@
     name: docker
     state: started
     enabled: true
-  when: not container_check.stat.exists
 
 - name: Ensure docker group exists
   ansible.builtin.group:
@@ -70,6 +69,4 @@
     name: "{{ user }}"
     groups: docker
     append: true
-  when:
-    - user_in_docker_group.rc != 0
-    - not container_check.stat.exists
+  when: user_in_docker_group.rc != 0

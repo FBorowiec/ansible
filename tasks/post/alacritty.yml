@@ -87,4 +87,3 @@
   ansible.builtin.command:
     cmd: update-desktop-database
   changed_when: false
-  when: not container_check.stat.exists

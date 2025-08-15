@@ -14,6 +14,7 @@ RUN pacman -Syu --noconfirm && \
   python \
   python-pip \
   sudo \
+  systemd \
   vim \
   which && \
   update-ca-trust && \

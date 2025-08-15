@@ -3,14 +3,13 @@
 set -e
 
 check_aur_status() {
-	echo "Checking AUR status..."
 	local aur_url="https://aur.archlinux.org"
 	local timeout=10
-	local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+	local timestamp
+	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
 	if curl -s --connect-timeout "$timeout" --max-time "$timeout" \
 		--head "$aur_url" >/dev/null 2>&1; then
-		echo "[$timestamp] AUR is UP"
 		return 0
 	fi
 	echo "[$timestamp] AUR is DOWN! Install aborted."

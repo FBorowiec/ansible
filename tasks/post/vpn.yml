@@ -98,7 +98,6 @@
         name: nordvpnd
         enabled: true
         state: started
-      when: not container_check.stat.exists
 
     - name: Add user to nordvpn group
       ansible.builtin.user:

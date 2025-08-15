@@ -61,9 +61,7 @@
         update_cache: true
 
     - name: Install snap packages (Debian)
-      when:
-        - ansible_os_family == "Debian"
-        - not container_check.stat.exists
+      when: ansible_os_family == "Debian"
       community.general.snap:
         name:
           - btop

@@ -73,18 +73,24 @@ build_and_test_os() {
 	if [[ "$INTERACTIVE" == "true" ]]; then
 		echo "Starting interactive $os container..."
 		docker run \
+			--privileged \
 			--network host --rm -it \
 			--name "$image_name" \
+			--cgroupns=host \
 			-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
 			-v /var/run/docker.sock:/var/run/docker.sock \
+			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 			"$image_name":latest \
 			/bin/bash
 	else
 		docker run \
+			--privileged \
 			--network host --rm \
 			--name "$image_name" \
+			--cgroupns=host \
 			-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
 			-v /var/run/docker.sock:/var/run/docker.sock \
+			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 			"$image_name":latest \
 			/bin/bash install
 		check_success "Test ansible setup on $os"

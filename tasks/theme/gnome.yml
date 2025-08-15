@@ -26,4 +26,3 @@
         shell_version: "{{ gnome_shell_version.stdout }}"
         display: ":0"
         dbus_address: "{{ dbus_session_bus_address | default('') }}"
-      when: not container_check.stat.exists

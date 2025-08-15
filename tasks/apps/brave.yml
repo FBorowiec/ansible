@@ -1,6 +1,5 @@
 ---
 - name: Install Brave Browser
-  when: not container_check.stat.exists
   community.general.snap:
     name:
       - brave
