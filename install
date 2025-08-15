@@ -20,13 +20,9 @@ detect_distro() {
 	if [ -f /etc/os-release ]; then
 		. /etc/os-release
 		echo "$ID"
-	elif [ -f /etc/arch-release ]; then
-		echo "arch"
-	elif [ -f /etc/debian_version ]; then
-		echo "debian"
-	else
-		echo "unknown"
+		return 0
 	fi
+	echo "Error: Unable to detect distribution." && exit 1
 }
 
 install_ansible_debian() {
@@ -70,18 +66,14 @@ HOSTS="$ROOTDIR/hosts"
 PLAYBOOK="$ROOTDIR/setup.yml"
 
 if [[ -n "$CONTAINER" || -f /.dockerenv ]]; then
-	if [[ -n "$ANSIBLE_VAULT_PASSWORD" ]]; then
-		echo "Using vault password from environment variable"
-		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD")
+	if [[ -n "$ANSIBLE_VAULT_PASSWORD" && -n "$ANSIBLE_BECOME_PASS" ]]; then
+		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD") --become-password-file <(echo "$ANSIBLE_BECOME_PASS")
 	else
-		echo "ANSIBLE_VAULT_PASSWORD not set, prompting for vault password"
-		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --ask-vault-pass
+		ansible-playbook -i "$HOSTS" "$PLAYBOOK" --become --ask-vault-pass --ask-become-pass
 	fi
 else
-	echo "The BECOME password is your sudo password."
 	ansible-playbook -i "$HOSTS" "$PLAYBOOK" --ask-become-pass --ask-vault-pass
 fi
 
 echo "Ansible: Bootstrap complete. Successfully set up dev environment."
-
 exit 0

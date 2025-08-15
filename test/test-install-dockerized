@@ -78,6 +78,7 @@ build_and_test_os() {
 			--name "$image_name" \
 			--cgroupns=host \
 			-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}" \
+			-e ANSIBLE_BECOME_PASS="${ANSIBLE_BECOME_PASS:-}" \
 			-v /var/run/docker.sock:/var/run/docker.sock \
 			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 			"$image_name":latest \
@@ -89,6 +90,7 @@ build_and_test_os() {
 			--name "$image_name" \
 			--cgroupns=host \
 			-e ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
+			-e ANSIBLE_BECOME_PASS="$ANSIBLE_BECOME_PASS" \
 			-v /var/run/docker.sock:/var/run/docker.sock \
 			-v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 			"$image_name":latest \
@@ -103,6 +105,11 @@ if [[ "$INTERACTIVE" == "false" ]]; then
 		echo "Enter vault password:"
 		read -rs ANSIBLE_VAULT_PASSWORD
 		export ANSIBLE_VAULT_PASSWORD
+	}
+	[[ -z "$ANSIBLE_BECOME_PASS" ]] && {
+		echo "Enter become (sudo) password:"
+		read -rs ANSIBLE_BECOME_PASS
+		export ANSIBLE_BECOME_PASS
 	}
 fi
 

@@ -21,6 +21,7 @@ RUN pacman -Syu --noconfirm && \
   pacman -Scc --noconfirm
 
 RUN useradd --create-home -m -s /bin/bash $USER && \
+  echo "$USER:ansible" | chpasswd && \
   touch /home/$USER/.bashrc && \
   chown -R $USER:$USER /home/$USER && \
   echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
