@@ -95,6 +95,13 @@
             force: true
             version: master
 
+        - name: Fix permissions for mkversion.sh
+          become: true
+          become_user: "{{ user }}"
+          ansible.builtin.file:
+            path: /tmp/snapd/mkversion.sh
+            mode: "0755"
+
         - name: Build snapd package
           become: true
           become_user: "{{ user }}"
