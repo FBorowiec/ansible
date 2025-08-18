@@ -42,8 +42,8 @@
 - name: Enable auto-display.service for user
   become: true
   become_user: "{{ user }}"
+  when: not container_check.stat.exists
   ansible.builtin.systemd:
     name: auto-display.service
     enabled: true
     scope: user
-  when: not container_check.stat.exists

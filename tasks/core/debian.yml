@@ -61,14 +61,14 @@
         update_cache: true
 
     - name: Enable snapd
-      become: true
+      when: not container_check.stat.exists
       ansible.builtin.systemd:
         name: snapd
         enabled: true
         state: started
 
     - name: Install snap packages (Debian)
-      when: ansible_os_family == "Debian"
+      when: not container_check.stat.exists
       community.general.snap:
         name:
           - btop

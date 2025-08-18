@@ -15,7 +15,6 @@ RUN pacman -Syu --noconfirm && \
   python \
   python-pip \
   sudo \
-  systemd \
   vim \
   which && \
   update-ca-trust && \
@@ -35,6 +34,4 @@ WORKDIR /home/$USER
 ENV USER=$USER
 USER $USER
 
-STOPSIGNAL SIGRTMIN+3
-VOLUME [ "/sys/fs/cgroup" ]
-CMD ["/sbin/init"]
+CMD ["/bin/bash"]

@@ -44,6 +44,7 @@
   when: ansible_os_family == "Archlinux"
 
 - name: Start and enable Docker service
+  when: not container_check.stat.exists
   ansible.builtin.systemd:
     name: docker
     state: started
@@ -69,4 +70,6 @@
     name: "{{ user }}"
     groups: docker
     append: true
-  when: user_in_docker_group.rc != 0
+  when:
+    - user_in_docker_group.rc != 0
+    - not container_check.stat.exists

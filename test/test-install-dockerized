@@ -10,7 +10,7 @@ OS_CHOICE="both"
 usage() {
 	echo "Usage: $0 [-i|--interactive] [-o|--os ubuntu|arch|both]"
 	echo "  -i, --interactive    Start interactive container"
-	echo "  -o, --os OS         Choose OS to test (ubuntu, arch, or both) [default: both]"
+	echo "  -o, --os OS          Choose OS to test (ubuntu, arch, or both) [default: both]"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -71,17 +71,11 @@ build_and_test_os() {
 	check_success "Building $os test docker image"
 
 	local common_flags=(
-		--privileged
 		--network host
 		--rm
 		--name "$image_name"
-		--cgroupns=host
 		-e ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD:-}"
 		-e ANSIBLE_BECOME_PASS="${ANSIBLE_BECOME_PASS:-}"
-		-v /var/run/docker.sock:/var/run/docker.sock
-		-v /sys/fs/cgroup:/sys/fs/cgroup:rw
-		--tmpfs /tmp
-		--tmpfs /run
 	)
 	if [[ "$INTERACTIVE" == "true" ]]; then
 		echo "Starting interactive $os container..."

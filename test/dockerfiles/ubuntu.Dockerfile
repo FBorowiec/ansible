@@ -12,15 +12,11 @@ RUN apt-get update && \
   build-essential \
   ca-certificates \
   curl \
-  dbus \
   git \
   gnupg \
   lsb-release \
-  snapd \
   software-properties-common \
   sudo \
-  systemd \
-  systemd-sysv \
   vim && \
   rm -rf /var/lib/apt/lists/* && \
   apt-get clean
@@ -43,6 +39,5 @@ WORKDIR /home/$USER
 ENV USER=$USER
 USER $USER
 
-STOPSIGNAL SIGRTMIN+3
-VOLUME [ "/sys/fs/cgroup" ]
-CMD ["/sbin/init"]
+CMD ["/bin/bash"]
+
