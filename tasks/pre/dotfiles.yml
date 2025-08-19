@@ -38,12 +38,3 @@
   register: dotfiles_install
   changed_when: dotfiles_install.rc == 0
   failed_when: dotfiles_install.rc != 0
-
-- name: Enable auto-display.service for user
-  become: true
-  become_user: "{{ user }}"
-  when: not container_check.stat.exists
-  ansible.builtin.systemd:
-    name: auto-display.service
-    enabled: true
-    scope: user
