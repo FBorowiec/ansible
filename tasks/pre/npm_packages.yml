@@ -70,3 +70,4 @@
     - ts-node
     - emojione
     - live-server
+    - pnpm
