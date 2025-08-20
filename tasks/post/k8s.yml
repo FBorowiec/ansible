@@ -37,11 +37,27 @@
         state: present
         update_cache: true
 
+    - name: Download minikube binary
+      ansible.builtin.get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        dest: /usr/local/bin/minikube
+        mode: "0755"
+        force: true
+
+    - name: Download kind binary
+      ansible.builtin.get_url:
+        url: https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+        dest: /usr/local/bin/kind
+        mode: "0755"
+        force: true
+
 - name: K8s for Arch
   when: ansible_os_family == "Archlinux"
   community.general.pacman:
     name:
-      - kubectl
       - helm
+      - kind
+      - kubectl
+      - minikube
     state: present
     update_cache: true
