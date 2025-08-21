@@ -16,7 +16,8 @@
     mode: "0600"
 
 - name: Install Claude
+  become: true
+  become_user: "{{ user }}"
   community.general.npm:
     name: "@anthropic-ai/claude-code"
-    global: true
     state: present
