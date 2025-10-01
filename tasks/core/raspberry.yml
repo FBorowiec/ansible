@@ -1,0 +1,9 @@
+---
+- name: Raspberry PI imager
+  when: ansible_os_family == "Debian"
+  ansible.builtin.apt:
+    name:
+      - rpi-imager
+      - nmap
+    state: present
+    update_cache: true
