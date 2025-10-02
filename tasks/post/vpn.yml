@@ -105,3 +105,24 @@
         name: "{{ ansible_user_id }}"
         groups: nordvpn
         append: true
+
+- name: Install WireGuard
+  ansible.builtin.apt:
+    name: wireguard
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install WireGuard (Arch)
+  community.general.pacman:
+    name: wireguard-tools
+    state: present
+  when: ansible_os_family == "Archlinux"
+
+- name: Copy WireGuard home configuration
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/wireguard/wg0-home.conf"
+    dest: /etc/wireguard/wg0-home.conf
+    mode: "0600"
+    owner: root
+    group: root
+  when: wireguard_home_config is defined and wireguard_home_config

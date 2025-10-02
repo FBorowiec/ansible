@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  become: true
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    - name: Install WireGuard
+      ansible.builtin.apt:
+        name: wireguard
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install WireGuard (Arch)
+      community.general.pacman:
+        name: wireguard-tools
+        state: present
+      when: ansible_os_family == "Archlinux"
+
+    - name: Copy WireGuard home configuration
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/files/wireguard/wg0-home.conf"
+        dest: /etc/wireguard/wg0-home.conf
+        mode: "0600"
+        owner: root
+        group: root
+
+    - name: Allow passwordless sudo for WireGuard commands
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/wireguard-home
+        content: |
+          {{ user }} ALL=(ALL) NOPASSWD: /usr/bin/wg-quick up wg0-home, /usr/bin/wg-quick down wg0-home
+        mode: "0440"
+        owner: root
+        group: root
+        validate: 'visudo -cf %s'
+
+    - name: Display connection instructions
+      ansible.builtin.debug:
+        msg:
+          - "WireGuard home VPN installed successfully!"
+          - "To connect: sudo wg-quick up wg0-home"
+          - "To disconnect: sudo wg-quick down wg0-home"
+          - "To auto-start on boot: sudo systemctl enable wg-quick@wg0-home"
+          - "Passwordless sudo configured for WireGuard commands"

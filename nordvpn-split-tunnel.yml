@@ -1,0 +1,64 @@
+---
+- hosts: localhost
+  vars:
+    local_network: "192.168.0.0/24"
+    raspberry_pi_eth: "192.168.0.114/32"
+    raspberry_pi_wifi: "192.168.0.115/32"
+  tasks:
+    - name: Check if NordVPN is installed
+      ansible.builtin.command: which nordvpn
+      register: nordvpn_check
+      failed_when: false
+      changed_when: false
+
+    - name: Fail if NordVPN is not installed
+      ansible.builtin.fail:
+        msg: "NordVPN is not installed. Please install it first."
+      when: nordvpn_check.rc != 0
+
+    - name: Set NordVPN to use NordLynx (WireGuard)
+      ansible.builtin.command: nordvpn set technology nordlynx
+      changed_when: true
+
+    - name: Enable NordVPN auto-connect on boot
+      ansible.builtin.command: nordvpn set autoconnect on
+      changed_when: true
+
+    - name: Set custom DNS to use AdGuard Home
+      ansible.builtin.command: nordvpn set dns {{ raspberry_pi_eth.split('/')[0] }}
+      register: dns_result
+      changed_when: "'successfully' in dns_result.stdout or 'set to' in dns_result.stdout"
+      failed_when: dns_result.rc != 0 and 'already set' not in dns_result.stdout
+
+    - name: Add local network to split tunnel whitelist
+      ansible.builtin.command: nordvpn whitelist add subnet {{ local_network }}
+      register: whitelist_result
+      changed_when: "'is whitelisted' in whitelist_result.stdout or 'successfully' in whitelist_result.stdout"
+      failed_when: false
+
+    - name: Display NordVPN settings
+      ansible.builtin.command: nordvpn settings
+      register: nordvpn_settings
+      changed_when: false
+
+    - name: Show current NordVPN configuration
+      ansible.builtin.debug:
+        msg: "{{ nordvpn_settings.stdout_lines }}"
+
+    - name: Display split tunnel information
+      ansible.builtin.debug:
+        msg:
+          - "NordVPN configured successfully!"
+          - "Settings applied:"
+          - "  - Technology: NordLynx (WireGuard)"
+          - "  - Auto-connect on boot: Enabled"
+          - "  - Custom DNS: {{ raspberry_pi_eth.split('/')[0] }} (AdGuard Home)"
+          - "  - Whitelisted subnet: {{ local_network }}"
+          - ""
+          - "When connected to NordVPN:"
+          - "  - DNS filtering via AdGuard (ad-blocking works)"
+          - "  - Can still access local network devices"
+          - "  - AdGuard Home: http://192.168.0.114 or http://192.168.0.115"
+          - ""
+          - "To connect to NordVPN: nordvpn connect"
+          - "To disconnect: nordvpn disconnect"

@@ -1,6 +1,7 @@
 ---
 user: "{{ lookup('env', 'USER') }}"
 home: "{{ lookup('env', 'HOME') }}"
+wireguard_home_config: true
 tools_versions:
   go: "1.24.5"
 gnome_extensions:
