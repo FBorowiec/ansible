@@ -36,6 +36,14 @@
       changed_when: "'is whitelisted' in whitelist_result.stdout or 'successfully' in whitelist_result.stdout"
       failed_when: false
 
+    - name: Configure resolv.conf to bypass systemd-resolved stub for proper DNS filtering
+      become: true
+      ansible.builtin.file:
+        src: /run/systemd/resolve/resolv.conf
+        dest: /etc/resolv.conf
+        state: link
+        force: true
+
     - name: Display NordVPN settings
       ansible.builtin.command: nordvpn settings
       register: nordvpn_settings
@@ -54,11 +62,17 @@
           - "  - Auto-connect on boot: Enabled"
           - "  - Custom DNS: {{ raspberry_pi_eth.split('/')[0] }} (AdGuard Home)"
           - "  - Whitelisted subnet: {{ local_network }}"
+          - "  - DNS resolution: Direct (bypasses systemd-resolved stub)"
           - ""
-          - "When connected to NordVPN:"
-          - "  - DNS filtering via AdGuard (ad-blocking works)"
-          - "  - Can still access local network devices"
+          - "Features:"
+          - "  - Ad-blocking via AdGuard Home (works with NordVPN)"
+          - "  - Location privacy via NordVPN"
+          - "  - Local network access via split tunnel"
+          - ""
+          - "Access points:"
           - "  - AdGuard Home: http://192.168.0.114 or http://192.168.0.115"
           - ""
-          - "To connect to NordVPN: nordvpn connect"
-          - "To disconnect: nordvpn disconnect"
+          - "Commands:"
+          - "  - Connect: nordvpn connect"
+          - "  - Disconnect: nordvpn disconnect"
+          - "  - Use polybar VPN menu to switch between NordVPN and WireGuard"
