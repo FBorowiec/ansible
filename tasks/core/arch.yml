@@ -69,6 +69,7 @@
           - btop
           - markdownlint
           - spotify-launcher
+          - signal-desktop
         state: present
         update_cache: true
 

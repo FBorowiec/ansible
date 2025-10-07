@@ -74,5 +74,6 @@
           - btop
           - mdl
           - spotify
+          - signal-desktop
           - teams-for-linux
         state: present
